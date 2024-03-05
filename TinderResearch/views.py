@@ -10,7 +10,7 @@ class FrontendAppView(TemplateView):
     template_name = os.path.join(settings.REACT_APP_DIR, 'index.html')
 
     @method_decorator(never_cache)
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):ggg
         try:
             with open(self.template_name, 'rb') as f:
                 return HttpResponse(f.read(), content_type='text/html')

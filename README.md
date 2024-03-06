@@ -19,15 +19,15 @@ A step-by-step series of commands that tell you how to get a development environ
 
 #### Backend Dependencies  
 
-pip install Django djangorestframework
+`pip install Django djangorestframework`
 
 ## Running the Application
 
 To set up and run the project locally, follow these steps:
 
 1. **Build the React Frontend:**  
-'cd trapp' Run this command in root directory for project.  
-'npm run build' This command compiles the React frontend code, preparing it for production.  
+`cd trapp` Run this command in root directory for project.  
+`npm run build` This command compiles the React frontend code, preparing it for production.  
 'cd ../', go back into main directory and run the server.
 
 3. **Collect Static Files:**  

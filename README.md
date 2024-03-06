@@ -1,12 +1,45 @@
 # MediMatch
-Installs:
-pip install Django djangorestframework
-npm install react react-dom react-scripts
-npm install axios
-npm install redux react-redux react-router-dom
 
-Processes to finalise server and react compatibility every time changes are made:
-To build the react front end: 'npm run build'
-To pass files on to the server: 'python manage.py collectstatic'
-To run the server: 'python manage.py runserver'
-To view the server running locally in browser 'http://127.0.0.1:8000/.......'
+Provide a short description of your project here. What is the purpose of MediMatch? What does it do?
+
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
+### Prerequisites
+
+What things you need to install the software and how to install them:
+
+- [Python](https://www.python.org/downloads/) - Programming language used for the backend.
+- [Node.js and npm](https://nodejs.org/en/download/) - JavaScript runtime and package manager for the frontend.
+
+### Installing
+
+A step-by-step series of commands that tell you how to get a development environment running:
+
+#### Backend Dependencies
+
+pip install Django djangorestframework
+
+
+
+## Running the Application
+
+To set up and run the project locally, follow these steps:
+
+1. **Build the React Frontend:**
+npm run build
+This command compiles the React frontend code, preparing it for production.
+
+2. **Collect Static Files:**
+python manage.py collectstatic
+Django collects all static files into the `STATIC_ROOT` directory. Confirm the action when prompted.
+
+3. **Run the Django Server:**
+python manage.py runserver
+Starts the Django server allowing access to the application.
+
+4. **Access the Application:**
+Open your web browser and visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) to view the application.
+
+Ensure you have all the necessary prerequisites installed before running these steps, and replace the URL with the specific endpoint you need, if necessary.

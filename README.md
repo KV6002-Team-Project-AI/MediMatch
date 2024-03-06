@@ -15,11 +15,27 @@ What things you need to install the software and how to install them:
 
 ### Installing  
 
-A step-by-step series of commands that tell you how to get a development environment running:
+A step-by-step series of commands that tell you how to get a development environment running:  
+
+### Clone this repository onto your PC using the following instructions:  
+1. Head over to the KV6002-TEAM_PROJECT_AI  
+2. Choose the MediMatch Repository  
+3. CLick on code <>, then click on clone using Github desktop  
 
 #### Backend Dependencies  
 
-`pip install Django djangorestframework`
+`pip install Django djangorestframework`  
+
+#### Frontend Dependencies (All of this is in trapp directory)  
+
+Follow the instructions below to set up React.
+
+## Setup 🛠️  
+1. Go inside the **trapp** folder, right click and open *terminal*.  
+2. Run this to install node modules: `npm install`  
+3. Install **React Router**: `npm install react-router-dom`  
+4. Install **Tailwind** for CSS: `npm install -D tailwindcss postcss autoprefixer`  
+5. Install **SweetAlert2** for alert dialogs: `npm install sweetalert2`  
 
 ## Running the Application
 

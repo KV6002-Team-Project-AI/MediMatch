@@ -18,18 +18,13 @@ function App() {
         <Header />
         <Menu />
         <Routes>
-          {/* Routes from the first App */}
           <Route path='/' element={<Tinder />}/>
           <Route path='/matches' element={<Matches />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/browse' element={<Browse />}/>
           <Route path='/settings' element={<Settings />}/>
-
-          {/* Routes from the second App */}
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />
-
-          {/* You can add more routes or adjust as necessary */}
         </Routes>
       </div>
     </Router>

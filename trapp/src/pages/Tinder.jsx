@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { TinderLikeCard } from 'react-stack-cards';
 import profilePic from '../assets/profile-pic.jpg'; // Adjust the path as necessary
+import accept from "../assets/accept.svg"
+import reject from "../assets/reject.svg"
+
 
 class ProfileCard extends React.Component {
   render() {
@@ -53,19 +56,26 @@ class Tinder extends Component {
     };
   
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <TinderLikeCard
-          images={[]}
-          color={"#f95c5c"}
-          width="350"
-          height="450"
-          direction="swipeCornerDownRight"
-          ref={this.Tinder}
-        >
-          <ProfileCard {...profile} />
-        </TinderLikeCard>
-        <button onClick={this.swipe} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Swipe</button>
+      <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+        <div>
+          <TinderLikeCard
+            images={[]}
+            color={"#f95c5c"}
+            width="350"
+            height="450"
+            direction="swipeCornerDownRight"
+            ref={this.Tinder}
+          >
+            <ProfileCard {...profile} />
+          </TinderLikeCard>
+        </div>
+        <div className='flex  flex-row gap-2'>
+          <img src={reject} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+          <img src={accept} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+        </div>
       </div>
+      
+
     );
   }
 }

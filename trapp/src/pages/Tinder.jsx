@@ -6,7 +6,7 @@ class ProfileCard extends React.Component {
   render() {
     const { name, bio, avatar, features, interests } = this.props;
     return (
-      <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 p-4 m-2">
+      <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md light:bg-gray-800 light:border-gray-700 p-4 m-2">
         <img className="rounded-t-lg mx-auto h-32 w-32" src={avatar} alt="profile image" />
         <h5 className="text-xl font-medium leading-tight mt-4 mb-2 text-center">{name}</h5>
         <p className="text-xs text-gray-500 text-center mt-1">{bio}</p>

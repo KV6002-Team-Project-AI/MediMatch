@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { TinderLikeCard } from 'react-stack-cards';
 import profilePic from '../assets/profile-pic.jpg'; // Adjust the path as necessary
+import accept from "../assets/accept.svg"
+import reject from "../assets/reject.svg"
+
 
 class ProfileCard extends React.Component {
   render() {
@@ -14,7 +17,7 @@ class ProfileCard extends React.Component {
           <h6 className="text-md font-medium text-center">Features</h6>
           <div className="flex flex-wrap justify-center gap-2 mt-1">
             {features.map((feature, index) => (
-              <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{feature}</span>
+              <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded light:bg-blue-200 light:text-blue-800">{feature}</span>
             ))}
           </div>
         </div>
@@ -22,7 +25,7 @@ class ProfileCard extends React.Component {
           <h6 className="text-md font-medium text-center">Interests</h6>
           <div className="flex flex-wrap justify-center gap-2 mt-1">
             {interests.map((interest, index) => (
-              <span key={index} className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800">{interest}</span>
+              <span key={index} className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded light:bg-green-200 light:text-green-800">{interest}</span>
             ))}
           </div>
         </div>
@@ -53,19 +56,26 @@ class Tinder extends Component {
     };
   
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <TinderLikeCard
-          images={[]}
-          color={"#f95c5c"}
-          width="350"
-          height="450"
-          direction="swipeCornerDownRight"
-          ref={this.Tinder}
-        >
-          <ProfileCard {...profile} />
-        </TinderLikeCard>
-        <button onClick={this.swipe} className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Swipe</button>
+      <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+        <div>
+          <TinderLikeCard
+            images={[]}
+            color={"#f95c5c"}
+            width="350"
+            height="450"
+            direction="swipeCornerDownRight"
+            ref={this.Tinder}
+          >
+            <ProfileCard {...profile} />
+          </TinderLikeCard>
+        </div>
+        <div className='flex  flex-row gap-2'>
+          <img src={reject} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+          <img src={accept} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+        </div>
       </div>
+      
+
     );
   }
 }

@@ -14,7 +14,7 @@ class ProfileCard extends React.Component {
           <h6 className="text-md font-medium text-center">Features</h6>
           <div className="flex flex-wrap justify-center gap-2 mt-1">
             {features.map((feature, index) => (
-              <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{feature}</span>
+              <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded light:bg-blue-200 light:text-blue-800">{feature}</span>
             ))}
           </div>
         </div>
@@ -22,7 +22,7 @@ class ProfileCard extends React.Component {
           <h6 className="text-md font-medium text-center">Interests</h6>
           <div className="flex flex-wrap justify-center gap-2 mt-1">
             {interests.map((interest, index) => (
-              <span key={index} className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800">{interest}</span>
+              <span key={index} className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded light:bg-green-200 light:text-green-800">{interest}</span>
             ))}
           </div>
         </div>

@@ -5,6 +5,7 @@ import Header from './components/Header';
 import Tinder from './pages/Tinder';
 import Matches from './pages/Matches';
 import Profile from './pages/Profile';
+import AddResearch from './pages/AddResearch';
 import Browse from './pages/Browse';
 import Settings from './pages/Settings';
 import RecruiteeSignup from './RecruiteeSignup';
@@ -22,6 +23,7 @@ function App() {
           <Route path='/matches' element={<Matches />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/browse' element={<Browse />}/>
+          <Route path='/add-study' element={<AddResearch />}/>
           <Route path='/settings' element={<Settings />}/>
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />

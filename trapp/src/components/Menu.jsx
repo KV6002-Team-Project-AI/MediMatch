@@ -23,6 +23,11 @@ function Menu() {
             Browse
           </Link>
         </li>
+        <li>
+          <Link to="/add-study" className={`transition duration-200 ease-in-out hover:bg-gray-200 ${location.pathname === '/add-study' ? 'text-red-600' : ''} rounded-full p-2 inline-block w-20 text-center`}>
+            Add Research
+          </Link>
+        </li>
         <li onClick={toggleNotifications(true)}>
           <Link to="/matches" className={`transition duration-200 ease-in-out hover:bg-gray-200 ${location.pathname === '/matches' ? 'text-red-600' : ''} rounded-full p-2 inline-block w-20 text-center`}>
             <Badge 

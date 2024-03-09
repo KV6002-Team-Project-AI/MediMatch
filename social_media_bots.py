@@ -15,29 +15,24 @@ media_files = ["/Users/mehdiamrani/Desktop/projectmoney/uni project/Screenshot 2
 
 bot_token = '6978869390:AAEkpdIn42aZ2m845qm98OqBeVYxTmZ-bwA'
 chat_id = '-1002111033632'
-def send_message_with_images(bot_token, chat_id, text ):
+def send_message_with_images(bot_token, chat_id, post_content ):
     text_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
     text_params = {
         'chat_id': chat_id,
-        'text': text,
+        'text': post_content,
         'parse_mode': 'HTML'  
     }
-    media = []
+    text_response = requests.post(text_url, data=text_params)
+    if text_response.status_code != 200:
+        print(f"Error sending text: {text_response.content}")
+
+    # Then, send the images
     for image_path in media_files:
         with open(image_path, 'rb') as image:
-            files = {
-                'photo': image
-            }
+            files = {'photo': image}
             response = requests.post(f"https://api.telegram.org/bot{bot_token}/sendPhoto", data={'chat_id': chat_id}, files=files)
-            if response.status_code == 200:
-                photo_id = response.json()['result']['photo'][-1]['file_id'] 
-                media.append({'type': 'photo', 'media': photo_id})
-            else:
+            if response.status_code != 200:
                 print(f"Error uploading image: {response.content}")
-
-    return None
-    text_response = requests.post(text_url, data=text_params)
-
 ##___________________________________________________________________________________________________________________________________________________
 
 #_________________________________________________twitter bot_________________________________________________________________________________________
@@ -191,7 +186,7 @@ def post_to_social_media(reddit_posting=True, facebook=True, twitter=True, teleg
     telegram_chat_id = '-1002111033632'
     
     # Load data
-    file_path = 'clinical_research_studies_full.csv'
+    file_path = '/Users/mehdiamrani/Desktop/projectmoney/uni project/studydescription_data.csv'
     df = pd.read_csv(file_path)
 
     for index, row in df.iterrows():
@@ -254,4 +249,4 @@ def post_to_social_media(reddit_posting=True, facebook=True, twitter=True, teleg
             print(f"Completed postings for {recruiter}. No more posts scheduled.")
             
         time.sleep(1800)
-post_to_social_media(reddit_posting=False, facebook=False, twitter=False, telegram=False, linkedin=False)
+post_to_social_media(reddit_posting=False, facebook=False, twitter=False, telegram=True, linkedin=False)

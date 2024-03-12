@@ -10,6 +10,8 @@ import Browse from './pages/Browse';
 import Settings from './pages/Settings';
 import RecruiteeSignup from './RecruiteeSignup';
 import RecruiterSignup from './RecruiterSignup';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 import './App.css';
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route path='/browse' element={<Browse />}/>
           <Route path='/add-study' element={<AddResearch />}/>
           <Route path='/settings' element={<Settings />}/>
+          <Route path='/signin' element={<SignIn />}/>
+          <Route path='/signup' element={<SignUp />}/>
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />
         </Routes>

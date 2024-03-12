@@ -1,34 +1,51 @@
-from rest_framework import status
+from rest_framework import status, views, permissions
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from django.contrib.auth.hashers import make_password
 from .models import User, Recruitee, Recruiter
-from .serializers import RecruiteeSerializer, RecruiterSerializer, UserSerializer
+from .serializers import UserSerializer, RecruiteeSerializer, RecruiterSerializer
 
-class RecruiteeSignup(APIView):
-    def post(self, request):
-        serializer = RecruiteeSerializer(data=request.data)
+class UserSignup(views.APIView):
+    # Allow any user to sign up
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user_data = serializer.validated_data.pop('user')
-            user_serializer = UserSerializer(data=user_data)
-            if user_serializer.is_valid():
-                user = User.objects.create_user(**user_serializer.validated_data, is_recruitee=True)
-                recruitee_data = serializer.validated_data
-                recruitee_data['user'] = user
-                recruitee = Recruitee.objects.create(**recruitee_data)
-                # If you need to return user data, serialize recruitee instance again
-                return Response(RecruiteeSerializer(recruitee).data, status=status.HTTP_201_CREATED)
-            else:
-                return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer.save()  # UserSerializer should handle password hashing internally
+            # Return the user data, excluding the password
+            return Response(
+                {
+                    "id": serializer.instance.id,
+                    "username": serializer.instance.username,
+                    "is_recruitee": serializer.instance.is_recruitee,
+                    "is_recruiter": serializer.instance.is_recruiter
+                }, 
+                status=status.HTTP_201_CREATED
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class RecruiteeDetail(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
 
-
-class RecruiterSignup(APIView):
-    def post(self, request):
-        serializer = RecruiterSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_recruitee:
+            return Response({"error": "User is not a recruitee"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = RecruiteeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            user_data = serializer.validated_data.pop('user')
-            user = User.objects.create_user(**user_data, is_recruiter=True)
-            Recruiter.objects.create(user=user, **serializer.validated_data)
+            serializer.save(user=request.user)  # Associate the recruitee profile with the authenticated user
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RecruiterDetail(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_recruiter:
+            return Response({"error": "User is not a recruiter"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = RecruiterSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(user=request.user)  # Associate the recruiter profile with the authenticated user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

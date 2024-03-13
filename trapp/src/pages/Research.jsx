@@ -1,7 +1,7 @@
 
 
 
-function Browse() {
+function Research() {
 
     return (
         <>
@@ -14,5 +14,5 @@ function Browse() {
     )
 }
  
-export default Browse
+export default Research
  

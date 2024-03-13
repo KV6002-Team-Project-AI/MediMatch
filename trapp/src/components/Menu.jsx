@@ -24,8 +24,8 @@ function Menu() {
           </Link>
         </li>
         <li>
-          <Link to="/add-study" className={`transition duration-200 ease-in-out hover:bg-gray-200 ${location.pathname === '/add-study' ? 'text-red-600' : ''} rounded-full p-2 inline-block w-20 text-center`}>
-            Add Research
+          <Link to="/research" className={`transition duration-200 ease-in-out hover:bg-gray-200 ${location.pathname === '/add-study' ? 'text-red-600' : ''} rounded-full p-2 inline-block w-20 text-center`}>
+            Research
           </Link>
         </li>
         <li onClick={toggleNotifications(true)}>

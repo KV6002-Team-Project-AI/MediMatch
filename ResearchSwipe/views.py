@@ -44,8 +44,9 @@ class UserLoginView(views.APIView):
                 'refresh': refresh,
                 'access': access,
                 'user': {
-                    'name': user.first_name, 
-                     },
+                    'name': user.first_name,
+                    'email': user.username
+                    },
 
                 # Include any other data you want to send back
             }

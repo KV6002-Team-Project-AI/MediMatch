@@ -2,8 +2,6 @@ import React from 'react';
 import UserProfile from '../components/userProfile';
 
 
-
-
 function Profile() {
     // Dummy data for the dropdown menu
     const researchFields = [

@@ -35,15 +35,16 @@ class ProfileCard extends React.Component {
 }
 
 class Tinder extends Component {
-  constructor(props) {
-    super(props);
-    this.Tinder = React.createRef(); // Using React.createRef() for a more modern approach
+  constructor(props){
+    super(props)
+    this.state = {
+      directionTinder: "swipeCornerDownRight",
+    }
+    this.Tinder = null
   }
 
-  swipe = () => {
-    if (this.Tinder.current) {
-      this.Tinder.current.swipe(); // Adjusted to reference current for the ref
-    }
+  onTinderSwipe() {
+    this.Tinder.swipe()
   }
 
   render() {
@@ -56,24 +57,32 @@ class Tinder extends Component {
     };
   
     return (
-      <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-        <div>
-          <TinderLikeCard
-            images={[]}
-            color={"#f95c5c"}
-            width="350"
-            height="450"
-            direction="swipeCornerDownRight"
-            ref={this.Tinder}
-          >
-            <ProfileCard {...profile} />
-          </TinderLikeCard>
+      <>
+        <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+          <div>
+            <TinderLikeCard
+              images={[]}
+              color={"#f95c5c"}
+              width="350"
+              height="450"
+              direction={this.state.directionTinder}
+              duration={400}
+              ref={(node) => this.Tinder = node}
+              className="tinder"
+            >
+
+              <ProfileCard {...profile} />
+            </TinderLikeCard>
+          </div>
+          <div className='flex  flex-row gap-2'>
+            <img src={reject} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+            <img src={accept} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
+          </div>
         </div>
-        <div className='flex  flex-row gap-2'>
-          <img src={reject} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
-          <img src={accept} onClick={this.swipe} className="mt-20 font-bold py-2 px-4 rounded" />
-        </div>
-      </div>
+
+        
+      </>
+
       
 
     );

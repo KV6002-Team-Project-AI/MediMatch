@@ -37,7 +37,7 @@ function UserProfile({ user }) {
       <div className="flex flex-col items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl p-6">
         <img src={profilePic} alt="Profile Picture" className="h-32 w-32 rounded-full mb-4" />
         <h2 className="text-xl font-semibold text-gray-800">{user.name}</h2>
-        <p className="text-sm text-gray-600">john.doe@example.com</p>
+        <p className="text-sm text-gray-600">{user.email}</p>
           <div className="border-t border-gray-200 mt-6 w-full">
             <div className="py-2">
               <h3 className="text-lg font-semibold mb-2 text-center text-gray-800">Personal Information</h3>

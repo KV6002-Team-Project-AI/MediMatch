@@ -47,6 +47,8 @@ export default function SignUp() {
       body: JSON.stringify({
         username: data.get('email'), // Assuming username is the email
         password: data.get('password'),
+        first_name: data.get('firstName'),
+        last_name: data.get('lastName'),
         is_recruitee: userType === 'recruitee',
         is_recruiter: userType === 'recruiter',
         // You might want to handle first name and last name separately

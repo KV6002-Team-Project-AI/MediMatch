@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
 
-function UserProfile() {
+function UserProfile({ user }) {
   
   const features = ["Brown Hair", "25 Years old", "1.76 metres"]
   const interests = ["Coding", "Hiking", "Traveling", "Photography"]
@@ -31,12 +31,12 @@ function UserProfile() {
 
   const canBeOpen = open && Boolean(anchorEl);
   const id = canBeOpen ? 'transition-popper' : undefined;
-
+  
   return (
     <div className="mx-3 my-20">
       <div className="flex flex-col items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl p-6">
         <img src={profilePic} alt="Profile Picture" className="h-32 w-32 rounded-full mb-4" />
-        <h2 className="text-xl font-semibold text-gray-800">John Doe</h2>
+        <h2 className="text-xl font-semibold text-gray-800">{user.name}</h2>
         <p className="text-sm text-gray-600">john.doe@example.com</p>
           <div className="border-t border-gray-200 mt-6 w-full">
             <div className="py-2">
@@ -142,5 +142,6 @@ function UserProfile() {
     </div>
   );
 }
+
 
 export default UserProfile;

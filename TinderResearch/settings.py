@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ResearchSwipe.apps.ResearchswipeConfig',
     'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -58,6 +61,36 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000',
     # Add other origins as needed
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    # Make sure the AUTH_TOKEN_CLASSES setting includes 'SlidingToken'
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+
+    'AUTH_COOKIE': 'access_token',  # Cookie name. You can pick your own.
+    'AUTH_COOKIE_DOMAIN': None,     # A string like ".yourdomain.com", or None for standard domain cookie.
+    'AUTH_COOKIE_SECURE': True,     # Whether the auth tokens should only be sent over HTTPS.
+    'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly flag used for security.
+    'AUTH_COOKIE_SAMESITE': 'Lax',  # Strict or Lax or None
+}
 
 ROOT_URLCONF = 'TinderResearch.urls'
 

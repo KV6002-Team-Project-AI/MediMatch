@@ -34,11 +34,42 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    fetch('http://localhost:8000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: data.get('email'), // make sure this matches the 'name' attribute of your form input
+        password: data.get('password'), // and this one too
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      if (response.status === 204 || response.status === 205) { 
+        // No content
+        return null;
+      }
+      return response.json(); // Only parse if there's a response to parse
+    })
+    .then(data => {
+      if (data) {
+        console.log('Success:', data);
+        // Redirect the user to their profile page after successful login
+        localStorage.setItem('userInfo', JSON.stringify(data.user));
+        window.location.href = './profile'; // replace '/profile' with the actual path to the user's profile
+      }
+      // handle case when there's no content
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    })
   };
+    
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -111,7 +142,7 @@ export default function SignIn() {
             </Link>
           </Grid>
           <Grid item>
-            <Link href="#" variant="body2">
+            <Link href="./signup" variant="body2">
               {"Don't have an account? Sign Up"}
             </Link>
           </Grid>

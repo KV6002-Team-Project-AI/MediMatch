@@ -2,6 +2,8 @@ import React from 'react';
 import UserProfile from '../components/userProfile';
 
 
+
+
 function Profile() {
     // Dummy data for the dropdown menu
     const researchFields = [
@@ -16,9 +18,10 @@ function Profile() {
         'Ethical and Legal',
         'Other'
     ];
+    const userInfo = JSON.parse(localStorage.getItem('userInfo')); // Retrieve user info
 
     return (
-        <UserProfile />
+        <UserProfile user={userInfo} />
     );
 }
 

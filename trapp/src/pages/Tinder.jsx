@@ -1,5 +1,5 @@
 import React from 'react';
-import CardStack from '../components/CardStack';
+import ProfileCard from '../components/ProfileCard';
 
 const Tinder = () => {
   return (
@@ -14,7 +14,7 @@ const Tinder = () => {
         </div>
 
         <div>
-          <CardStack />     
+          <ProfileCard />     
         </div>
             
           <div className="flex-none mx-14 mb-20 justify-center p-1 items-center">

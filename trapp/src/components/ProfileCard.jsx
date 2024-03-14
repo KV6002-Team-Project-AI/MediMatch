@@ -1,30 +1,46 @@
-import React from 'react';
+import React from 'react'
+import profilePic from '../assets/profile-pic.jpg'
+import infoLogo from '../assets/info.png'
+import summarise from '../assets/summary.png'
 
-function ProfileCard({ name, bio, avatar, features, interests }) {
+const ProfileCard = () => {
+    const features = ["Brown Hair", "25 Years old", "1.76 metres"];
+    const interests = ['Football', 'Swimming', 'Reading'];
   
-  return (
-    <div className="max-w-sm bg-white rounded-lg border border-gray-200 shadow-md dark:bg-gray-800 dark:border-gray-700 p-4 m-2">
-      <img className="rounded-t-lg mx-auto h-32 w-32" src={avatar} alt="profile image" />
-      <h5 className="text-xl font-medium leading-tight mt-4 mb-2 text-center">{name}</h5>
-      <p className="text-xs text-gray-500 text-center mt-1">{bio}</p>
-      <div className="mt-4">
-        <h6 className="text-md font-medium text-center">Features</h6>
-        <div className="flex flex-wrap justify-center gap-2 mt-1">
-          {features.map((feature, index) => (
-            <span key={index} className="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{feature}</span>
-          ))}
+    return (
+      <div className='mt-5 mb-5 mx-14'>
+        <div className="flex flex-col justify-center p-2 items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl relative">
+          <img src={summarise} alt="summarise" className=" w-7 h-7 hover:bg-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 absolute top-2 left-2" />
+          <img src={infoLogo} alt="info" className="w-7 h-7 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5 absolute top-2 right-2"/>
+          <img src={profilePic} alt="Person" className="w-40 h-40 rounded-full"/>
+          <p className="font-medium text-lg text-gray-800">John Doe</p>
+          <p className='text-center font-normal mt-3'>Welcome to my natural habitat, where I can speak no more than this.</p>
+  
+          <hr className="border-gray-400 w-full mt-3" />
+  
+          <div className="font-semibold justify-center mt-3 mb-3 underline underline-offset-2">Features: </div>
+          <div className="flex gap-2">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-blue-100 w-full text-blue-800 p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                {feature}
+              </div>
+            ))}
+          </div>
+  
+          <hr className="border-gray-400 w-full mt-5" />
+  
+          <div className="font-semibold justify-center mt-3 mb-3 underline underline-offset-2">Interests: </div>
+          <div className="flex gap-2">
+            {interests.map((interests, index) => (
+              <div key={index} className="bg-green-100 w-full text-green-800 p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                {interests}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      <div className="mt-4">
-        <h6 className="text-md font-medium text-center">Interests</h6>
-        <div className="flex flex-wrap justify-center gap-2 mt-1">
-          {interests.map((interest, index) => (
-            <span key={index} className="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-200 dark:text-green-800 ">{interest}</span>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
+    );
+  };
+  
 
-export default ProfileCard;
+  export default ProfileCard;

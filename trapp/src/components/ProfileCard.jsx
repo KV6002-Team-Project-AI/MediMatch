@@ -8,7 +8,7 @@ const ProfileCard = () => {
     const interests = ['Football', 'Swimming', 'Reading'];
   
     return (
-      <div className='mt-5 mb-5 mx-10'>
+      <div className='my-3 mx-10'>
         <div className="flex flex-col justify-center p-2 items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl relative">
           <img src={summarise} alt="summarise" className=" w-7 h-7 hover:bg-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 absolute top-2 left-2" />
           <img src={infoLogo} alt="info" className="w-7 h-7 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5 absolute top-2 right-2"/>

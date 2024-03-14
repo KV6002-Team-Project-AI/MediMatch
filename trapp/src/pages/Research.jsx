@@ -1,4 +1,4 @@
-import infoLogo from '../assets/info.png'
+import addLogo from '../assets/add.svg'
 
 function Research() {
 
@@ -13,9 +13,7 @@ function Research() {
                                     <input type="text" placeholder="Search..." className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
                                 </div>
                                 <div className='flex items-center'>
-                                    <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg shadowtransition duration-300 ease-in-out transform hover:-translate-y-0.5">
-                                        Add Research
-                                    </button>
+                                    <img src={addLogo} alt="add" className='h-7 transition duration-300 ease-in-out hover:bg-gray-100 transform hover:-translate-y-0.5 '/>
                                 </div>
                             </div>
                         </div>

@@ -38,23 +38,18 @@ class MyAuthTokenSerializer(serializers.Serializer):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
-
-
 class RecruiteeSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)
+    
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Recruitee
         fields = (
-            'user',
-            'personal_id',
-            'name',
             'age',
             'date_of_birth',
             'biological_sex',
             'contact_information',
             'emergency_contact',
-            'informed_consent_status',
             'has_medical_history',
             'medical_history_details',
             'taking_current_medications',
@@ -65,6 +60,13 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'allergy_details',
             'has_family_medical_history',
             'family_medical_history_details',
+            'measurement_system',
+            'height',
+            'weight',
+            'hair_color',
+            'profession',
+            'duration_of_participation',
+            'work_preference',
             'health_status',
             'lifestyle_factors',
             'socioeconomic_status',
@@ -72,19 +74,22 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'race',
             'pregnancy_status',
             'language_preferences',
-            'participation_history',
-            'consent_form_version',
-            'date_of_consent',
-            'study_ids'
+            'participation_history'
         )
 
     def create(self, validated_data):
-        user_data = validated_data.pop('user')
-    # The 'create' method should already save the User.
-        user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-    # At this point, the user instance is already saved.
-        profile = self.Meta.model.objects.create(user=user, **validated_data)
-        return profile
+    # Get the authenticated user from the request context
+        user = self.context['request'].user
+
+    # Check if a Recruitee profile already exists for the user
+        if Recruitee.objects.filter(user=user).exists():
+            raise serializers.ValidationError('Recruitee profile already exists for this user.')
+
+    # Now create a new Recruitee instance linked to the authenticated user
+        recruitee = Recruitee.objects.create(user=user, **validated_data)
+        return recruitee
+
+
 
 
 class RecruiterSerializer(serializers.ModelSerializer):
@@ -102,3 +107,7 @@ class RecruiterSerializer(serializers.ModelSerializer):
         profile = self.Meta.model.objects.create(user=user, **validated_data)
         return profile
 
+class UserRoleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('is_recruitee', 'is_recruiter')

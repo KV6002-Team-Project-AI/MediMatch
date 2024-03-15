@@ -12,6 +12,7 @@ import RecruiteeSignup from './RecruiteeSignup';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import UserStatus from './test';
 import './App.css';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path='/settings' element={<Settings />}/>
           <Route path='/signin' element={<SignIn />}/>
           <Route path='/signup' element={<SignUp />}/>
+          <Route path='/test' element={<UserStatus />}/>
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />
         </Routes>

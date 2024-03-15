@@ -3,10 +3,7 @@ import React, { useState } from 'react';
 
 function RecruiteeSignup() {
     const [formData, setFormData] = useState({
-        username: '',
-        password: '',
-        personalId: '',
-        name: '',
+        // Initial state setup
         age: '',
         dateOfBirth: '',
         biologicalSex: '',
@@ -23,6 +20,13 @@ function RecruiteeSignup() {
         allergyDetails: '',
         hasFamilyMedicalHistory: false,
         familyMedicalHistoryDetails: '',
+        measurementSystem: 'metric',
+        height: '',
+        weight: '',
+        hairColor: '',
+        profession: '',
+        durationOfParticipation: '',
+        workPreference: 'no preference',
         healthStatus: '',
         lifestyleFactors: '',
         socioeconomicStatus: '',
@@ -31,53 +35,51 @@ function RecruiteeSignup() {
         pregnancyStatus: '',
         languagePreferences: '',
         participationHistory: '',
-        consentFormVersion: '',
-        dateOfConsent: '',
-        studyIds: '',
-        // Any additional fields...
+        termsOfService: false
     });
 
     const handleChange = (e) => {
-        const value =
-            e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+        const { name, type, checked, value } = e.target;
         setFormData({
             ...formData,
-            [e.target.name]: value,
+            [name]: type === 'checkbox' ? checked : value,
         });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        fetch('/api/signup/recruitee/', {
+        if (!formData.termsOfService) {
+            alert('You must agree to the terms of service.');
+            return;
+        }
+        fetch('http://localhost:8000/api/recruitee/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                user: {
-                    username: formData.username,
-                    password: formData.password,
-                },
-                age: formData.age,
-                ethnicity: formData.ethnicity,
-                height: formData.height,
-            }),
+            credentials: 'include', // This ensures cookies are sent with the request
+            body: JSON.stringify(formData),
         })
-        .then((response) => {
-            if (response.ok) {
-                return response.json();
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
-            return Promise.reject(response);
+            return response.json();
         })
-        .then((data) => {
-            console.log(data);
-            // Handle success
+        .then(data => {
+            console.log('Success:', data);
+            // Redirect or handle successful signup
         })
-        .catch((error) => {
+        .catch(error => {
             console.error('Error:', error);
-            // Handle errors here
         });
     };
+
+    // Render form fields...
+    // Form rendering logic here...
+
+ 
+
 
     // Render form fields...
     return (
@@ -85,71 +87,6 @@ function RecruiteeSignup() {
             <div className="max-w-4xl w-full mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-6 text-gray-700">Recruitee Sign Up</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                <div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
-        Username
-    </label>
-    <input
-        id="username"
-        name="username"
-        type="text"
-        value={formData.username}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Username"
-        required
-    />
-</div>
-
-{/* Password Field */}
-<div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-        Password
-    </label>
-    <input
-        id="password"
-        name="password"
-        type="password"
-        value={formData.password}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Password"
-        required
-    />
-</div>
-
-{/* Personal ID Field */}
-<div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="personalId">
-        Personal ID
-    </label>
-    <input
-        id="personalId"
-        name="personalId"
-        type="text"
-        value={formData.personalId}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Personal ID"
-    />
-</div>
-
-{/* Name Field */}
-<div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-        Name
-    </label>
-    <input
-        id="name"
-        name="name"
-        type="text"
-        value={formData.name}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Full Name"
-        required
-    />
-</div>
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
                             Age
@@ -200,7 +137,121 @@ function RecruiteeSignup() {
         <option value="prefer_not_to_say">Prefer not to say</option>
     </select>
 </div>
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="measurementSystem">
+        Measurement System
+    </label>
+    <select
+        id="measurementSystem"
+        name="measurementSystem"
+        value={formData.measurementSystem}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="metric">Metric (cm, kg)</option>
+        <option value="imperial">Imperial (inches, lbs)</option>
+    </select>
+</div>
 
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="height">
+        Height ({formData.measurementSystem === 'metric' ? 'cm' : 'inches'})
+    </label>
+    <input
+        id="height"
+        name="height"
+        type="number"
+        value={formData.height}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder={`Height in ${formData.measurementSystem === 'metric' ? 'centimeters' : 'inches'}`}
+    />
+</div>
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="weight">
+        Weight ({formData.measurementSystem === 'metric' ? 'kg' : 'lbs'})
+    </label>
+    <input
+        id="weight"
+        name="weight"
+        type="number"
+        value={formData.weight}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder={`Weight in ${formData.measurementSystem === 'metric' ? 'kilograms' : 'pounds'}`}
+    />
+</div>
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hairColor">
+        Hair Color
+    </label>
+    <select
+        id="hairColor"
+        name="hairColor"
+        value={formData.hairColor}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select hair color</option>
+        <option value="black">Black</option>
+        <option value="brown">Brown</option>
+        <option value="blonde">Blonde</option>
+        <option value="ginger">Ginger</option>
+        <option value="gray">Gray</option>
+        <option value="white">White</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="profession">
+        Profession
+    </label>
+    <input
+        id="profession"
+        name="profession"
+        type="text"
+        value={formData.profession}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder="Profession"
+    />
+</div>
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="durationOfParticipation">
+        Duration of Participation (in weeks)
+    </label>
+    <input
+        id="durationOfParticipation"
+        name="durationOfParticipation"
+        type="number"
+        value={formData.durationOfParticipation}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        placeholder="Duration in weeks"
+    />
+</div>
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="workPreference">
+        Work Preference
+    </label>
+    <select
+        id="workPreference"
+        name="workPreference"
+        value={formData.workPreference}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="group">Group</option>
+        <option value="solo">Solo</option>
+        <option value="no preference">No Preference</option>
+    </select>
+</div>
 {/* Contact Information Field */}
 <div>
     <label htmlFor="contactInformation" className="block text-gray-700 text-sm font-bold mb-2">
@@ -232,36 +283,6 @@ function RecruiteeSignup() {
         placeholder="Name, Phone number"
     />
 </div>
-
-{/* Informed Consent Status Field */}
-<div>
-    <label htmlFor="informedConsentStatus" className="block text-gray-700 text-sm font-bold mb-2">
-        Informed Consent Status
-    </label>
-    <input
-        id="informedConsentStatus"
-        name="informedConsentStatus"
-        type="checkbox"
-        checked={formData.informedConsentStatus}
-        onChange={handleChange}
-        className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
-    />
-    <span className="ml-2 text-gray-600">Consent given</span>
-</div>
-
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="informedConsentStatus">
-                            Informed Consent Status
-                        </label>
-                        <input
-                            id="informedConsentStatus"
-                            name="informedConsentStatus"
-                            type="checkbox"
-                            checked={formData.informedConsentStatus}
-                            onChange={handleChange}
-                            className="rounded text-blue-500 leading-tight"
-                        />
-                    </div>
                     
                     {/* Conditional Medical History Field */}
 <div>
@@ -548,53 +569,26 @@ function RecruiteeSignup() {
     />
 </div>
 
-{/* Consent Form Version Field */}
+{/* Terms of Service Agreement Field */}
 <div>
-    <label htmlFor="consentFormVersion" className="block text-gray-700 text-sm font-bold mb-2">
-        Consent Form Version
+    <label htmlFor="termsOfService" className="block text-gray-700 text-sm font-bold mb-2">
+        Agree to Terms of Service
     </label>
-    <input
-        id="consentFormVersion"
-        name="consentFormVersion"
-        type="text"
-        value={formData.consentFormVersion}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Version of the consent form signed"
-    />
+    <div className="flex items-start">
+        <input
+            id="termsOfService"
+            name="termsOfService"
+            type="checkbox"
+            checked={formData.termsOfService}
+            onChange={handleChange}
+            className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline mt-1"
+        />
+        <label htmlFor="termsOfService" className="ml-2 text-gray-600">
+            I agree to the <a href="/terms-of-service" className="text-blue-500 hover:underline">Terms of Service</a>.
+        </label>
+    </div>
 </div>
 
-                    
-                   {/* Date of Consent Field */}
-<div>
-    <label htmlFor="dateOfConsent" className="block text-gray-700 text-sm font-bold mb-2">
-        Date of Consent
-    </label>
-    <input
-        id="dateOfConsent"
-        name="dateOfConsent"
-        type="date"
-        value={formData.dateOfConsent}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    />
-</div>
-
-{/* Study IDs Field */}
-<div>
-    <label htmlFor="studyIds" className="block text-gray-700 text-sm font-bold mb-2">
-        Study IDs
-    </label>
-    <input
-        id="studyIds"
-        name="studyIds"
-        type="text"
-        value={formData.studyIds}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Enter study IDs separated by commas"
-    />
-</div>
 
 {/* Submit Button */}
 <div className="flex justify-center mt-4">

@@ -2,9 +2,12 @@ from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
 from .models import User, Recruitee, Recruiter
-from .serializers import UserSerializer, RecruiteeSerializer, RecruiterSerializer, MyAuthTokenSerializer
+from .serializers import UserSerializer, RecruiteeSerializer, RecruiterSerializer, MyAuthTokenSerializer, UserRoleSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+import logging
 
 class UserSignup(views.APIView):
     # Allow any user to sign up
@@ -29,32 +32,25 @@ class UserSignup(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class UserLoginView(views.APIView):
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (permissions.AllowAny,)  # Allow any user to attempt login
 
     def post(self, request, *args, **kwargs):
         serializer = MyAuthTokenSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.validated_data['user']
-            refresh = serializer.validated_data['refresh']
-            access = serializer.validated_data['access']
-            
-            
-            # Construct a response object with JSON data
+            refresh = RefreshToken.for_user(user)  # Obtain refresh token for the user
+            access = refresh.access_token
+
             response_data = {
-                'refresh': refresh,
-                'access': access,
                 'user': {
                     'name': user.first_name,
-                    'email': user.username
-                    },
-
-                # Include any other data you want to send back
+                    'email': user.email  # Assuming user.username is the email
+                },
+                'refresh': str(refresh),
+                'access': str(access),
             }
-            
-            # Create a Response instance with the JSON data
+
             response = Response(response_data, status=status.HTTP_200_OK)
-            
-            # Set the JWT token in a HttpOnly cookie
             response.set_cookie(
                 key=settings.SIMPLE_JWT['AUTH_COOKIE'],
                 value=str(access),
@@ -63,16 +59,33 @@ class UserLoginView(views.APIView):
                 httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
                 samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
             )
-            
-            # Return the Response instance
             return response
-        
-        # Return a 400 response with validation errors
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+logger = logging.getLogger(__name__)
+
+class ValidateTokenView(views.APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        # Since this is a protected endpoint, the request will have the user attached to it
+        # by the JWTAuthentication class if the token is valid.
+        user = request.user
+        if user.is_authenticated:
+            return Response({'message': 'Token is valid', 'user': str(user)}, status=status.HTTP_200_OK)
+        return Response({'message': 'Token is invalid'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RecruiteeDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
+
+    def get(self, request, *args, **kwargs):
+        try:
+            recruitee = Recruitee.objects.get(user=request.user)
+            serializer = RecruiteeSerializer(recruitee)
+            return Response(serializer.data)
+        except Recruitee.DoesNotExist:
+            return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, *args, **kwargs):
         if not request.user.is_recruitee:
@@ -83,7 +96,6 @@ class RecruiteeDetail(views.APIView):
             serializer.save(user=request.user)  # Associate the recruitee profile with the authenticated user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 class RecruiterDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
 
@@ -96,3 +108,24 @@ class RecruiterDetail(views.APIView):
             serializer.save(user=request.user)  # Associate the recruiter profile with the authenticated user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class UserRolesView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # Serialize the request.user instance
+        serializer = UserRoleSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class CookieLoggingMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        cookies = request.COOKIES
+        if 'sessionid' in cookies:  # Replace 'sessionid' with the name of your session cookie
+            print(f"Session cookie received: {cookies['sessionid']}")
+        else:
+            print("No session cookie received.")
+        return response

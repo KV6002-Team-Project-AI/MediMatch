@@ -34,41 +34,42 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
+  
     fetch('http://localhost:8000/api/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include', // Include credentials for cross-origin requests
       body: JSON.stringify({
-        email: data.get('email'), // make sure this matches the 'name' attribute of your form input
-        password: data.get('password'), // and this one too
+        email: data.get('email'), // this should match the 'name' attribute of the form input
+        password: data.get('password'), // this too
       }),
     })
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-      if (response.status === 204 || response.status === 205) { 
-        // No content
+      if (response.status === 204 || response.status === 205) {
+        // No content or Reset Content
         return null;
       }
-      return response.json(); // Only parse if there's a response to parse
+      return response.json(); // parse the response if it has a body
     })
     .then(data => {
       if (data) {
         console.log('Success:', data);
-        // Redirect the user to their profile page after successful login
+        // Store non-sensitive data in localStorage, if needed
         localStorage.setItem('userInfo', JSON.stringify(data.user));
-        window.location.href = './profile'; // replace '/profile' with the actual path to the user's profile
+        // Redirect to the user's profile page
+       // window.location.href = './profile'; // replace with the actual path
       }
-      // handle case when there's no content
     })
     .catch((error) => {
       console.error('Error:', error);
-    })
+    });
   };
-    
+  
   
 
   return (

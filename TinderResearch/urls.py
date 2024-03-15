@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
-from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView
+from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView
 
 
 urlpatterns = [
@@ -14,8 +14,10 @@ urlpatterns = [
     path('api/signup/', UserSignup.as_view(), name='user_signup'),
     path('api/recruitee/', RecruiteeDetail.as_view(), name='recruitee_detail'),
     path('api/recruiter/', RecruiterDetail.as_view(), name='recruiter_detail'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/login/', UserLoginView.as_view(), name='user_login'),
+    path('api/user', UserRolesView.as_view(), name='user-roles'),
+    path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
+    #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     
     # ... include your other url patterns here ...
 

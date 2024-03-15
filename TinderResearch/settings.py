@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
@@ -68,11 +70,13 @@ REST_FRAMEWORK = {
     ],
 }
 
+
+
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'BLACKLIST_AFTER_ROTATION': False,
 
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
@@ -86,11 +90,32 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
 
     'AUTH_COOKIE': 'access_token',  # Cookie name. You can pick your own.
-    'AUTH_COOKIE_DOMAIN': None,     # A string like ".yourdomain.com", or None for standard domain cookie.
-    'AUTH_COOKIE_SECURE': True,     # Whether the auth tokens should only be sent over HTTPS.
+    'AUTH_COOKIE_DOMAIN': 'localhost',     # A string like ".yourdomain.com", or None for standard domain cookie.
+    'AUTH_COOKIE_SECURE': False,     # Whether the auth tokens should only be sent over HTTPS.
     'AUTH_COOKIE_HTTP_ONLY': True,  # HttpOnly flag used for security.
     'AUTH_COOKIE_SAMESITE': 'Lax',  # Strict or Lax or None
 }
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': './logfile.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
 
 ROOT_URLCONF = 'TinderResearch.urls'
 

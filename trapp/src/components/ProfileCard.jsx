@@ -8,7 +8,6 @@ const ProfileCard = () => {
     const interests = ['Football', 'Swimming', 'Reading'];
   
     return (
-      <div className='flex flex-row'>
         <div className='my-3 w-full max-w-auto'>
           <div className="flex flex-col justify-center p-2 items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl relative">
             <img src={summarise} alt="summarise" className=" w-7 h-7 hover:bg-gray-200 transition duration-300 ease-in-out transform hover:-translate-y-0.5 absolute top-2 left-2" />
@@ -40,8 +39,6 @@ const ProfileCard = () => {
             </div>
           </div>
         </div>
-        
-      </div>
     );
   };
   

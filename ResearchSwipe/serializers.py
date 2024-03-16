@@ -106,12 +106,6 @@ class RecruiteeSerializer(serializers.ModelSerializer):
         recruitee = Recruitee.objects.create(user=user, **validated_data)
         return recruitee
     
-    def update(self, instance, validated_data):
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-
-        instance.save()
-        return instance
 
 
 

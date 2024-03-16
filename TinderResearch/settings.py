@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'Syed.apps.SyedConfig',
+    'Mo.apps.MoConfig',
+    'Aymman.apps.AymmanConfig',
+    'Abdul.apps.AbdulConfig',
 ]
 
 MIDDLEWARE = [

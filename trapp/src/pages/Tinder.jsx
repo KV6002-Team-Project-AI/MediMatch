@@ -21,8 +21,8 @@ const Tinder = () => {
 
   return (
     <>
-    <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen`}>
-      <div className='my-20 items-center justify-center mx-3'>
+    <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center`}>
+      <div className='mt-0 items-center justify-center mx-3'>
         <div className="w-full h-full max-w-auto mx-auto">
           <div className="flex justify-center p-2 items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
             <select className="font-semibold py-2 px-2 rounded-lg">

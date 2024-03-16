@@ -23,6 +23,7 @@ function App() {
         <Menu />
         <Routes>
           <Route path='/' element={<LandingPage />}/>
+          <Route path='/Tinder' element={<LandingPage />}/>
           <Route path='/matches' element={<Matches />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/research' element={<Research />}/>

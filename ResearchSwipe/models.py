@@ -37,7 +37,7 @@ class Recruitee(models.Model):
     profession = models.CharField(max_length=255, null=True, blank=True)
     duration_of_participation = models.PositiveIntegerField(null=True, blank=True)  # Duration in weeks
     work_preference = models.CharField(max_length=50, choices=[('group', 'Group'), ('solo', 'Solo'), ('no preference', 'No Preference')], null=True, blank=True)
-
+    
     health_status = models.TextField(null=True, blank=True)
     lifestyle_factors = models.TextField(null=True, blank=True)
     socioeconomic_status = models.TextField(null=True, blank=True)
@@ -55,3 +55,4 @@ class Recruiter(models.Model):
     research_area = models.TextField()
     company_info = models.TextField()
     # Add other recruiter-specific fields
+

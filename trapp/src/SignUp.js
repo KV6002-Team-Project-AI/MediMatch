@@ -34,35 +34,80 @@ function Copyright(props) {
 
 export default function SignUp() {
   const [userType, setUserType] = React.useState('');
+
+  // Handle the logic after a successful signup to login the user
+  const loginNewUser = (email, password) => {
+    fetch('http://localhost:8000/api/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok during login');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // Store tokens and user info in localStorage
+      localStorage.setItem('accessToken', data.access);
+      localStorage.setItem('refreshToken', data.refresh);
+      localStorage.setItem('userInfo', JSON.stringify(data.user));
+  
+      // Redirect based on the role
+      if (data.user.is_recruitee) {
+        window.location.href = '/signup/recruitee';
+      } else if (data.user.is_recruiter) {
+        window.location.href = '/signup/recruiter';
+      }
+    })
+    .catch((error) => {
+      console.error('Error during login:', error);
+    });
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    const email = data.get('email');
+    const password = data.get('password');
   
-    // TODO: Replace 'http://localhost:8000/api/signup/' with the actual API endpoint
     fetch('http://localhost:8000/api/signup/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: data.get('email'), // Assuming username is the email
-        password: data.get('password'),
+        username: email,
+        password: password,
         first_name: data.get('firstName'),
         last_name: data.get('lastName'),
         is_recruitee: userType === 'recruitee',
         is_recruiter: userType === 'recruiter',
-        // You might want to handle first name and last name separately
-        // as they are not part of the User model by default
       }),
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok during signup');
+      }
+      return response.json();
+    })
     .then(data => {
       console.log('Success:', data);
+      // Call login function for the new user
+      loginNewUser(email, password);
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.error('Error during signup:', error);
     });
   };
+  
 
   return (
     <ThemeProvider theme={defaultTheme}>

@@ -13,6 +13,7 @@ import RecruiteeEditProfile from './RecruiteeEditProfile';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import LandingPage from './LandingPage'
 import UserStatus from './test';
 import './App.css';
 
@@ -23,7 +24,7 @@ function App() {
         <Header />
         <Menu />
         <Routes>
-          <Route path='/' element={<Tinder />}/>
+          <Route path='/' element={<LandingPage />}/>
           <Route path='/matches' element={<Matches />}/>
           <Route path='/profile' element={<Profile />}/>
           <Route path='/browse' element={<Browse />}/>
@@ -35,6 +36,7 @@ function App() {
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
           <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />
+          <Route path='/landingpage' element={<LandingPage />}/>
         </Routes>
       </div>
     </Router>

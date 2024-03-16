@@ -1,7 +1,9 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function RecruiteeSignup() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         // Initial state setup
         age: '',
@@ -69,15 +71,14 @@ function RecruiteeSignup() {
         })
         .then(data => {
             console.log('Success:', data);
-            // Redirect or handle successful signup
+            // Redirect to the profile page
+            navigate('/profile');
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
-
-    // Render form fields...
-    // Form rendering logic here...
+    
 
  
 

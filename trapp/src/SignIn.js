@@ -59,10 +59,11 @@ export default function SignIn() {
     .then(data => {
       if (data) {
         console.log('Success:', data);
-        // Store non-sensitive data in localStorage, if needed
-        localStorage.setItem('userInfo', JSON.stringify(data.user));
+        localStorage.setItem('accessToken', data.access); // Storing access token
+        localStorage.setItem('refreshToken', data.refresh); // Storing refresh token
+        localStorage.setItem('userInfo', JSON.stringify(data.user)); // Storing user info if needed
         // Redirect to the user's profile page
-       // window.location.href = './profile'; // replace with the actual path
+        // window.location.href = './profile'; // replace with the actual path
       }
     })
     .catch((error) => {
@@ -70,7 +71,8 @@ export default function SignIn() {
     });
   };
   
-  
+  console.log(localStorage.getItem('access_token'));
+
 
   return (
     <ThemeProvider theme={defaultTheme}>

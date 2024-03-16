@@ -44,26 +44,15 @@ class UserLoginView(views.APIView):
             response_data = {
                 'user': {
                     'name': user.first_name,
-                    'email': user.email  # Assuming user.username is the email
+                    'email': user.username,  # Assuming user.username is the email
                 },
                 'refresh': str(refresh),
                 'access': str(access),
             }
 
-            response = Response(response_data, status=status.HTTP_200_OK)
-            response.set_cookie(
-                key=settings.SIMPLE_JWT['AUTH_COOKIE'],
-                value=str(access),
-                expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
-                secure=settings.SIMPLE_JWT['AUTH_COOKIE_SECURE'],
-                httponly=settings.SIMPLE_JWT['AUTH_COOKIE_HTTP_ONLY'],
-                samesite=settings.SIMPLE_JWT['AUTH_COOKIE_SAMESITE']
-            )
-            return response
+            return Response(response_data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-logger = logging.getLogger(__name__)
 
 class ValidateTokenView(views.APIView):
     permission_classes = [permissions.AllowAny]
@@ -88,12 +77,14 @@ class RecruiteeDetail(views.APIView):
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_recruitee:
+        # Assuming request.user.is_recruitee is a property that checks if the user is a recruitee
+        if hasattr(request.user, 'is_recruitee') and not request.user.is_recruitee:
             return Response({"error": "User is not a recruitee"}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = RecruiteeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(user=request.user)  # Associate the recruitee profile with the authenticated user
+            # The save method on the serializer will handle the creation
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class RecruiterDetail(views.APIView):

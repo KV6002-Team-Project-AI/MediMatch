@@ -4,7 +4,6 @@ from django.views.generic import TemplateView
 from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware
 from django.conf.urls.static import static
 from django.conf import settings
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenVerifyView
 
 
 urlpatterns = [
@@ -17,6 +16,7 @@ urlpatterns = [
     path('api/login/', UserLoginView.as_view(), name='user_login'),
     path('api/user', UserRolesView.as_view(), name='user-roles'),
     path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
+   
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     
     # ... include your other url patterns here ...

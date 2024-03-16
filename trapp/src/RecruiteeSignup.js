@@ -52,12 +52,13 @@ function RecruiteeSignup() {
             alert('You must agree to the terms of service.');
             return;
         }
+        const jwtToken = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
         fetch('http://localhost:8000/api/recruitee/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                ...(jwtToken ? { 'Authorization': `Bearer ${jwtToken}` } : {}), // Include the token in the Authorization header if it exists
             },
-            credentials: 'include', // This ensures cookies are sent with the request
             body: JSON.stringify(formData),
         })
         .then(response => {
@@ -201,7 +202,6 @@ function RecruiteeSignup() {
         <option value="ginger">Ginger</option>
         <option value="gray">Gray</option>
         <option value="white">White</option>
-        <option value="other">Other</option>
     </select>
 </div>
 

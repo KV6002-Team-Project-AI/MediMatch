@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate  } from 'react-router-dom';
 
 const withAuthentication = WrappedComponent => {
   return props => {
@@ -7,40 +6,48 @@ const withAuthentication = WrappedComponent => {
     const [isChecking, setIsChecking] = useState(true);
 
     useEffect(() => {
-      fetch('http://localhost:8000/api/validate_token/', { // Endpoint to validate the token
-        method: 'GET',
-        credentials: 'include', // to include the HttpOnly cookie
-        headers: {
-            'Content-Type': 'application/json'
+      // Retrieve the token from localStorage
+      const jwtToken = localStorage.getItem('accessToken');
+      console.log('Retrieved JWT Token from localStorage:', jwtToken); // Logging the token for debugging
+
+      if (jwtToken) {
+        fetch('http://localhost:8000/api/validate_token/', { // Endpoint to validate the token
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${jwtToken}`
           },
-      })
-      .then(response => {
-        if (response.ok) {
-          setIsAuthenticated(true);
-        } else {
-          throw new Error('Not authenticated');
-        }
-      })
-      .catch(error => {
-        if (error.response && error.response.status === 401) {
-          // If the error is 401 Unauthorized, then it's an auth issue
-          console.error('Authentication error:', error);
+        })
+        .then(response => {
+          console.log('Validation response status:', response.status); // Log the response status
+          if (response.ok) {
+            setIsAuthenticated(true);
+          } else {
+            response.json().then(data => {
+              console.log('Validation error:', data); // Log the response error message
+            });
+            throw new Error('Not authenticated');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
           setIsAuthenticated(false);
-        } else {
-          // For any other type of error, you might want to handle it differently
-          console.error('Network or other error:', error);
-          // Possibly set a different state variable to show an error message to the user
-        }
-      })
+        });
+      } else {
+        setIsAuthenticated(false);
+      }
+
+      setIsChecking(false);
     }, []);
 
     if (isChecking) {
-      return <div>Loading...</div>; // Or any loading state you prefer
+      return <div>Loading...</div>;
     }
 
-   // if (!isAuthenticated) {
-   //   return <Navigate to="/signin" />;
-   // }
+    if (!isAuthenticated) {
+      // Handle redirection or show message when not authenticated
+      return <div>Please log in to view this page.</div>;
+    }
 
     return <WrappedComponent {...props} />;
   };

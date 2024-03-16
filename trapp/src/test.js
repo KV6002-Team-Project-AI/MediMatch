@@ -10,35 +10,38 @@ function UserStatus() {
   });
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await fetch('http://localhost:8000/api/user', {
-          method: 'GET',
-          credentials: 'include', // Use 'include' to send the session cookie with the request
-          headers: {
-            'Content-Type': 'application/json'
-          },
-        });
-        
-        if (!response.ok) {
-          throw new Error('You are not authorized to view this data.');
-        }
+    const jwtToken = localStorage.getItem('accessToken');
+    console.log('JWT Token from localStorage:', jwtToken);
 
-        const data = await response.json();
-        setUserRoles({
-          isRecruitee: data.is_recruitee,
-          isRecruiter: data.is_recruiter,
-          isLoading: false,
-          error: null,
-        });
-      } catch (error) {
-        setUserRoles({
-          isRecruitee: false,
-          isRecruiter: false,
-          isLoading: false,
-          error: error.message,
-        });
-      }
+    const fetchUserData = async () => {
+        try {
+            const response = await fetch('http://localhost:8000/api/user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwtToken}`
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP status ${response.status}: You are not authorized to view this data.`);
+            }
+
+            const data = await response.json();
+            setUserRoles({
+                isRecruitee: data.is_recruitee,
+                isRecruiter: data.is_recruiter,
+                isLoading: false,
+                error: null,
+            });
+        } catch (error) {
+            setUserRoles({
+                isRecruitee: false,
+                isRecruiter: false,
+                isLoading: false,
+                error: error.message,
+            });
+        }
     };
 
     fetchUserData();
@@ -61,4 +64,4 @@ function UserStatus() {
   );
 }
 
-export default withAuthentication(UserStatus); // Wrap UserStatus with the HOC
+export default withAuthentication(UserStatus);

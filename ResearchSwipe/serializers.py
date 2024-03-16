@@ -38,6 +38,8 @@ class MyAuthTokenSerializer(serializers.Serializer):
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
+    
+
 class RecruiteeSerializer(serializers.ModelSerializer):
     
     user = UserSerializer(read_only=True)
@@ -45,6 +47,7 @@ class RecruiteeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recruitee
         fields = (
+            'user',
             'age',
             'date_of_birth',
             'biological_sex',

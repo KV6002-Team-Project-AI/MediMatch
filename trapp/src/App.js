@@ -18,34 +18,25 @@ import './App.css';
 function AppWrapper() {
   return (
     <Router>
-      <App />
+      <div className="App">
+        <Header />
+        <Menu />
+        <Routes>
+          <Route path='/' element={<LandingPage />}/>
+          <Route path='/Tinder' element={<LandingPage />}/>
+          <Route path='/matches' element={<Matches />}/>
+          <Route path='/profile' element={<Profile />}/>
+          <Route path='/research' element={<Research />}/>
+          <Route path='/signin' element={<SignIn />}/>
+          <Route path='/signup' element={<SignUp />}/>
+          <Route path='/test' element={<UserStatus />}/>
+          <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
+          <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
+          <Route path="/signup/recruiter" element={<RecruiterSignup />} />
+          <Route path='/landingpage' element={<LandingPage />}/>
+        </Routes>
+      </div>
     </Router>
-  );
-}
-
-function App() {
-  const location = useLocation();
-  const excludedPaths = ['/signin', '/signup', '/signup/recruitee', '/signup/recruiter', '/landingpage', '/'];
-
-  return (
-    <div className="App">
-      {!excludedPaths.includes(location.pathname) && <Header />}
-      {!excludedPaths.includes(location.pathname) && <Menu />}
-      <Routes>
-        <Route path='/' element={<LandingPage />}/>
-        <Route path='/tinder' element={<Tinder />}/>
-        <Route path='/matches' element={<Matches />}/>
-        <Route path='/profile' element={<Profile />}/>
-        <Route path='/research' element={<Research />}/>
-        <Route path='/signin' element={<SignIn />}/>
-        <Route path='/signup' element={<SignUp />}/>
-        <Route path='/test' element={<UserStatus />}/>
-        <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
-        <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
-        <Route path="/signup/recruiter" element={<RecruiterSignup />} />
-        <Route path='/landingpage' element={<LandingPage />}/>
-      </Routes>
-    </div>
   );
 }
 

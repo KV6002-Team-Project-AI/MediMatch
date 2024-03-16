@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
-from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware, LogoutView
+from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware, LogoutView, RecruiteeUpdate
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -16,7 +16,8 @@ urlpatterns = [
     path('api/login/', UserLoginView.as_view(), name='user_login'),
     path('api/user', UserRolesView.as_view(), name='user-roles'),
     path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
-     path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/recruitee/update/', RecruiteeUpdate.as_view(), name='recruitee-update'),
    
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     

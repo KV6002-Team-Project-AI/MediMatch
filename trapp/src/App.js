@@ -9,6 +9,7 @@ import Research from './pages/Research';
 import Browse from './pages/Browse';
 import Settings from './pages/Settings';
 import RecruiteeSignup from './RecruiteeSignup';
+import RecruiteeEditProfile from './RecruiteeEditProfile';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -32,6 +33,7 @@ function App() {
           <Route path='/signup' element={<SignUp />}/>
           <Route path='/test' element={<UserStatus />}/>
           <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
+          <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
           <Route path="/signup/recruiter" element={<RecruiterSignup />} />
         </Routes>
       </div>

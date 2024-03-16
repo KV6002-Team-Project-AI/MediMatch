@@ -107,9 +107,6 @@ class RecruiteeSerializer(serializers.ModelSerializer):
         return recruitee
     
 
-
-
-
 class RecruiterSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=True)
 

@@ -1,2 +1,6 @@
 # exclude db from push requests
 db.sqlite3
+
+# Exclude static files
+.trapp/index.html
+.trapp/static/*

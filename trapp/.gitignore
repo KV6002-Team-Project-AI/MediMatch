@@ -13,6 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
+.index
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,3 +23,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Exclude static files
+static/*

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Menu from './components/Menu';
 import Header from './components/Header';
 import Tinder from './pages/Tinder';
@@ -15,29 +15,38 @@ import LandingPage from './LandingPage'
 import UserStatus from './test';
 import './App.css';
 
-function App() {
+function AppWrapper() {
   return (
     <Router>
-      <div className="App">
-        <Header />
-        <Menu />
-        <Routes>
-          <Route path='/' element={<LandingPage />}/>
-          <Route path='/Tinder' element={<LandingPage />}/>
-          <Route path='/matches' element={<Matches />}/>
-          <Route path='/profile' element={<Profile />}/>
-          <Route path='/research' element={<Research />}/>
-          <Route path='/signin' element={<SignIn />}/>
-          <Route path='/signup' element={<SignUp />}/>
-          <Route path='/test' element={<UserStatus />}/>
-          <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
-          <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
-          <Route path="/signup/recruiter" element={<RecruiterSignup />} />
-          <Route path='/landingpage' element={<LandingPage />}/>
-        </Routes>
-      </div>
+      <App />
     </Router>
   );
 }
 
-export default App;
+function App() {
+  const location = useLocation();
+  const excludedPaths = ['/signin', '/signup', '/signup/recruitee', '/signup/recruiter', '/landingpage', '/'];
+
+  return (
+    <div className="App">
+      {!excludedPaths.includes(location.pathname) && <Header />}
+      {!excludedPaths.includes(location.pathname) && <Menu />}
+      <Routes>
+        <Route path='/' element={<LandingPage />}/>
+        <Route path='/tinder' element={<Tinder />}/>
+        <Route path='/matches' element={<Matches />}/>
+        <Route path='/profile' element={<Profile />}/>
+        <Route path='/research' element={<Research />}/>
+        <Route path='/signin' element={<SignIn />}/>
+        <Route path='/signup' element={<SignUp />}/>
+        <Route path='/test' element={<UserStatus />}/>
+        <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
+        <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
+        <Route path="/signup/recruiter" element={<RecruiterSignup />} />
+        <Route path='/landingpage' element={<LandingPage />}/>
+      </Routes>
+    </div>
+  );
+}
+
+export default AppWrapper;

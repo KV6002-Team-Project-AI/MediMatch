@@ -17,26 +17,40 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
 
+
+
 class MyAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get('email')  # This should match the field name you use on the front end
+        username = data.get('email')
         password = data.get('password')
         user = authenticate(username=username, password=password)
+
         if user is None:
-            raise serializers.ValidationError(
-                'A user with this email and password is not found.'
-            )
-        # No need for a try-except block here, because if authenticate() 
-        # doesn't raise an exception, the user exists.
-        refresh = RefreshToken.for_user(user)
-        update_last_login(None, user)  # Make sure update_last_login is imported
+            raise serializers.ValidationError('A user with this email and password is not found.')
+
+        # Check if the user has completed the additional information forms
+        has_filled_recruitee_form = Recruitee.objects.filter(user=user).exists()
+        has_filled_recruiter_form = Recruiter.objects.filter(user=user).exists()
+
+        # Update the last login time for the user
+        update_last_login(None, user)
+
         return {
-            'user': user,  # Set the user in validated_data
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'user_instance': user,  # Return the user instance for token generation
+            'user_info': {  # Return additional info for response
+                'id': user.id,
+                'name': user.get_full_name(),
+                'email': user.email,
+                'is_recruitee': user.is_recruitee,
+                'is_recruiter': user.is_recruiter,
+                'has_filled_recruitee_form': has_filled_recruitee_form,
+                'has_filled_recruiter_form': has_filled_recruiter_form,
+            },
+            'refresh': str(RefreshToken.for_user(user)),
+            'access': str(RefreshToken.for_user(user).access_token),
         }
     
 

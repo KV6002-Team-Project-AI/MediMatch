@@ -37,22 +37,21 @@ class UserLoginView(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = MyAuthTokenSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.validated_data['user']
-            refresh = RefreshToken.for_user(user)  # Obtain refresh token for the user
-            access = refresh.access_token
+            user_instance = serializer.validated_data['user_instance']
+            user_info = serializer.validated_data['user_info']
+            refresh = serializer.validated_data['refresh']
+            access = serializer.validated_data['access']
 
             response_data = {
-                'user': {
-                    'name': user.first_name,
-                    'email': user.username,  # Assuming user.username is the email
-                },
-                'refresh': str(refresh),
-                'access': str(access),
+                'user': user_info,
+                'refresh': refresh,
+                'access': access,
             }
 
             return Response(response_data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ValidateTokenView(views.APIView):
     permission_classes = [permissions.AllowAny]

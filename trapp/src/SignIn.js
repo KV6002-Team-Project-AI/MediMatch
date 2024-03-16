@@ -59,11 +59,21 @@ export default function SignIn() {
     .then(data => {
       if (data) {
         console.log('Success:', data);
-        localStorage.setItem('accessToken', data.access); // Storing access token
-        localStorage.setItem('refreshToken', data.refresh); // Storing refresh token
-        localStorage.setItem('userInfo', JSON.stringify(data.user)); // Storing user info if needed
-        // Redirect to the user's profile page
-        // window.location.href = './profile'; // replace with the actual path
+        localStorage.setItem('accessToken', data.access);
+        localStorage.setItem('refreshToken', data.refresh);
+        localStorage.setItem('userInfo', JSON.stringify(data.user));
+    
+        // Check the user's role and redirect accordingly
+        if (data.user.is_recruitee) {
+          // Further check if the recruitee has filled out the additional info
+          window.location.href = data.user.has_filled_recruitee_form ? './profile' : './signup/recruitee';
+        } else if (data.user.is_recruiter) {
+          // Similarly, check for the recruiter
+          window.location.href = data.user.has_filled_recruiter_form ? './profile' : './signup/recruiter';
+        } else {
+          // If neither, direct to a default page or error page
+          window.location.href = './';
+        }
       }
     })
     .catch((error) => {

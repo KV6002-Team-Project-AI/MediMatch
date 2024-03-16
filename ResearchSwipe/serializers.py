@@ -43,7 +43,7 @@ class MyAuthTokenSerializer(serializers.Serializer):
             'user_info': {  # Return additional info for response
                 'id': user.id,
                 'name': user.get_full_name(),
-                'email': user.email,
+                'email': user.username,
                 'is_recruitee': user.is_recruitee,
                 'is_recruiter': user.is_recruiter,
                 'has_filled_recruitee_form': has_filled_recruitee_form,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import puzzleLogo from '../assets/puzzle.png';
 import mediMatchLogo from '../assets/MediMatchLogo.png';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 function Header() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const [userRoles, setUserRoles] = useState({ isRecruitee: false, isRecruiter: false });
 
@@ -36,6 +37,24 @@ function Header() {
         setAnchorEl(null);
     };
 
+    const handleLogout = () => {
+        fetch('/api/logout/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ refresh: localStorage.getItem('refreshToken') })
+        })
+        .then(() => {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            handleClose();  // Close the settings menu
+            navigate('/signin');  // Redirect to sign-in page
+        })
+        .catch(error => console.error('Error during logout:', error));
+    };
+
     return (
         <div className="fixed inset-x-0 top-0 bg-white shadow-md pt-1.5 h-16 z-10">
             <ul className="flex justify-between items-center text-sm font-medium px-4 gap-1">
@@ -59,6 +78,7 @@ function Header() {
                             {userRoles.isRecruiter && (
                                 <MenuItem onClick={handleClose} component={Link} to="/recruiter-profile-edit">Recruiter Profile Edit</MenuItem>
                             )}
+                            <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                         </Menu>
                     </div>
                 </li>

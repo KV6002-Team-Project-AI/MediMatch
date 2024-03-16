@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Menu from './components/Menu';
 import Header from './components/Header';
 import Tinder from './pages/Tinder';
@@ -44,6 +44,10 @@ function App() {
         <Route path="/update/recruitee" element={<RecruiteeEditProfile />} />
         <Route path="/signup/recruiter" element={<RecruiterSignup />} />
         <Route path='/landingpage' element={<LandingPage />}/>
+
+
+        {/* Catch-all route */}
+        <Route path='*' element={<Navigate to='/profile' replace />} />
       </Routes>
     </div>
   );

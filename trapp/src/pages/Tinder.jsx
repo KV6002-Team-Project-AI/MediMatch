@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import ProfileCard from '../components/ProfileCard';
+import withAuthentication from '../HOCauth'; // Import the HOC
+
 
 const Tinder = () => {
   // State to manage the background color
@@ -51,4 +53,4 @@ const Tinder = () => {
   );
 };
 
-export default Tinder;
+export default withAuthentication(Tinder);

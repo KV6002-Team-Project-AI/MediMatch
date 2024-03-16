@@ -1,5 +1,7 @@
 import React from 'react';
 import UserProfile from '../components/userProfile';
+import withAuthentication from '../HOCauth'; // Import the HOC
+
 
 
 function Profile() {
@@ -23,4 +25,4 @@ function Profile() {
     );
 }
 
-export default Profile;
+export default withAuthentication(Profile);

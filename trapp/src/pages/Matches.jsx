@@ -1,5 +1,6 @@
 import profilePic from '../assets/profile-pic.jpg'
 import infoLogo from '../assets/info.png'
+import withAuthentication from '../HOCauth'; // Import the HOC
 
 function Matches() {
 
@@ -40,4 +41,4 @@ function Matches() {
     )
 }
 
-export default Matches
+export default withAuthentication(Matches);

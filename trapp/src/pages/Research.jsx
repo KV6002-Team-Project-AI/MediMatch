@@ -1,7 +1,9 @@
 import addLogo from '../assets/add.svg'
+import withAuthentication from '../HOCauth'; // Import the HOC
 
 function Research() {
 
+    
     return (
         <>
             <div className="mx-3 my-20">
@@ -89,5 +91,5 @@ function Research() {
     )
 }
  
-export default Research
+export default withAuthentication(Research);
  

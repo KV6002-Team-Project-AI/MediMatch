@@ -16,7 +16,6 @@ function Menu() {
 
   const menuItems = [
     { name: 'Tinder', icon: <HomeIcon />, path: '/' },
-    { name: 'Browse', icon: <SearchIcon />, path: '/browse' },
     { name: 'Research', icon: <InsightsIcon />, path: '/research' },
     { name: 'Matches', icon: <FavoriteIcon />, path: '/matches', badge: true },
     { name: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },

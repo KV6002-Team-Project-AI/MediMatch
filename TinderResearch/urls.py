@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware, LogoutView, RecruiteeUpdate
-# from Syed.views import RecruiterStudy
+from Syed.views import StudyCreateAPIView
 from django.conf.urls.static import static
 from django.conf import settings
 
@@ -25,7 +25,9 @@ urlpatterns = [
     # ... include your other url patterns here ...
 
     # Syed Paths
-    # path('api/recruiter/studies/', RecruiterStudy.as_view(), name='recruitee-studies'),
+    path('api/studycreate/', StudyCreateAPIView.as_view(), name='study-create'),
+    
+
 
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),

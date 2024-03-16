@@ -1,17 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import puzzleLogo from '../assets/puzzle.png';
 import mediMatchLogo from '../assets/MediMatchLogo.png';
 import SettingsIcon from '@mui/icons-material/Settings';
-
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 function Header() {
     const location = useLocation();
-    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [userRoles, setUserRoles] = useState({ isRecruitee: false, isRecruiter: false });
 
-    const toggleDrawer = (newOpen) => () => {
-      setOpen(newOpen);
-    }
+    useEffect(() => {
+        // API call to fetch user roles
+        fetch('/api/user', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            setUserRoles({
+                isRecruitee: data.is_recruitee,
+                isRecruiter: data.is_recruiter
+            });
+        })
+        .catch(error => console.error('Error fetching user roles:', error));
+    }, []);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <div className="fixed inset-x-0 top-0 bg-white shadow-md pt-1.5 h-16 z-10">
@@ -23,9 +46,21 @@ function Header() {
                     </Link>
                 </li>
                 <li>
-                    <Link to="/settings" className={`transition duration-200 ease-in-out hover:bg-gray-200 ${location.pathname === '/settings'} rounded-full p-2 mt-1 inline-block`}>
-                        <SettingsIcon sx={{ fontSize: 30 }}/>
-                    </Link>
+                    <div>
+                        <SettingsIcon sx={{ fontSize: 30 }} onClick={handleMenu} className="cursor-pointer" />
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            {userRoles.isRecruitee && (
+                                <MenuItem onClick={handleClose} component={Link} to="/recruitee-profile-edit">Recruitee Profile Edit</MenuItem>
+                            )}
+                            {userRoles.isRecruiter && (
+                                <MenuItem onClick={handleClose} component={Link} to="/recruiter-profile-edit">Recruiter Profile Edit</MenuItem>
+                            )}
+                        </Menu>
+                    </div>
                 </li>
             </ul>
         </div>

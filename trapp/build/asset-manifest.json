@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/static/css/main.e7063b98.css",
-    "main.js": "/static/js/main.7ac92d6b.js",
-    "static/js/453.dbaddae4.chunk.js": "/static/js/453.dbaddae4.chunk.js",
+    "main.css": "/static/css/main.c4bade81.css",
+    "main.js": "/static/js/main.ad7ed605.js",
+    "static/js/592.408e8e10.chunk.js": "/static/js/592.408e8e10.chunk.js",
     "static/media/profile-pic.jpg": "/static/media/profile-pic.ef6304130ca986003683.jpg",
     "static/media/MediMatchLogo.png": "/static/media/MediMatchLogo.7a298a1ba9978a88d68b.png",
     "static/media/info.png": "/static/media/info.8d2c2e2cd81460bf9d5f.png",
@@ -10,12 +10,12 @@
     "static/media/summary.png": "/static/media/summary.c7bd95d583bb13be795a.png",
     "static/media/add.svg": "/static/media/add.c0ff4737afe3a322cdbcd0ca75936452.svg",
     "index.html": "/index.html",
-    "main.e7063b98.css.map": "/static/css/main.e7063b98.css.map",
-    "main.7ac92d6b.js.map": "/static/js/main.7ac92d6b.js.map",
-    "453.dbaddae4.chunk.js.map": "/static/js/453.dbaddae4.chunk.js.map"
+    "main.c4bade81.css.map": "/static/css/main.c4bade81.css.map",
+    "main.ad7ed605.js.map": "/static/js/main.ad7ed605.js.map",
+    "592.408e8e10.chunk.js.map": "/static/js/592.408e8e10.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.e7063b98.css",
-    "static/js/main.7ac92d6b.js"
+    "static/css/main.c4bade81.css",
+    "static/js/main.ad7ed605.js"
   ]
 }

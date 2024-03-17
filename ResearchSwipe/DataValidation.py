@@ -296,7 +296,7 @@ GROUP_CHOICES = [
 PREGNANCY_STATUS_CHOICES = [
         ('yes', 'Yes'),
         ('no', 'No'),
-    ]
+]
 
 LANGUAGE_CHOICES = [
     ('abkhaz', 'Abkhaz'),

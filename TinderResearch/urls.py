@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
-from ResearchSwipe.views import UserSignup, RecruiteeDetail, RecruiterDetail, UserLoginView, UserRolesView, ValidateTokenView, CookieLoggingMiddleware, LogoutView, RecruiteeUpdate
+from ResearchSwipe.views import *
 from Syed.views import StudyCreate
 from django.conf.urls.static import static
 from django.conf import settings
@@ -10,7 +10,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    # Add your API endpoints here
+    # Jed's API paths from ResearchSwipe
     path('api/signup/', UserSignup.as_view(), name='user_signup'),
     path('api/recruitee/', RecruiteeDetail.as_view(), name='recruitee_detail'),
     path('api/recruiter/', RecruiterDetail.as_view(), name='recruiter_detail'),
@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/recruitee/update/', RecruiteeUpdate.as_view(), name='recruitee-update'),
+    path('api/dropdown-choices/', DropdownChoicesAPIView.as_view(), name='dropdown-choices'),
    
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     

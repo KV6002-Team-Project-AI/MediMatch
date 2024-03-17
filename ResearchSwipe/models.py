@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from DataValidation import (NATIONALITY_CHOICES, ETHNICITY_CHOICES, ACTIVITY_LEVEL_CHOICES, HAIR_COLOR_CHOICES, 
-                            HEALTH_STATUS_CHOICES, SOCIOECONOMIC_STATUS_CHOICES, MEASUREMENT_CHOICES, GROUP_CHOICES, 
-                            PREGNANCY_STATUS_CHOICES, LANGUAGE_CHOICES, PROFESSION_CHOICES, SEX_CHOICES, DURATION_CHOICES)
+from .datavalidation import *
+
 
 
 
@@ -48,6 +47,7 @@ class Recruitee(models.Model):
     duration_of_participation = models.CharField(max_length=20, choices=DURATION_CHOICES, null=True, blank=True)
     biological_sex = models.CharField(max_length=50, choices=SEX_CHOICES, null=True, blank=True)
     pregnancy_status = models.CharField(max_length=3,choices=PREGNANCY_STATUS_CHOICES ,null=True, blank=True)
+    study_preference = models.CharField(max_length=100,choices=STUDY_PREFERENCE_CHOICES, null=True, blank=True)
     # Measurement system preference
     measurement_system = models.CharField(max_length=20, choices=MEASUREMENT_CHOICES, default='metric')
     #End of DropDown

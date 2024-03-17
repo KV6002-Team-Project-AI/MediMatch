@@ -7,7 +7,6 @@ import Matches from './pages/Matches';
 import Profile from './pages/Profile';
 import Research from './pages/Research';
 import RecruiteeSignup from './RecruiteeSignup';
-import RecruiteeEditProfile from './RecruiteeEditProfile';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
 import SignUp from './SignUp';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ProfileCard from '../components/ProfileCard';
+import ProfileCard from '../components/MobileProfileCard';
 import withAuthentication from '../HOCauth'; // Import the HOC
 
 
@@ -32,7 +32,7 @@ const Tinder = () => {
         </div>
 
         <div className='mt-10 mx-3 flex-grow flex flex-col items-center justify-center'>
-          <ProfileCard/>
+          <MobileProfileCard/>
 
           <div className="w-full max-w-screen-md mx-auto">
             <div className='flex text-white gap-2 text-center'>

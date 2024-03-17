@@ -88,25 +88,27 @@ class RecruiteeDetail(views.APIView):
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, *args, **kwargs):
-        # Assuming request.user.is_recruitee is a property that checks if the user is a recruitee
         if hasattr(request.user, 'is_recruitee') and not request.user.is_recruitee:
             return Response({"error": "User is not a recruitee"}, status=status.HTTP_400_BAD_REQUEST)
         
         serializer = RecruiteeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            # The save method on the serializer will handle the creation
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-class RecruiteeUpdate(generics.UpdateAPIView):
-    permission_classes = [permissions.IsAuthenticated]
-    serializer_class = RecruiteeSerializer
-    queryset = Recruitee.objects.all()
 
-    def get_object(self):
-        # Ensure the user can only update their own profile
-        return Recruitee.objects.get(user=self.request.user)
+    def put(self, request, *args, **kwargs):
+        try:
+            recruitee = Recruitee.objects.get(user=request.user)
+        except Recruitee.DoesNotExist:
+            return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RecruiteeSerializer(recruitee, data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 
 class RecruiterDetail(views.APIView):
@@ -148,19 +150,22 @@ class CookieLoggingMiddleware:
 class DropdownChoicesAPIView(views.APIView):
     def get(self, request):
         choices = {
-            'health_status_choices': [choice[1] for choice in HEALTH_STATUS_CHOICES],
-            'activity_level_choices': [choice[1] for choice in ACTIVITY_LEVEL_CHOICES],
-            'socioeconomic_status_choices': [choice[1] for choice in SOCIOECONOMIC_STATUS_CHOICES],
-            'hair_color_choices': [choice[1] for choice in HAIR_COLOR_CHOICES],
-            'ethnicity_choices': [choice[1] for choice in ETHNICITY_CHOICES],
-            'work_preference_choices': [choice[1] for choice in GROUP_CHOICES],
-            'nationality_choices': [choice[1] for choice in NATIONALITY_CHOICES],
-            'language_preferences_choices': [choice[1] for choice in LANGUAGE_CHOICES],
-            'profession_choices': [choice[1] for choice in PROFESSION_CHOICES],
-            'duration_of_participation_choices': [choice[1] for choice in DURATION_CHOICES],
-            'biological_sex_choices': [choice[1] for choice in SEX_CHOICES],
-            'pregnancy_status_choices': [choice[1] for choice in PREGNANCY_STATUS_CHOICES],
-            'measurement_system_choices': [choice[1] for choice in MEASUREMENT_CHOICES],
-            'study_preference_choices': [choice[1] for choice in STUDY_PREFERENCE_CHOICES],
+            'health_status_choices': HEALTH_STATUS_CHOICES,
+            'activity_level_choices': ACTIVITY_LEVEL_CHOICES,
+            'socioeconomic_status_choices': SOCIOECONOMIC_STATUS_CHOICES,
+            'hair_color_choices': HAIR_COLOR_CHOICES,
+            'ethnicity_choices': ETHNICITY_CHOICES,
+            'work_preference_choices': GROUP_CHOICES,
+            'nationality_choices': NATIONALITY_CHOICES,
+            'language_preferences_choices': LANGUAGE_CHOICES,
+            'profession_choices': PROFESSION_CHOICES,
+            'duration_of_participation_choices': DURATION_CHOICES,
+            'biological_sex_choices': SEX_CHOICES,
+            'pregnancy_status_choices': PREGNANCY_STATUS_CHOICES,
+            'measurement_system_choices': MEASUREMENT_CHOICES,
+            'study_preference_choices': STUDY_PREFERENCE_CHOICES,
+            'interest_choices': INTEREST_CHOICES,
         }
-        return Response(choices)
+        # Convert each choice tuple into a dictionary format that is easy to handle in the frontend
+        formatted_choices = {key: [{'key': choice[0], 'value': choice[1]} for choice in value] for key, value in choices.items()}
+        return Response(formatted_choices)

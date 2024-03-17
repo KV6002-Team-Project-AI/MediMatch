@@ -2,52 +2,69 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
-
 function RecruiteeSignup() {
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
-        // Initial state setup
         age: '',
-        dateOfBirth: '',
-        biologicalSex: '',
-        contactInformation: '',
-        emergencyContact: '',
+        date_of_birth: '',
+        biological_sex: '',
+        contact_information: '',
+        emergency_contact: '',
         informedConsentStatus: false,
-        hasMedicalHistory: false,
-        medicalHistoryDetails: '',
-        takingCurrentMedications: false,
-        currentMedicationDetails: '',
-        hasMedicationHistory: false,
-        medicationHistoryDetails: '',
-        hasAllergies: false,
-        allergyDetails: '',
-        hasFamilyMedicalHistory: false,
-        familyMedicalHistoryDetails: '',
-        measurementSystem: 'metric',
+        has_medical_history: false,
+        medical_history_details: '',
+        taking_current_medications: false,
+        current_medication_details: '',
+        has_medication_history: false,
+        medication_history_details: '',
+        has_allergies: false,
+        allergy_details: '',
+        has_family_medical_history: false,
+        family_medical_history_details: '',
+        measurement_system: 'metric',
         height: '',
         weight: '',
-        hairColor: '',
+        hair_color: '',
         profession: '',
-        durationOfParticipation: '',
-        workPreference: 'no preference',
-        healthStatus: '',
-        lifestyleFactors: '',
-        socioeconomicStatus: '',
+        duration_of_participation: '',
+        work_preference: 'no preference',
+        health_status: '',
+        lifestyle_factors: '',
+        socioeconomic_status: '',
         ethnicity: '',
-        race: '',
-        pregnancyStatus: '',
-        languagePreferences: '',
-        participationHistory: '',
+        nationality: '',  
+        pregnancy_status: '', 
+        language_preferences: '',
+        study_preference: '',
+        interest_1: '',
+        interest_2: '',
+        interest_3: '',
+        interest_4: '',
+        bio: '',
         termsOfService: false
     });
     useEffect(() => {
         fetch('http://localhost:8000/api/dropdown-choices/')
             .then(response => response.json())
             .then(data => setDropdownChoices(data))
-            .catch(error => console.error('Error fetching dropdown choices:', error));
-    }, []);
+        // Load existing recruitee data if editing
+    fetch('http://localhost:8000/api/recruitee/', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.user) { // Check if user data exists in the response
+            setFormData({
+                ...data, // Populate form data with existing details
+                informedConsentStatus: false, // Reset certain flags as needed
+            });
+        }
+    })
+    .catch(error => console.error('Error fetching recruitee details:', error));
+}, []);
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
         setFormData({
@@ -60,19 +77,32 @@ function RecruiteeSignup() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // Convert the date of birth from the form data to a Date object
+    const dob = new Date(formData.date_of_birth);
+    const ageDiffMs = Date.now() - dob.getTime();
+    const ageDate = new Date(ageDiffMs);
+    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+    const url = 'http://localhost:8000/api/recruitee/';
+    const method = formData.user ? 'PUT' : 'POST';
+
+    // Check if age is less than 18
+    if (age < 18) {
+        alert('You must be at least 18 years old to submit this form.');
+        return; // Prevent the form from submitting
+    }
         if (!formData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
-        }
+        }// Prevent the form from submitting
         const jwtToken = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
-        fetch('http://localhost:8000/api/recruitee/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                ...(jwtToken ? { 'Authorization': `Bearer ${jwtToken}` } : {}), // Include the token in the Authorization header if it exists
-            },
-            body: JSON.stringify(formData),
-        })
+        fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+        body: JSON.stringify(formData),
+    })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -81,8 +111,7 @@ function RecruiteeSignup() {
         })
         .then(data => {
             console.log('Success:', data);
-            // Redirect to the profile page
-            navigate('/profile');
+            navigate('/profile'); // or another appropriate action
         })
         .catch(error => {
             console.error('Error:', error);
@@ -99,32 +128,36 @@ function RecruiteeSignup() {
             <div className="max-w-4xl w-full mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
                 <h2 className="text-2xl font-bold mb-6 text-gray-700">Recruitee Sign Up</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                            Age
-                        </label>
-                        <input
-                            id="age"
-                            name="age"
-                            type="number"
-                            value={formData.age}
-                            onChange={handleChange}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            placeholder="Age"
-                            required
-                        />
-                    </div>
+
+
+ <div>
+        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
+            Age
+        </label>
+        <input
+            id="age"
+            name="age"
+            type="number"
+            value={formData.age}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            placeholder="Age"
+            min="1"
+            required
+        />
+</div>
+
                     
                     {/* Date of Birth Field */}
 <div>
-    <label htmlFor="dateOfBirth" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="date_of_birth" className="block text-gray-700 text-sm font-bold mb-2">
         Date of Birth
     </label>
     <input
-        id="dateOfBirth"
-        name="dateOfBirth"
+        id="date_of_birth"
+        name="date_of_birth"
         type="date"
-        value={formData.dateOfBirth}
+        value={formData.date_of_birth}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     />
@@ -132,42 +165,51 @@ function RecruiteeSignup() {
 
 {/* Biological Sex Field */}
 <div>
-    <label htmlFor="biologicalSex" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="biological_sex" className="block text-gray-700 text-sm font-bold mb-2">
         Biological Sex
     </label>
     <select
-        id="biologicalSex"
-        name="biologicalSex"
-        value={formData.biologicalSex}
+        id="biological_sex"
+        name="biological_sex"
+        value={formData.biological_sex}
         onChange={handleChange}
         className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
     >
         <option value="">Select</option>
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-        <option value="other">Other</option>
-        <option value="prefer_not_to_say">Prefer not to say</option>
-    </select>
-</div>
-<div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="measurementSystem">
-        Measurement System
-    </label>
-    <select
-        id="measurementSystem"
-        name="measurementSystem"
-        value={formData.measurementSystem}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-    >
-        <option value="metric">Metric (cm, kg)</option>
-        <option value="imperial">Imperial (inches, lbs)</option>
+        {dropdownChoices.biological_sex_choices &&
+            dropdownChoices.biological_sex_choices.map((sex) => (
+                <option key={sex.key} value={sex.key}>
+                    {sex.value}
+                </option>
+            ))}
     </select>
 </div>
 
+
+
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="measurement_system">
+        Measurement System
+    </label>
+    <select
+        id="measurement_system"
+        name="measurement_system"
+        value={formData.measurement_system}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+        {dropdownChoices.measurement_system_choices?.map((system) => (
+            <option key={system.key} value={system.key}>
+                {system.value === 'Metric' ? 'Metric (cm, kg)' : 'Imperial (inches, lbs)'}
+            </option>
+        ))}
+    </select>
+</div>
+
+
 <div>
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="height">
-        Height ({formData.measurementSystem === 'metric' ? 'cm' : 'inches'})
+        Height ({formData.measurement_system === 'metric' ? 'cm' : 'inches'})
     </label>
     <input
         id="height"
@@ -176,13 +218,14 @@ function RecruiteeSignup() {
         value={formData.height}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder={`Height in ${formData.measurementSystem === 'metric' ? 'centimeters' : 'inches'}`}
+        placeholder={`Height in ${formData.measurement_system === 'Metric' ? 'centimeters' : 'inches'}`}
+        min="0"
     />
 </div>
 
 <div>
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="weight">
-        Weight ({formData.measurementSystem === 'metric' ? 'kg' : 'lbs'})
+        Weight ({formData.measurement_system === 'metric' ? 'kg' : 'lbs'})
     </label>
     <input
         id="weight"
@@ -191,88 +234,110 @@ function RecruiteeSignup() {
         value={formData.weight}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder={`Weight in ${formData.measurementSystem === 'metric' ? 'kilograms' : 'pounds'}`}
+        placeholder={`Weight in ${formData.measurement_system === 'Metric' ? 'kilograms' : 'pounds'}`}
+        min="0"
     />
 </div>
 
+
 <div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hairColor">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="hair_color">
         Hair Color
     </label>
     <select
-        id="hairColor"
-        name="hairColor"
-        value={formData.hairColor}
+        id="hair_color"
+        name="hair_color"
+        value={formData.hair_color}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     >
         <option value="">Select hair color</option>
-        <option value="black">Black</option>
-        <option value="brown">Brown</option>
-        <option value="blonde">Blonde</option>
-        <option value="ginger">Ginger</option>
-        <option value="gray">Gray</option>
-        <option value="white">White</option>
+        {dropdownChoices.hair_color_choices &&
+            dropdownChoices.hair_color_choices.map((color) => (
+                <option key={color.key} value={color.key}>
+                    {color.value}
+                </option>
+            ))}
     </select>
 </div>
 
 
+        {/* Profession */}
 <div>
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="profession">
         Profession
     </label>
-    <input
-        id="profession"
-        name="profession"
-        type="text"
-        value={formData.profession}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Profession"
-    />
+    <select
+    id="profession"
+    name="profession"
+    value={formData.profession}
+    onChange={handleChange}
+    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+>
+    <option value="">Select Profession</option>
+    {dropdownChoices.profession_choices &&
+        dropdownChoices.profession_choices.map(option => (
+            <option key={option.key} value={option.key}>
+                {option.value}
+            </option>
+        ))}
+</select>
 </div>
 
+        {/* Duration Preference */}
 <div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="durationOfParticipation">
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="duration_of_participation">
         Duration of Participation (in weeks)
     </label>
-    <input
-        id="durationOfParticipation"
-        name="durationOfParticipation"
-        type="number"
-        value={formData.durationOfParticipation}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Duration in weeks"
-    />
-</div>
-
-<div>
-    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="workPreference">
-        Work Preference
-    </label>
     <select
-        id="workPreference"
-        name="workPreference"
-        value={formData.workPreference}
+        id="duration_of_participation"
+        name="duration_of_participation"
+        value={formData.duration_of_participation}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
     >
-        <option value="group">Group</option>
-        <option value="solo">Solo</option>
-        <option value="no preference">No Preference</option>
+        <option value="">Select Duration</option>
+        {dropdownChoices.duration_of_participation_choices &&
+            dropdownChoices.duration_of_participation_choices.map(option => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
     </select>
 </div>
+
+{/* Work Preference */}
+<div>
+    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="work_preference">
+        Work Preference
+    </label>
+    <select
+        id="work_preference"
+        name="work_preference"
+        value={formData.work_preference}
+        onChange={handleChange}
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Work Preference</option>
+        {dropdownChoices.work_preference_choices &&
+            dropdownChoices.work_preference_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
 {/* Contact Information Field */}
 <div>
-    <label htmlFor="contactInformation" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="contact_information" className="block text-gray-700 text-sm font-bold mb-2">
         Contact Information
     </label>
     <input
-        id="contactInformation"
-        name="contactInformation"
+        id="contact_information"
+        name="contact_information"
         type="text"
-        value={formData.contactInformation}
+        value={formData.contact_information}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Phone number, email"
@@ -281,14 +346,14 @@ function RecruiteeSignup() {
 
 {/* Emergency Contact Field */}
 <div>
-    <label htmlFor="emergencyContact" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="emergency_contact" className="block text-gray-700 text-sm font-bold mb-2">
         Emergency Contact
     </label>
     <input
-        id="emergencyContact"
-        name="emergencyContact"
+        id="emergency_contact"
+        name="emergency_contact"
         type="text"
-        value={formData.emergencyContact}
+        value={formData.emergency_contact}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Name, Phone number"
@@ -297,22 +362,22 @@ function RecruiteeSignup() {
                     
                     {/* Conditional Medical History Field */}
 <div>
-    <label htmlFor="hasMedicalHistory" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="has_medical_history" className="block text-gray-700 text-sm font-bold mb-2">
         Do you have a medical history?
     </label>
     <input
-        id="hasMedicalHistory"
-        name="hasMedicalHistory"
+        id="has_medical_history"
+        name="has_medical_history"
         type="checkbox"
-        checked={formData.hasMedicalHistory}
+        checked={formData.has_medical_history}
         onChange={handleChange}
         className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
     />
-    {formData.hasMedicalHistory && (
+    {formData.has_medical_history && (
         <textarea
-            id="medicalHistoryDetails"
-            name="medicalHistoryDetails"
-            value={formData.medicalHistoryDetails}
+            id="medical_history_details"
+            name="medical_history_details"
+            value={formData.medical_history_details}
             onChange={handleChange}
             className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Please provide details of your medical history"
@@ -322,22 +387,22 @@ function RecruiteeSignup() {
 
 {/* Taking Current Medications Field */}
 <div>
-    <label htmlFor="takingCurrentMedications" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="taking_current_medications" className="block text-gray-700 text-sm font-bold mb-2">
         Are you currently taking any medications?
     </label>
     <input
-        id="takingCurrentMedications"
-        name="takingCurrentMedications"
+        id="taking_current_medications"
+        name="taking_current_medications"
         type="checkbox"
-        checked={formData.takingCurrentMedications}
+        checked={formData.taking_current_medications}
         onChange={handleChange}
         className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
     />
-    {formData.takingCurrentMedications && (
+    {formData.taking_current_medications && (
         <textarea
-            id="currentMedicationDetails"
-            name="currentMedicationDetails"
-            value={formData.currentMedicationDetails}
+            id="current_medication_details"
+            name="current_medication_details"
+            value={formData.current_medication_details}
             onChange={handleChange}
             className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Please list your current medications"
@@ -347,22 +412,22 @@ function RecruiteeSignup() {
 
 {/* Has Medication History Field */}
 <div>
-    <label htmlFor="hasMedicationHistory" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="has_medication_history" className="block text-gray-700 text-sm font-bold mb-2">
         Do you have a history of taking any medications?
     </label>
     <input
-        id="hasMedicationHistory"
-        name="hasMedicationHistory"
+        id="has_medication_history"
+        name="has_medication_history"
         type="checkbox"
-        checked={formData.hasMedicationHistory}
+        checked={formData.has_medication_history}
         onChange={handleChange}
         className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
     />
-    {formData.hasMedicationHistory && (
+    {formData.has_medication_history && (
         <textarea
-            id="medicationHistoryDetails"
-            name="medicationHistoryDetails"
-            value={formData.medicationHistoryDetails}
+            id="medication_history_details"
+            name="medication_history_details"
+            value={formData.medication_history_details}
             onChange={handleChange}
             className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Please provide details of your medication history"
@@ -370,47 +435,32 @@ function RecruiteeSignup() {
     )}
 </div>
 
-                    
-                    {/* Medication History Details Field */}
-<div>
-    <label htmlFor="medicationHistoryDetails" className="block text-gray-700 text-sm font-bold mb-2">
-        Medication History Details
-    </label>
-    <textarea
-        id="medicationHistoryDetails"
-        name="medicationHistoryDetails"
-        value={formData.medicationHistoryDetails}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Details of your medication history"
-    />
-</div>
 
 {/* Has Allergies Field */}
 <div>
-    <label htmlFor="hasAllergies" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="has_allergies" className="block text-gray-700 text-sm font-bold mb-2">
         Do you have any allergies?
     </label>
     <input
-        id="hasAllergies"
-        name="hasAllergies"
+        id="has_allergies"
+        name="has_allergies"
         type="checkbox"
-        checked={formData.hasAllergies}
+        checked={formData.has_allergies}
         onChange={handleChange}
         className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
     />
 </div>
 
 {/* Allergy Details Field */}
-{formData.hasAllergies && (
+{formData.has_allergies && (
     <div>
-        <label htmlFor="allergyDetails" className="block text-gray-700 text-sm font-bold mb-2">
+        <label htmlFor="allergy_details" className="block text-gray-700 text-sm font-bold mb-2">
             Allergy Details
         </label>
         <textarea
-            id="allergyDetails"
-            name="allergyDetails"
-            value={formData.allergyDetails}
+            id="allergy_details"
+            name="allergy_details"
+            value={formData.allergy_details}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Details of your allergies"
@@ -420,29 +470,29 @@ function RecruiteeSignup() {
 
 {/* Has Family Medical History Field */}
 <div>
-    <label htmlFor="hasFamilyMedicalHistory" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="has_family_medical_history" className="block text-gray-700 text-sm font-bold mb-2">
         Do you have a family medical history?
     </label>
     <input
-        id="hasFamilyMedicalHistory"
-        name="hasFamilyMedicalHistory"
+        id="has_family_medical_history"
+        name="has_family_medical_history"
         type="checkbox"
-        checked={formData.hasFamilyMedicalHistory}
+        checked={formData.has_family_medical_history}
         onChange={handleChange}
         className="rounded text-blue-500 leading-tight focus:outline-none focus:shadow-outline"
     />
 </div>
 
 {/* Family Medical History Details Field */}
-{formData.hasFamilyMedicalHistory && (
+{formData.has_family_medical_history && (
     <div>
-        <label htmlFor="familyMedicalHistoryDetails" className="block text-gray-700 text-sm font-bold mb-2">
+        <label htmlFor="family_medical_history_details" className="block text-gray-700 text-sm font-bold mb-2">
             Family Medical History Details
         </label>
         <textarea
-            id="familyMedicalHistoryDetails"
-            name="familyMedicalHistoryDetails"
-            value={formData.familyMedicalHistoryDetails}
+            id="family_medical_history_details"
+            name="family_medical_history_details"
+            value={formData.family_medical_history_details}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             placeholder="Details of your family's medical history"
@@ -453,21 +503,21 @@ function RecruiteeSignup() {
                     
 {/* Health Status Field */}
 <div>
-    <label htmlFor="healthStatus" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="health_status" className="block text-gray-700 text-sm font-bold mb-2">
         How would you describe your health?
     </label>
     <select
-        id="healthStatus"
-        name="healthStatus"
-        value={formData.healthStatus}
+        id="health_status"
+        name="health_status"
+        value={formData.health_status}
         onChange={handleChange}
         className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
     >
         <option value="">Select Health Status</option>
         {dropdownChoices.health_status_choices &&
             dropdownChoices.health_status_choices.map(option => (
-                <option key={option} value={option}>
-                    {option}
+                <option key={option.key} value={option.key}>
+                    {option.value}
                 </option>
             ))}
     </select>
@@ -475,13 +525,13 @@ function RecruiteeSignup() {
 
 {/* Lifestyle Factors Field */}
 <div>
-    <label htmlFor="lifestyleFactors" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="lifestyle_factors" className="block text-gray-700 text-sm font-bold mb-2">
         Lifestyle Factors
     </label>
     <textarea
-        id="lifestyleFactors"
-        name="lifestyleFactors"
-        value={formData.lifestyleFactors}
+        id="lifestyle_factors"
+        name="lifestyle_factors"
+        value={formData.lifestyle_factors}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
         placeholder="Detail your diet, physical activity, smoking, or drinking habits"
@@ -490,102 +540,245 @@ function RecruiteeSignup() {
 
 {/* Socioeconomic Status Field */}
 <div>
-    <label htmlFor="socioeconomicStatus" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="socioeconomic_status" className="block text-gray-700 text-sm font-bold mb-2">
         Socioeconomic Status
     </label>
-    <input
-        id="socioeconomicStatus"
-        name="socioeconomicStatus"
-        type="text"
-        value={formData.socioeconomicStatus}
+    <select
+        id="socioeconomic_status"
+        name="socioeconomic_status"
+        value={formData.socioeconomic_status}
         onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Describe your occupation, income level, education, etc."
-    />
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Socioeconomic Status</option>
+        {dropdownChoices.socioeconomic_status_choices?.map((option) => (
+            <option key={option.key} value={option.key}>
+                {option.value}
+            </option>
+        ))}
+    </select>
 </div>
+
 
 {/* Ethnicity Field */}
 <div>
     <label htmlFor="ethnicity" className="block text-gray-700 text-sm font-bold mb-2">
         Ethnicity
     </label>
-    <input
+    <select
         id="ethnicity"
         name="ethnicity"
-        type="text"
         value={formData.ethnicity}
         onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Your ethnic background"
-    />
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Ethnicity</option>
+        {dropdownChoices.ethnicity_choices &&
+            dropdownChoices.ethnicity_choices.map((ethnicity) => (
+                <option key={ethnicity.key} value={ethnicity.key}>
+                    {ethnicity.value}
+                </option>
+            ))}
+    </select>
 </div>
 
-{/* Race Field */}
+
+{/* Nationality Field */}
 <div>
-    <label htmlFor="race" className="block text-gray-700 text-sm font-bold mb-2">
-        Race
+    <label htmlFor="nationality" className="block text-gray-700 text-sm font-bold mb-2">
+        Nationality
     </label>
-    <input
-        id="race"
-        name="race"
-        type="text"
-        value={formData.race}
+    <select
+        id="nationality"
+        name="nationality"
+        value={formData.nationality}
         onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Your race"
-    />
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Nationality</option>
+        {dropdownChoices.nationality_choices &&
+            dropdownChoices.nationality_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
 </div>
+
 
                     
-                    {/* Pregnancy Status Field */}
+  {/* Pregnancy Status Field */}
 {formData.biologicalSex === 'female' && (
     <div>
-        <label htmlFor="pregnancyStatus" className="block text-gray-700 text-sm font-bold mb-2">
+        <label htmlFor="pregnancy_status" className="block text-gray-700 text-sm font-bold mb-2">
             Pregnancy Status
         </label>
-        <input
-            id="pregnancyStatus"
-            name="pregnancyStatus"
-            type="text"
-            value={formData.pregnancyStatus}
+        <select
+            id="pregnancy_status"
+            name="pregnancy_status"
+            value={formData.pregnancy_status}
             onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Pregnancy status"
-        />
+            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        >
+            <option value="">Select Pregnancy Status</option>
+            {dropdownChoices.pregnancy_status_choices &&
+                dropdownChoices.pregnancy_status_choices.map((status) => (
+                    <option key={status.key} value={status.key}>
+                        {status.value}
+                    </option>
+                ))}
+        </select>
     </div>
 )}
 
+
 {/* Language Preferences Field */}
 <div>
-    <label htmlFor="languagePreferences" className="block text-gray-700 text-sm font-bold mb-2">
+    <label htmlFor="language_preferences" className="block text-gray-700 text-sm font-bold mb-2">
         Language Preferences
     </label>
-    <input
-        id="languagePreferences"
-        name="languagePreferences"
-        type="text"
-        value={formData.languagePreferences}
+    <select
+        id="language_preferences"
+        name="language_preferences"
+        value={formData.language_preferences}
         onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Preferred languages"
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select a language</option>
+        {dropdownChoices.language_preferences_choices &&
+            dropdownChoices.language_preferences_choices.map((language) => (
+                <option key={language.key} value={language.key}>
+                    {language.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Study Preference Field */}
+<div>
+    <label htmlFor="study_preference" className="block text-gray-700 text-sm font-bold mb-2">
+        Study Preference
+    </label>
+    <select
+        id="study_preference"
+        name="study_preference"
+        value={formData.study_preference}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Study Preference</option>
+        {dropdownChoices.study_preference_choices &&
+            dropdownChoices.study_preference_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Interest 1 Field */}
+<div>
+    <label htmlFor="interest_1" className="block text-gray-700 text-sm font-bold mb-2">
+        Interest 1
+    </label>
+    <select
+        id="interest_1"
+        name="interest_1"
+        value={formData.interest_1}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Interest</option>
+        {dropdownChoices.interest_choices &&
+            dropdownChoices.interest_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Interest 2 Field */}
+<div>
+    <label htmlFor="interest_2" className="block text-gray-700 text-sm font-bold mb-2">
+        Interest 2
+    </label>
+    <select
+        id="interest_2"
+        name="interest_2"
+        value={formData.interest_2}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Interest</option>
+        {dropdownChoices.interest_choices &&
+            dropdownChoices.interest_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Interest 3 Field */}
+<div>
+    <label htmlFor="interest_3" className="block text-gray-700 text-sm font-bold mb-2">
+        Interest 3
+    </label>
+    <select
+        id="interest_3"
+        name="interest_3"
+        value={formData.interest_3}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Interest</option>
+        {dropdownChoices.interest_choices &&
+            dropdownChoices.interest_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Interest 4 Field */}
+<div>
+    <label htmlFor="interest_4" className="block text-gray-700 text-sm font-bold mb-2">
+        Interest 4
+    </label>
+    <select
+        id="interest_4"
+        name="interest_4"
+        value={formData.interest_4}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+    >
+        <option value="">Select Interest</option>
+        {dropdownChoices.interest_choices &&
+            dropdownChoices.interest_choices.map((option) => (
+                <option key={option.key} value={option.key}>
+                    {option.value}
+                </option>
+            ))}
+    </select>
+</div>
+
+{/* Bio Field */}
+<div>
+    <label htmlFor="bio" className="block text-gray-700 text-sm font-bold mb-2">
+        Bio
+    </label>
+    <textarea
+        id="bio"
+        name="bio"
+        value={formData.bio}
+        onChange={handleChange}
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+        placeholder="Tell us more about yourself"
     />
 </div>
 
-{/* Participation History Field */}
-<div>
-    <label htmlFor="participationHistory" className="block text-gray-700 text-sm font-bold mb-2">
-        Participation History
-    </label>
-    <input
-        id="participationHistory"
-        name="participationHistory"
-        type="text"
-        value={formData.participationHistory}
-        onChange={handleChange}
-        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Previous participation in studies"
-    />
-</div>
 
 {/* Terms of Service Agreement Field */}
 <div>

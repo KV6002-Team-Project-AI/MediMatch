@@ -12,7 +12,7 @@ from django.conf import settings
 
 # Create your views here.
 
-class StudyCreateAPIView(views.APIView):
+class StudyCreate(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):

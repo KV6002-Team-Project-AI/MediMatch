@@ -26,8 +26,8 @@ urlpatterns = [
     # ... include your other url patterns here ...
 
     # Syed Paths
-    path('api/studycreate/', StudyCreateAPIView.as_view(), name='study-create'),
-    
+    path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
+
 
 
     # The catch-all pattern for your React frontend should be the last pattern

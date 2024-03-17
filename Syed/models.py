@@ -3,15 +3,16 @@ from django.conf import settings
 from ResearchSwipe.datavalidation import *
 
 class Study(models.Model):
-    # Trivial
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    expiry_date = models.DateField(null=True, blank=True)
+
+    # Trivial
     age = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
     weight = models.PositiveIntegerField(null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True)
-    expiry_date = models.DateField(null=True, blank=True)
 
     #DropDown Specific
     category = models.TextField(null=True, choices=STUDY_PREFERENCE_CHOICES, blank=True)
@@ -25,7 +26,9 @@ class Study(models.Model):
     activity_level = models.CharField(max_length=100, choices=ACTIVITY_LEVEL_CHOICES, null=True, blank=True)
     socioeconomic_status = models.CharField(max_length=100, choices=SOCIOECONOMIC_STATUS_CHOICES, null=True, blank=True)
     duration = models.PositiveIntegerField(null=True, choices=DURATION_CHOICES, blank=True)
-    
+    health_status = models.CharField(max_length=50, choices=HEALTH_STATUS_CHOICES, null=True, blank=True)
+    work_preference = models.CharField(max_length=50, choices=GROUP_CHOICES, null=True, blank=True)
+
     # NLP related
     has_medical_history = models.BooleanField(default=False)
     medical_history = models.ManyToManyField('MedicalHistory', blank=True)

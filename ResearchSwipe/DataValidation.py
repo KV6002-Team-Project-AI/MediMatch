@@ -177,7 +177,7 @@ NATIONALITY_CHOICES = [
     ('scottish', 'Scottish'),
     ('senegalese', 'Senegalese'),
     ('serbian', 'Serbian'),
-    ('seychelles_citizen', 'Citizen ofSeychelles', 'Citizen of Seychelles'),
+    ('seychelles_citizen', 'Citizen of Seychelles'),
     ('sierra_leonean', 'Sierra Leonean'),
     ('singaporean', 'Singaporean'),
     ('slovak', 'Slovak'),

@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from DataValidation import (NATIONALITY_CHOICES, ETHNICITY_CHOICES, ACTIVITY_LEVEL_CHOICES, HAIR_COLOR_CHOICES, 
-                            HEALTH_STATUS_CHOICES, SOCIOECONOMIC_STATUS_CHOICES, MEASUREMENT_CHOICES, GROUP_CHOICES, 
-                            PREGNANCY_STATUS_CHOICES, LANGUAGE_CHOICES, PROFESSION_CHOICES, SEX_CHOICES, DURATION_CHOICES)
+from .datavalidation import *
+
 
 
 

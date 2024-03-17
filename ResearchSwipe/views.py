@@ -8,6 +8,7 @@ from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import logging
+from .datavalidation import *
 
 class UserSignup(views.APIView):
     # Allow any user to sign up
@@ -107,12 +108,6 @@ class RecruiteeUpdate(generics.UpdateAPIView):
         # Ensure the user can only update their own profile
         return Recruitee.objects.get(user=self.request.user)
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update
 
 class RecruiterDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
@@ -147,3 +142,24 @@ class CookieLoggingMiddleware:
         else:
             print("No session cookie received.")
         return response
+
+
+
+class DropdownChoicesAPIView(views.APIView):
+    def get(self, request):
+        choices = {
+            'health_status_choices': [choice[1] for choice in HEALTH_STATUS_CHOICES],
+            'activity_level_choices': [choice[1] for choice in ACTIVITY_LEVEL_CHOICES],
+            'socioeconomic_status_choices': [choice[1] for choice in SOCIOECONOMIC_STATUS_CHOICES],
+            'hair_color_choices': [choice[1] for choice in HAIR_COLOR_CHOICES],
+            'ethnicity_choices': [choice[1] for choice in ETHNICITY_CHOICES],
+            'work_preference_choices': [choice[1] for choice in GROUP_CHOICES],
+            'nationality_choices': [choice[1] for choice in NATIONALITY_CHOICES],
+            'language_preferences_choices': [choice[1] for choice in LANGUAGE_CHOICES],
+            'profession_choices': [choice[1] for choice in PROFESSION_CHOICES],
+            'duration_of_participation_choices': [choice[1] for choice in DURATION_CHOICES],
+            'biological_sex_choices': [choice[1] for choice in SEX_CHOICES],
+            'pregnancy_status_choices': [choice[1] for choice in PREGNANCY_STATUS_CHOICES],
+            'measurement_system_choices': [choice[1] for choice in MEASUREMENT_CHOICES],
+        }
+        return Response(choices)

@@ -88,8 +88,9 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'lifestyle_factors',
             'socioeconomic_status',
             'ethnicity',
-            'race',
-            'pregnancy_status',
+            'nationality',  
+            'biological_sex',  
+            'pregnancy_status', 
             'language_preferences',
             'participation_history'
         )

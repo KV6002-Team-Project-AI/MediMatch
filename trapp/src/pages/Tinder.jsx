@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ProfileCard from '../components/MobileProfileCard';
+import MobileProfileCard from '../components/MobileProfileCard';
 import withAuthentication from '../HOCauth'; // Import the HOC
 
 

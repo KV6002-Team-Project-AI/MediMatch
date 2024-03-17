@@ -43,7 +43,7 @@ class StudySerializer(serializers.ModelSerializer):
         model = Study
         fields = [
             'user', 'name', 'category', 'description', 'age', 'sex', 'height', 'weight',
-            'hair_color', 'profession', 'race', 'ethnicity', 'nationality', 'pregnancy_status',
+            'hair_color', 'profession', 'ethnicity', 'nationality', 'pregnancy_status',
             'language_preference', 'activity_level', 'socioeconomic_status', 'start_date',
             'duration', 'expiry_date', 'has_medical_history', 'medical_history',
             'has_medication_history', 'medication_history', 'has_current_medication',

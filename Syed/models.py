@@ -12,7 +12,6 @@ class Study(models.Model):
     weight = models.PositiveIntegerField(null=True, blank=True)
     hair_color = models.CharField(max_length=100, null=True, blank=True)
     profession = models.CharField(max_length=100, null=True, blank=True)
-    race = models.CharField(max_length=100, null=True, blank=True)
     ethnicity = models.CharField(max_length=100, null=True, blank=True)
     nationality = models.CharField(max_length=100, null=True, blank=True)
     pregnancy_status = models.CharField(max_length=100, null=True, blank=True)

@@ -88,11 +88,17 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'lifestyle_factors',
             'socioeconomic_status',
             'ethnicity',
-            'nationality',  
-            'biological_sex',  
-            'pregnancy_status', 
+            'nationality',
+            'pregnancy_status',
             'language_preferences',
-            'participation_history'
+            'participation_history',
+            'activity_level',
+            'study_preference',
+            'interest_1',
+            'interest_2',
+            'interest_3',
+            'interest_4',
+            'bio'
         )
 
     def create(self, validated_data):

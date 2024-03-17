@@ -4,3 +4,7 @@ db.sqlite3
 # Exclude static files
 .trapp/index.html
 .trapp/static/*
+trapp/build/*
+static/*
+static
+trapp/build

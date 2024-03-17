@@ -3,7 +3,7 @@ import profilePic from '../assets/profile-pic.jpg'
 import infoLogo from '../assets/info.png'
 import summarise from '../assets/summary.png'
 
-const ProfileCard = () => {
+const MobileProfileCard = () => {
     const features = ["Brown Hair", "25 Years old", "1.76 metres"];
     const interests = ['Football', 'Swimming', 'Reading'];
   
@@ -43,4 +43,4 @@ const ProfileCard = () => {
   };
   
 
-  export default ProfileCard;
+  export default MobileProfileCard;

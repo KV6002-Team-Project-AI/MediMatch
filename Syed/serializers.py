@@ -48,7 +48,8 @@ class StudySerializer(serializers.ModelSerializer):
             'duration', 'expiry_date', 'has_medical_history', 'medical_history',
             'has_medication_history', 'medication_history', 'has_current_medication',
             'current_medication', 'has_family_medication_history', 'family_medication_history',
-            'has_allergies', 'allergies', 'has_lifestyle', 'lifestyle'
+            'has_allergies', 'allergies', 'has_lifestyle', 'lifestyle', 'health_status', 
+            'work_preference'
         ]
 
 

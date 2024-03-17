@@ -7,7 +7,7 @@ export default function LandingPage() {
   
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-        <img src={logoImage} alt="Logo" className="mb-8" />
+        <img src={logoImage} alt="Logo" className="mb-8 h-56 w-56" />
   
         <h1 className="text-4xl text-center mb-4 font-bold text-gray-800">
           Welcome to Our App

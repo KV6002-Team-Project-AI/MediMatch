@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import SearchIcon from '@mui/icons-material/Search';
 import InsightsIcon from '@mui/icons-material/Insights';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -15,7 +14,7 @@ function Menu() {
   };
 
   const menuItems = [
-    { name: 'Tinder', icon: <HomeIcon />, path: '/' },
+    { name: 'Tinder', icon: <HomeIcon />, path: '/tinder' },
     { name: 'Research', icon: <InsightsIcon />, path: '/research' },
     { name: 'Matches', icon: <FavoriteIcon />, path: '/matches', badge: true },
     { name: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },

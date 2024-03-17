@@ -161,5 +161,6 @@ class DropdownChoicesAPIView(views.APIView):
             'biological_sex_choices': [choice[1] for choice in SEX_CHOICES],
             'pregnancy_status_choices': [choice[1] for choice in PREGNANCY_STATUS_CHOICES],
             'measurement_system_choices': [choice[1] for choice in MEASUREMENT_CHOICES],
+            'study_preference_choices': [choice[1] for choice in STUDY_PREFERENCE_CHOICES],
         }
         return Response(choices)

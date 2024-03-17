@@ -507,4 +507,30 @@ DURATION_CHOICES = [
         ('4', '4 weeks'),
         ('5', 'More than 4 weeks'),
     ]
+
+STUDY_PREFERENCE_CHOICES = [
+    ('cohort_study', 'Cohort study'),
+    ('controlled_studies', 'Controlled studies'),
+    ('cross_sectional_studies', 'Cross sectional studies'),
+    ('systematic_review', 'Systematic review'),
+    ('clinical_trials', 'Clinical trials'),
+    ('experiment', 'Experiment'),
+    ('case_series', 'Case series'),
+    ('case_studies', 'Case studies'),
+    ('correlation', 'Correlation'),
+    ('interventional_studies', 'Interventional studies'),
+    ('analytical_study', 'Analytical study'),
+    ('research', 'Research'),
+    ('design', 'Design'),
+    ('descriptive_study', 'Descriptive study'),
+    ('ecology', 'Ecology'),
+    ('epidemiological_studies', 'Epidemiological studies'),
+    ('preventive_healthcare', 'Preventive healthcare'),
+    ('qualitative_research', 'Qualitative research'),
+    ('randomized_controlled_trials', 'Randomized controlled trials'),
+    ('observation', 'Observation'),
+    ('genetic', 'Genetic'),
+    ('references', 'References'),
+    ('longitudinal_studies', 'Longitudinal studies'),
+]
 #End of data validation

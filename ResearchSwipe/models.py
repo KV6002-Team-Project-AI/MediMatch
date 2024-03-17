@@ -47,6 +47,7 @@ class Recruitee(models.Model):
     duration_of_participation = models.CharField(max_length=20, choices=DURATION_CHOICES, null=True, blank=True)
     biological_sex = models.CharField(max_length=50, choices=SEX_CHOICES, null=True, blank=True)
     pregnancy_status = models.CharField(max_length=3,choices=PREGNANCY_STATUS_CHOICES ,null=True, blank=True)
+    study_preference = models.CharField(max_length=100,choices=STUDY_PREFERENCE_CHOICES, null=True, blank=True)
     # Measurement system preference
     measurement_system = models.CharField(max_length=20, choices=MEASUREMENT_CHOICES, default='metric')
     #End of DropDown

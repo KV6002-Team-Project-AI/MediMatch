@@ -30,6 +30,7 @@ class Recruitee(models.Model):
     allergy_details = models.TextField(null=True, blank=True)
     has_family_medical_history = models.BooleanField(default=False)
     family_medical_history_details = models.TextField(null=True, blank=True)
+    bio = models.TextField(null=True, blank=True)
     #End of Conditional detail fields
     lifestyle_factors = models.TextField(null=True, blank=True)
     #End of NLP related TextFeilds
@@ -48,6 +49,10 @@ class Recruitee(models.Model):
     biological_sex = models.CharField(max_length=50, choices=SEX_CHOICES, null=True, blank=True)
     pregnancy_status = models.CharField(max_length=3,choices=PREGNANCY_STATUS_CHOICES ,null=True, blank=True)
     study_preference = models.CharField(max_length=100,choices=STUDY_PREFERENCE_CHOICES, null=True, blank=True)
+    interest_1 = models.CharField(max_length=50, choices=INTEREST_CHOICES, null=True, blank=True)
+    interest_2 = models.CharField(max_length=50, choices=INTEREST_CHOICES, null=True, blank=True)
+    interest_3 = models.CharField(max_length=50, choices=INTEREST_CHOICES, null=True, blank=True)
+    interest_4 = models.CharField(max_length=50, choices=INTEREST_CHOICES, null=True, blank=True)
     # Measurement system preference
     measurement_system = models.CharField(max_length=20, choices=MEASUREMENT_CHOICES, default='metric')
     #End of DropDown

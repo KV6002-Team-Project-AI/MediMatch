@@ -18,7 +18,6 @@ urlpatterns = [
     path('api/user', UserRolesView.as_view(), name='user-roles'),
     path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
-    path('api/recruitee/update/', RecruiteeUpdate.as_view(), name='recruitee-update'),
     path('api/dropdown-choices/', DropdownChoicesAPIView.as_view(), name='dropdown-choices'),
    
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),

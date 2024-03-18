@@ -17,7 +17,7 @@ class UserSignup(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # UserSerializer should handle password hashing internally
+            serializer.save()  # UserSerializer will handle password hashing internally
             # Return the user data, excluding the password
             return Response(
                 {
@@ -60,7 +60,7 @@ class LogoutView(views.APIView):
         try:
             refresh_token = request.data.get('refresh')
             token = RefreshToken(refresh_token)
-            token.blacklist()  # If you are using django-rest-framework-simplejwt's blacklist app
+            token.blacklist() 
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -69,7 +69,7 @@ class ValidateTokenView(views.APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request):
-        # Since this is a protected endpoint, the request will have the user attached to it
+        # the request will have the user attached to it
         # by the JWTAuthentication class if the token is valid.
         user = request.user
         if user.is_authenticated:
@@ -132,19 +132,6 @@ class UserRolesView(views.APIView):
         serializer = UserRoleSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-class CookieLoggingMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
-
-    def __call__(self, request):
-        response = self.get_response(request)
-        cookies = request.COOKIES
-        if 'sessionid' in cookies:  # Replace 'sessionid' with the name of your session cookie
-            print(f"Session cookie received: {cookies['sessionid']}")
-        else:
-            print("No session cookie received.")
-        return response
-
 
 
 class DropdownChoicesAPIView(views.APIView):
@@ -166,6 +153,6 @@ class DropdownChoicesAPIView(views.APIView):
             'study_preference_choices': STUDY_PREFERENCE_CHOICES,
             'interest_choices': INTEREST_CHOICES,
         }
-        # Convert each choice tuple into a dictionary format that is easy to handle in the frontend
+        # Converts each choice tuple into a dictionary format that is easy to handle in the frontend
         formatted_choices = {key: [{'key': choice[0], 'value': choice[1]} for choice in value] for key, value in choices.items()}
         return Response(formatted_choices)

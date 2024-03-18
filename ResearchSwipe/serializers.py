@@ -123,9 +123,9 @@ class RecruiterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user_data = validated_data.pop('user')
-        # The 'create' method should already save the User.
+        # The 'create' method will save the User.
         user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        # At this point, the user instance is already saved.
+        
         profile = self.Meta.model.objects.create(user=user, **validated_data)
         return profile
 

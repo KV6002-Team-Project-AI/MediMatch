@@ -11,22 +11,20 @@ import logging
 from .datavalidation import *
 
 class UserSignup(views.APIView):
-    # Allow any user to sign up
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # UserSerializer will handle password hashing internally
-            # Return the user data, excluding the password
+            user = serializer.save()  # User creation now properly handles email and username
             return Response(
                 {
-                    "id": serializer.instance.id,
-                    "username": serializer.instance.username,
-                    "first_name": serializer.instance.first_name,
-                    "last_name": serializer.instance.last_name,
-                    "is_recruitee": serializer.instance.is_recruitee,
-                    "is_recruiter": serializer.instance.is_recruiter
+                    "id": user.id,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "is_recruitee": user.is_recruitee,
+                    "is_recruiter": user.is_recruiter
                 }, 
                 status=status.HTTP_201_CREATED
             )

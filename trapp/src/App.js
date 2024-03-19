@@ -6,6 +6,7 @@ import Tinder from './pages/Tinder';
 import Matches from './pages/Matches';
 import Profile from './pages/Profile';
 import Research from './pages/Research';
+import AddStudy from './pages/AddStudy';
 import RecruiteeSignup from './RecruiteeSignup';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
@@ -42,6 +43,7 @@ function App() {
         <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
         <Route path="/update/recruitee" element={<RecruiteeSignup />} />
         <Route path="/signup/recruiter" element={<RecruiterSignup />} />
+        <Route path="/addstudy" element={<AddStudy />} />
         <Route path='/landingpage' element={<LandingPage />}/>
 
 

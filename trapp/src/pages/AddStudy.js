@@ -1,70 +1,81 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function RecruiteeSignup() {
+function AddStudy() {
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
-        age: '',
-        date_of_birth: '',
-        biological_sex: '',
-        contact_information: '',
-        emergency_contact: '',
-        informedConsentStatus: false,
-        has_medical_history: false,
-        medical_history_details: '',
-        taking_current_medications: false,
-        current_medication_details: '',
-        has_medication_history: false,
-        medication_history_details: '',
-        has_allergies: false,
-        allergy_details: '',
-        has_family_medical_history: false,
-        family_medical_history_details: '',
-        measurement_system: 'metric',
-        height: '',
-        weight: '',
+        name: '',
+        description: '',
+        start_date: '',
+        expiry_date: '',
+
+        // min max numericals
+        min_age: '',
+        max_age: '',
+        min_height: '',
+        max_height: '',
+        min_weight: '',
+        max_weight: '',
+
+        // Select box specific
+        category: '',
+        sex: '',
         hair_color: '',
         profession: '',
-        duration_of_participation: '',
-        work_preference: 'no preference',
-        health_status: '',
-        lifestyle_factors: '',
-        socioeconomic_status: '',
         ethnicity: '',
-        nationality: '',  
-        pregnancy_status: '', 
-        language_preferences: '',
-        study_preference: '',
-        interest_1: '',
-        interest_2: '',
-        interest_3: '',
-        interest_4: '',
-        bio: '',
-        termsOfService: false
+        nationality: '',
+        pregnancy_status: '',
+        language_preference: '',
+        activity_level: '',
+        socioeconomic_status: '',
+        duration: '',
+        health_status: '',
+        work_preference: '',
+        termsOfService: false,
+
+        // NLP related
+        medical_history: '',
+        has_medical_history: false,
+
+        current_medication: '',
+        has_current_medication: false,
+
+        medication_history: '',
+        has_medication_history: false,
+
+        allergies: '',
+        has_allergies: false,
+
+        family_medical_history: '',
+        has_family_medical_history: false,
+
+        lifestyle: '',
+        has_lifestyle: false,
     });
+    
     useEffect(() => {
         fetch('http://localhost:8000/api/dropdown-choices/')
             .then(response => response.json())
             .then(data => setDropdownChoices(data))
         // Load existing recruitee data if editing
-    fetch('http://localhost:8000/api/recruitee/', {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.user) { // Check if user data exists in the response
-            setFormData({
-                ...data, // Populate form data with existing details
-                informedConsentStatus: false, // Reset certain flags as needed
-            });
-        }
-    })
-    .catch(error => console.error('Error fetching recruitee details:', error));
-}, []);
+        fetch('http://localhost:8000/api/studycreate/', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.user) { // Check if user data exists in the response
+                setFormData({
+                    ...data, // Populate form data with existing details
+                    informedConsentStatus: false, // Reset certain flags as needed
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching recruitee details:', error));
+    }, []);
+    
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
         setFormData({
@@ -76,31 +87,32 @@ function RecruiteeSignup() {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Convert the date of birth from the form data to a Date object
-    const dob = new Date(formData.date_of_birth);
-    const ageDiffMs = Date.now() - dob.getTime();
-    const ageDate = new Date(ageDiffMs);
-    const age = Math.abs(ageDate.getUTCFullYear() - 1970);
-    const url = 'http://localhost:8000/api/recruitee/';
-    const method = formData.user ? 'PUT' : 'POST';
+        const dob = new Date(formData.date_of_birth);
+        const ageDiffMs = Date.now() - dob.getTime();
+        const ageDate = new Date(ageDiffMs);
+        const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        const url = 'http://localhost:8000/api/recruitee/';
+        const method = formData.user ? 'PUT' : 'POST';
 
-    // Check if age is less than 18
-    if (age < 18) {
-        alert('You must be at least 18 years old to submit this form.');
-        return; // Prevent the form from submitting
-    }
+        // Check if age is less than 18
+        if (age < 18) {
+            alert('You must be at least 18 years old to submit this form.');
+            return; // Prevent the form from submitting
+        }
         if (!formData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
         const jwtToken = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
+        
         fetch(url, {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-        },
-        body: JSON.stringify(formData),
-    })
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            },
+            body: JSON.stringify(formData),
+        })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -117,36 +129,31 @@ function RecruiteeSignup() {
     };
     
 
- 
-
-
     // Render form fields...
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col justify-center p-6">
             <div className="max-w-4xl w-full mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-6 text-gray-700">Recruitee Sign Up</h2>
+                <h2 className="text-2xl font-bold mb-6 text-gray-700">Add Study</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
 
+        <div>
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
+                    Age
+                </label>
+                <input
+                    id="age"
+                    name="age"
+                    type="number"
+                    value={formData.age}
+                    onChange={handleChange}
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Age"
+                    min="1"
+                    required
+                />
+        </div>
 
- <div>
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-            Age
-        </label>
-        <input
-            id="age"
-            name="age"
-            type="number"
-            value={formData.age}
-            onChange={handleChange}
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Age"
-            min="1"
-            required
-        />
-</div>
-
-                    
-                    {/* Date of Birth Field */}
+{/* Date of Birth Field */}
 <div>
     <label htmlFor="date_of_birth" className="block text-gray-700 text-sm font-bold mb-2">
         Date of Birth
@@ -358,7 +365,7 @@ function RecruiteeSignup() {
     />
 </div>
                     
-                    {/* Conditional Medical History Field */}
+{/* Conditional Medical History Field */}
 <div>
     <label htmlFor="has_medical_history" className="block text-gray-700 text-sm font-bold mb-2">
         Do you have a medical history?
@@ -815,4 +822,4 @@ function RecruiteeSignup() {
     );
 }
 
-export default RecruiteeSignup;
+export default AddStudy

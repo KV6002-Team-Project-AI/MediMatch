@@ -66,7 +66,6 @@ class Recruitee(models.Model):
     participation_history = models.IntegerField(default=0, null=True, blank=True)
 
 
-
     # Add other recruitee-specific fields if needed
 
 class Recruiter(models.Model):

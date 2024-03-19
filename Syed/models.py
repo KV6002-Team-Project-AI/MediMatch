@@ -13,7 +13,7 @@ class Study(models.Model):
     age = models.PositiveIntegerField(null=True, blank=True)
     height = models.PositiveIntegerField(null=True, blank=True)
     weight = models.PositiveIntegerField(null=True, blank=True)
-
+    
     #DropDown Specific
     category = models.TextField(null=True, choices=STUDY_PREFERENCE_CHOICES, blank=True)
     sex = models.CharField(max_length=100, choices=SEX_CHOICES, null=True, blank=True)

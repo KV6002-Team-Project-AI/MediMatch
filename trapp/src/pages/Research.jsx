@@ -1,9 +1,10 @@
 import addLogo from '../assets/add.svg'
-import withAuthentication from '../HOCauth'; // Import the HOC
+import { useNavigate  } from 'react-router-dom';
+import withAuthentication from '../HOCauth';
 
 function Research() {
+    const navigate = useNavigate();
 
-    
     return (
         <>
             <div className="mx-3 my-20">
@@ -15,7 +16,7 @@ function Research() {
                                     <input type="text" placeholder="Search..." className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
                                 </div>
                                 <div className='flex items-center'>
-                                    <img src={addLogo} alt="add" className='h-7 transition duration-300 ease-in-out hover:bg-gray-100 transform hover:-translate-y-0.5 '/>
+                                    <img src={addLogo} onClick={() => navigate('/addstudy')} alt="add" className='h-7 transition duration-300 ease-in-out hover:bg-gray-100 transform hover:-translate-y-0.5 '/>
                                 </div>
                             </div>
                         </div>

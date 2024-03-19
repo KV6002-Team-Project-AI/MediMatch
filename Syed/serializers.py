@@ -42,14 +42,48 @@ class StudySerializer(serializers.ModelSerializer):
     class Meta:
         model = Study
         fields = [
-            'user', 'name', 'category', 'description', 'age', 'sex', 'height', 'weight',
-            'hair_color', 'profession', 'ethnicity', 'nationality', 'pregnancy_status',
-            'language_preference', 'activity_level', 'socioeconomic_status', 'start_date',
-            'duration', 'expiry_date', 'has_medical_history', 'medical_history',
-            'has_medication_history', 'medication_history', 'has_current_medication',
-            'current_medication', 'has_family_medication_history', 'family_medication_history',
-            'has_allergies', 'allergies', 'has_lifestyle', 'lifestyle', 'health_status', 
-            'work_preference'
+            'user', 
+            'name', 
+            'category', 
+            'description', 
+
+            # numericals
+            'min_age', 
+            'max_age', 
+            'min_height', 
+            'max_height', 
+            'min_weight', 
+            'max_weight', 
+            
+            # trivial
+            'sex', 
+            'hair_color', 
+            'profession', 
+            'ethnicity', 
+            'nationality', 
+            'pregnancy_status',
+            'language_preference', 
+            'activity_level', 
+            'socioeconomic_status', 
+            'start_date',
+            'duration', 
+            'expiry_date', 
+            'health_status', 
+            'work_preference',
+
+            # NLP 
+            'has_medical_history', 
+            'medical_history',
+            'has_medication_history', 
+            'medication_history', 
+            'has_current_medication',
+            'current_medication', 
+            'has_family_medication_history', 
+            'family_medication_history',
+            'has_allergies', 
+            'allergies', 
+            'has_lifestyle', 
+            'lifestyle', 
         ]
 
 

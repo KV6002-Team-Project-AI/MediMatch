@@ -1,8 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import withAuthentication from './HOCauth'
 
-function RecruiteeSignup() {
+
+    const RecruiteeSignup = ({ userRoles }) => {
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
@@ -65,6 +67,9 @@ function RecruiteeSignup() {
     })
     .catch(error => console.error('Error fetching recruitee details:', error));
 }, []);
+if (!userRoles.is_recruitee && !userRoles.is_superuser) {
+    return <div>You do not have permission to view this page.</div>;
+  }
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
         setFormData({
@@ -815,4 +820,4 @@ function RecruiteeSignup() {
     );
 }
 
-export default RecruiteeSignup;
+export default withAuthentication(RecruiteeSignup);

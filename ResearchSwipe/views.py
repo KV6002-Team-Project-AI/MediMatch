@@ -11,22 +11,20 @@ import logging
 from .datavalidation import *
 
 class UserSignup(views.APIView):
-    # Allow any user to sign up
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # UserSerializer will handle password hashing internally
-            # Return the user data, excluding the password
+            user = serializer.save()  # User creation now properly handles email and username
             return Response(
                 {
-                    "id": serializer.instance.id,
-                    "username": serializer.instance.username,
-                    "first_name": serializer.instance.first_name,
-                    "last_name": serializer.instance.last_name,
-                    "is_recruitee": serializer.instance.is_recruitee,
-                    "is_recruiter": serializer.instance.is_recruiter
+                    "id": user.id,
+                    "email": user.email,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name,
+                    "is_recruitee": user.is_recruitee,
+                    "is_recruiter": user.is_recruiter
                 }, 
                 status=status.HTTP_201_CREATED
             )
@@ -77,15 +75,26 @@ class ValidateTokenView(views.APIView):
         return Response({'message': 'Token is invalid'}, status=status.HTTP_401_UNAUTHORIZED)
 
 class RecruiteeDetail(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
+    permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
-        try:
-            recruitee = Recruitee.objects.get(user=request.user)
-            serializer = RecruiteeSerializer(recruitee)
-            return Response(serializer.data)
-        except Recruitee.DoesNotExist:
+    def get_object(self, user, pk=None):
+        if user.is_superuser and pk:
+            try:
+                return Recruitee.objects.get(pk=pk)
+            except Recruitee.DoesNotExist:
+                return None
+        return user.recruitee
+
+    def get(self, request, pk=None, *args, **kwargs):
+        if hasattr(request.user, 'is_recruiter') and request.user.is_recruiter:
+            return Response({"error": "Recruiter cannot access recruitee details"}, status=status.HTTP_403_FORBIDDEN)
+
+        recruitee = self.get_object(request.user, pk)
+        if recruitee is None:
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RecruiteeSerializer(recruitee)
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
         if hasattr(request.user, 'is_recruitee') and not request.user.is_recruitee:

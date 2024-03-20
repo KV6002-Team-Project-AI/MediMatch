@@ -4,7 +4,7 @@ import withAuthentication from '../HOCauth'; // Import the HOC
 
 
 
-function Profile() {
+const Profile = ({ userRoles }) => {
     // Dummy data for the dropdown menu
     const researchFields = [
         'Medical and Health', 

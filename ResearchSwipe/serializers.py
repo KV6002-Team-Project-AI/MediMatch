@@ -9,14 +9,26 @@ from django.contrib.auth.models import update_last_login
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'first_name', 'last_name', 'is_recruitee', 'is_recruiter')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_recruitee', 'is_recruiter')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        # Hash the user's password when creating a new user
+        email = validated_data.get('email')
+        
+        # Check if a user with this username (email) already exists
+        if User.objects.filter(username=email).exists():
+            raise serializers.ValidationError({'email': 'This email is already in use.'})
+        
+        # Hash the user's password
         validated_data['password'] = make_password(validated_data['password'])
+        
+        # Set the username as email
+        validated_data['username'] = email
+
+        # Create the new user
         return super().create(validated_data)
 
+    
 
 
 class MyAuthTokenSerializer(serializers.Serializer):
@@ -24,9 +36,11 @@ class MyAuthTokenSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        username = data.get('email')
+        email = data.get('email')
         password = data.get('password')
-        user = authenticate(username=username, password=password)
+
+        # Use 'username' parameter for email because Django's authenticate method expects 'username'
+        user = authenticate(username=email, password=password)
 
         if user is None:
             raise serializers.ValidationError('A user with this email and password is not found.')
@@ -43,9 +57,10 @@ class MyAuthTokenSerializer(serializers.Serializer):
             'user_info': {  # Return additional info for response
                 'id': user.id,
                 'name': user.get_full_name(),
-                'email': user.username,
-                'is_recruitee': user.is_recruitee,
-                'is_recruiter': user.is_recruiter,
+                'email': user.email,
+                'is_recruitee': getattr(user, 'is_recruitee', False),
+                'is_recruiter': getattr(user, 'is_recruiter', False),
+                'is_superuser': user.is_superuser, 
                 'has_filled_recruitee_form': has_filled_recruitee_form,
                 'has_filled_recruiter_form': has_filled_recruiter_form,
             },
@@ -53,6 +68,7 @@ class MyAuthTokenSerializer(serializers.Serializer):
             'access': str(RefreshToken.for_user(user).access_token),
         }
     
+
 
 class RecruiteeSerializer(serializers.ModelSerializer):
     
@@ -132,4 +148,12 @@ class RecruiterSerializer(serializers.ModelSerializer):
 class UserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('is_recruitee', 'is_recruiter')
+        fields = ('is_recruitee', 'is_recruiter', 'is_superuser')
+
+
+from django.contrib.auth import authenticate
+user = authenticate(email='booo@gmail.com', password='mum')
+if user:
+    print("User found!")
+else:
+    print("User not found.")

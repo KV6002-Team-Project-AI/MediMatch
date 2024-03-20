@@ -14,7 +14,7 @@ function Header() {
 
     useEffect(() => {
         // API call to fetch user roles
-        fetch('/api/user', {
+        fetch('http://localhost:8000/api/user', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }

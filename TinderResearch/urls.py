@@ -5,6 +5,7 @@ from ResearchSwipe.views import *
 from Syed.views import StudyCreate
 from django.conf.urls.static import static
 from django.conf import settings
+from django.contrib import admin
 
 
 urlpatterns = [
@@ -30,7 +31,7 @@ urlpatterns = [
 
 
     # The catch-all pattern for your React frontend should be the last pattern
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^(?!admin).*$', TemplateView.as_view(template_name='index.html')),
 ]
 
 if settings.DEBUG:

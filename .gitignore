@@ -1,19 +1,17 @@
-# Exclude static files
-.trapp/index.html
-.trapp/static/*
-trapp/build/*
-static/*
-static
-trapp/build
-db.sqlite3
-*.__pycache__
-*.__pycache__/*
-__pycache__
-__pycache__/*
-db.sqlite3
-*.sqlite3
-*.sqlite3
-/ResearchSwipe/__pycache__
-*.sqlite3
+# Exclude Python bytecode
+__pycache__/
+*.__pycache__/
 /ResearchSwipe/__pycache__
 /Syed/__pycache__
+
+# Exclude SQLite database files
+*.sqlite3
+db.sqlite3
+
+# Exclude specific static files and directories
+.trapp/index.html
+.trapp/static/
+trapp/build/
+static/
+
+# Note: Specific paths and patterns have been consolidated. Redundant entries and duplicates have been removed for clarity and efficiency.

@@ -71,16 +71,13 @@ class MyAuthTokenSerializer(serializers.Serializer):
 
 
 class RecruiteeSerializer(serializers.ModelSerializer):
+    
     user = UserSerializer(read_only=True)
-    full_name = serializers.SerializerMethodField()
-    email = serializers.SerializerMethodField()
 
     class Meta:
         model = Recruitee
         fields = (
             'user',
-            'full_name',
-            'email',
             'age',
             'date_of_birth',
             'biological_sex',
@@ -120,16 +117,15 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'bio'
         )
 
-    def get_full_name(self, obj):
-        return obj.user.get_full_name()
-
-    def get_email(self, obj):
-        return obj.user.email
-
     def create(self, validated_data):
+    # Get the authenticated user from the request context
         user = self.context['request'].user
+
+    # Check if a Recruitee profile already exists for the user
         if Recruitee.objects.filter(user=user).exists():
             raise serializers.ValidationError('Recruitee profile already exists for this user.')
+
+    # Now create a new Recruitee instance linked to the authenticated user
         recruitee = Recruitee.objects.create(user=user, **validated_data)
         return recruitee
     
@@ -155,3 +151,9 @@ class UserRoleSerializer(serializers.ModelSerializer):
         fields = ('is_recruitee', 'is_recruiter', 'is_superuser')
 
 
+from django.contrib.auth import authenticate
+user = authenticate(email='booo@gmail.com', password='mum')
+if user:
+    print("User found!")
+else:
+    print("User not found.")

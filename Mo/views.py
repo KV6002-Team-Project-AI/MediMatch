@@ -13,15 +13,15 @@ class MatchActionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        match_id = request.data.get('match_id')
+        id = request.data.get('id')
         action = request.data.get('action')  # 'accept' or 'reject'
         actor_type = request.data.get('actor_type')  # 'recruitee' or 'study'
 
-        if not match_id or not action or not actor_type:
+        if not id or not action or not actor_type:
             return Response({'detail': 'Missing parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            match = Matches.objects.get(match_id=match_id)
+            match = Matches.objects.get(id=id)
             # Here, you need to add logic to verify that the requester has the right to perform the action on the match.
             # This might involve checking if the logged-in user is the recruitee or part of the study related to this match.
 

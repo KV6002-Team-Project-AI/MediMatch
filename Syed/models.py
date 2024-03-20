@@ -4,6 +4,7 @@ from ResearchSwipe.datavalidation import *
 
 class Study(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    study_id = models.AutoField(primary_key=True)
     name = models.TextField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)

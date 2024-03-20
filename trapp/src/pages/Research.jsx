@@ -2,8 +2,14 @@ import addLogo from '../assets/add.svg'
 import { useNavigate  } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 
-function Research() {
+const Research = ({ userRoles }) =>  {
     const navigate = useNavigate();
+
+    
+
+    if (!userRoles.is_recruiter && !userRoles.is_superuser) {
+        return <div className='mt-20'>You do not have permission to view this page.</div>;
+    }
 
     return (
         <>

@@ -12,9 +12,7 @@ __pycache__
 __pycache__/*
 db.sqlite3
 *.sqlite3
-*.sqlite3
 /ResearchSwipe/__pycache__
 *.sqlite3
 /ResearchSwipe/__pycache__
-/Syed/__pycache__
 /Syed/__pycache__

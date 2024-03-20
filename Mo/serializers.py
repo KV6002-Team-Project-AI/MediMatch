@@ -9,4 +9,4 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Matches
-        fields = ('id', 'study', 'recruitee', 'recruitee_status', 'study_status')
+        fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')

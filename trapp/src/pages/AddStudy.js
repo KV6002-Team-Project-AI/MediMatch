@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import withAuthentication from '../HOCauth';
 
-function AddStudy() {
+    const AddStudy = ({ userRoles }) => {
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
@@ -71,6 +72,10 @@ function AddStudy() {
         })
         .catch(error => console.error('Error fetching recruitee details:', error));
     }, []);
+
+    if (!userRoles.is_recruiter && !userRoles.is_superuser) {
+        return <div className='mt-20'>You do not have permission to view this page.</div>;
+    }
     
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
@@ -506,7 +511,50 @@ function AddStudy() {
                                 </div>
                             ))}
                     </div>
+                    {/* Language Preference */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Language Preference</label>
+                        {dropdownChoices.language_preferences_choices &&
+                            dropdownChoices.language_preferences_choices.map((language) => (
+                                <div key={language.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`language_${language.key}`}
+                                        name="language"
+                                        value={language.key}
+                                        checked={formData.language ? formData.language.includes(language.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`language_${language.key}`} className="text-sm">
+                                        {language.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Activity Level */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Activity Level</label>
+                        {dropdownChoices.activity_level_choices &&
+                            dropdownChoices.activity_level_choices.map((activity) => (
+                                <div key={activity.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`activity_${activity.key}`}
+                                        name="activity"
+                                        value={activity.key}
+                                        checked={formData.activity ? formData.activity.includes(activity.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`activity_${activity.key}`} className="text-sm">
+                                        {activity.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
 
+                    
 
                     {/* Terms of Service Agreement Field */}
                     <div>
@@ -544,4 +592,4 @@ function AddStudy() {
     );
 }
 
-export default AddStudy;
+export default withAuthentication(AddStudy);

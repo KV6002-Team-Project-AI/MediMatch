@@ -3,7 +3,6 @@ from django.urls import path, re_path
 from django.views.generic import TemplateView
 from ResearchSwipe.views import *
 from Syed.views import StudyCreate
-from Mo.views import RefreshRejectedProfile
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
@@ -25,10 +24,6 @@ urlpatterns = [
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     
     # ... include your other url patterns here ...
-
-    #Mo paths
-    path('api/refresh_rejected/', RefreshRejectedProfile.as_view(), name='refresh_rejected'),
-
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),

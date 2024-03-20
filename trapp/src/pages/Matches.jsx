@@ -2,9 +2,16 @@ import profilePic from '../assets/profile-pic.jpg'
 import infoLogo from '../assets/info.png'
 import withAuthentication from '../HOCauth'; // Import the HOC
 
-function Matches() {
+const Matches = ({ userRoles }) =>  {
 
     const features = ["Brown Hair", "25 Years old", "1.76 metres"]
+
+    
+
+    if (!userRoles.is_recruiter && !userRoles.is_superuser) {
+        return <div className='mt-20'>You do not have permission to view this page.</div>;
+    }
+
     return (
         <div className="mx-3 my-20">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">

@@ -64,16 +64,20 @@ export default function SignIn() {
         localStorage.setItem('userInfo', JSON.stringify(data.user));
     
         // Check the user's role and redirect accordingly
-        if (data.user.is_recruitee) {
-          // Further check if the recruitee has filled out the additional info
-          window.location.href = data.user.has_filled_recruitee_form ? './profile' : './signup/recruitee';
-        } else if (data.user.is_recruiter) {
-          // Similarly, check for the recruiter
-          window.location.href = data.user.has_filled_recruiter_form ? './profile' : './signup/recruiter';
-        } else {
-          // If neither, direct to a default page or error page
-          window.location.href = './';
-        }
+        // Check the user's role and redirect accordingly
+      if (data.user.is_superuser) {
+        // Redirect superuser to profile page
+        window.location.href = './profile';
+      } else if (data.user.is_recruitee) {
+        // Further check if the recruitee has filled out the additional info
+        window.location.href = data.user.has_filled_recruitee_form ? './profile' : './signup/recruitee';
+      } else if (data.user.is_recruiter) {
+        // Similarly, check for the recruiter
+        window.location.href = data.user.has_filled_recruiter_form ? './profile' : './signup/recruiter';
+      } else {
+        // If neither, direct to a default page or error page
+        window.location.href = './';
+      }
       }
     })
     .catch((error) => {

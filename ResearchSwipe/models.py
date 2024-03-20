@@ -1,15 +1,49 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from .datavalidation import *
 
 
 
+class UserManager(BaseUserManager):
+    use_in_migrations = True
+
+    def create_user(self, email, password=None, **extra_fields):
+        """
+        Create and save a regular User with the given email and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.username = email  # Assuming you want to keep username same as email
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        """
+        Create and save a Superuser with the given email and password.
+        """
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+
+        return self.create_user(email, password, **extra_fields)
+
 
 class User(AbstractUser):
-    # Common fields
+    # Use the custom user manager
+    objects = UserManager()
+
+    # Your custom fields
     is_recruitee = models.BooleanField(default=False)
     is_recruiter = models.BooleanField(default=False)
-    # Add other common fields if needed
+
+    # Make sure email is unique
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.email
 
 class Recruitee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -64,7 +98,6 @@ class Recruitee(models.Model):
     
     #This is when the recuiter confirms if the user attended 
     participation_history = models.IntegerField(default=0, null=True, blank=True)
-
 
     # Add other recruitee-specific fields if needed
 

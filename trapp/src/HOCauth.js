@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const withAuthentication = WrappedComponent => {
   return props => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRoles, setUserRoles] = useState({ is_recruitee: false, is_recruiter: false, is_superuser: false });
     const [isChecking, setIsChecking] = useState(true);
-    const navigate = useNavigate(); // Get the navigate function
+    const navigate = useNavigate();
 
     useEffect(() => {
       const jwtToken = localStorage.getItem('accessToken');
@@ -23,21 +24,32 @@ const withAuthentication = WrappedComponent => {
           console.log('Validation response status:', response.status);
           if (response.ok) {
             setIsAuthenticated(true);
-          } else {
-            response.json().then(data => {
-              console.log('Validation error:', data);
+            // Optionally fetch additional user role data if needed
+            return fetch('http://localhost:8000/api/user', {
+              headers: {
+                'Authorization': `Bearer ${jwtToken}`
+              }
             });
-            throw new Error('Not authenticated');
+          } else {
+            throw new Error('Token validation failed');
           }
+        })
+        .then(response => response.json())
+        .then(data => {
+          setUserRoles({
+            is_recruitee: data.is_recruitee,
+            is_recruiter: data.is_recruiter,
+            is_superuser: data.is_superuser
+          });
         })
         .catch(error => {
           console.error('Error:', error);
           setIsAuthenticated(false);
-          navigate('/'); // Redirect to landing page
+          navigate('/');
         });
       } else {
         setIsAuthenticated(false);
-        navigate('/'); // Redirect to landing page when no token is found
+        navigate('/');
       }
 
       setIsChecking(false);
@@ -48,11 +60,10 @@ const withAuthentication = WrappedComponent => {
     }
 
     if (!isAuthenticated) {
-      // This block might be unnecessary because of the redirect
       return <div>Please log in to view this page.</div>;
     }
 
-    return <WrappedComponent {...props} />;
+    return <WrappedComponent {...props} userRoles={userRoles} />;
   };
 };
 

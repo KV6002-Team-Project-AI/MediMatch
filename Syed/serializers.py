@@ -72,17 +72,11 @@ class StudySerializer(serializers.ModelSerializer):
             'work_preference',
 
             # NLP 
-            'has_medical_history', 
-            'medical_history',
-            'has_medication_history', 
+            'medical_history', 
             'medication_history', 
-            'has_current_medication',
             'current_medication', 
-            'has_family_medication_history', 
             'family_medication_history',
-            'has_allergies', 
             'allergies', 
-            'has_lifestyle', 
             'lifestyle', 
         ]
 

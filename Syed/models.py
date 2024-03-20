@@ -30,17 +30,11 @@ class Study(models.Model):
     work_preference = models.CharField(max_length=50, choices=GROUP_CHOICES, null=True, blank=True)
 
     # NLP related
-    has_medical_history = models.BooleanField(default=False)
     medical_history = models.ManyToManyField('MedicalHistory', blank=True)
-    has_medication_history = models.BooleanField(default=False)
     medication_history = models.ManyToManyField('MedicationHistory', blank=True)
-    has_current_medication = models.BooleanField(default=False)
     current_medication = models.ManyToManyField('CurrentMedication', blank=True)
-    has_family_medication_history = models.BooleanField(default=False)
     family_medication_history = models.ManyToManyField('FamilyMedicalHistory', blank=True)
-    has_allergies = models.BooleanField(default=False)
     allergies = models.ManyToManyField('Allergy', blank=True)
-    has_lifestyle = models.BooleanField(default=False) 
     lifestyle = models.ManyToManyField('Lifestyle', blank=True)
 
 class MedicalHistory(models.Model):

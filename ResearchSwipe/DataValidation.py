@@ -294,8 +294,8 @@ GROUP_CHOICES = [
 ]
 
 PREGNANCY_STATUS_CHOICES = [
-        ('yes', 'Yes'),
-        ('no', 'No'),
+        ('yes', 'Pregnant'),
+        ('no', 'Not Pregnant'),
 ]
 
 LANGUAGE_CHOICES = [

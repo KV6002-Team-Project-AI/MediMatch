@@ -36,22 +36,11 @@ function AddStudy() {
 
         // NLP related
         medical_history: '',
-        has_medical_history: false,
-
         current_medication: '',
-        has_current_medication: false,
-
         medication_history: '',
-        has_medication_history: false,
-
         allergies: '',
-        has_allergies: false,
-
         family_medical_history: '',
-        has_family_medical_history: false,
-
         lifestyle: '',
-        has_lifestyle: false,
     });
 
     // State variables for toggling display of min-max components
@@ -63,6 +52,7 @@ function AddStudy() {
         fetch('http://localhost:8000/api/dropdown-choices/')
             .then(response => response.json())
             .then(data => setDropdownChoices(data))
+            // .then(console.log(dropdownChoices.biological_sex_choices))
             .catch(error => console.error('Error fetching dropdown choices:', error));
         // Load existing recruitee data if editing
         fetch('http://localhost:8000/api/studycreate/', {
@@ -246,6 +236,7 @@ function AddStudy() {
                     </div>
 
                     <h3 className="text-lg font-bold mb-4 text-gray-700">Study Requirements</h3>
+                    <p className='text-red-600 text-sm'>*Please ignore boxes if there is no preference.</p>
 
                     {/* Checkbox for Age */}
                     <div>
@@ -392,8 +383,8 @@ function AddStudy() {
                     {/* Sex */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Sex</label>
-                        {dropdownChoices.SEX_CHOICES &&
-                            dropdownChoices.SEX_CHOICES.map((sex) => (
+                        {dropdownChoices.biological_sex_choices &&
+                            dropdownChoices.biological_sex_choices.map((sex) => (
                                 <div key={sex.key} className="flex items-center mb-2">
                                     <input
                                         type="checkbox"
@@ -406,6 +397,111 @@ function AddStudy() {
                                     />
                                     <label htmlFor={`sex_${sex.key}`} className="text-sm">
                                         {sex.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Hair Color */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Hair Color</label>
+                        {dropdownChoices.hair_color_choices &&
+                            dropdownChoices.hair_color_choices.map((hair) => (
+                                <div key={hair.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`hair_${hair.key}`}
+                                        name="hair"
+                                        value={hair.key}
+                                        checked={formData.hair ? formData.hair.includes(hair.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`hair_${hair.key}`} className="text-sm">
+                                        {hair.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Profession */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Profession</label>
+                        {dropdownChoices.profession_choices &&
+                            dropdownChoices.profession_choices.map((profession) => (
+                                <div key={profession.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`profession_${profession.key}`}
+                                        name="profession"
+                                        value={profession.key}
+                                        checked={formData.profession ? formData.profession.includes(profession.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`profession_${profession.key}`} className="text-sm">
+                                        {profession.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Ethinicity */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Ethinicity</label>
+                        {dropdownChoices.ethnicity_choices &&
+                            dropdownChoices.ethnicity_choices.map((ethinicity) => (
+                                <div key={ethinicity.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`ethinicity_${ethinicity.key}`}
+                                        name="ethinicity"
+                                        value={ethinicity.key}
+                                        checked={formData.ethinicity ? formData.ethinicity.includes(ethinicity.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`ethinicity_${ethinicity.key}`} className="text-sm">
+                                        {ethinicity.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Nationality */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Nationality</label>
+                        {dropdownChoices.nationality_choices &&
+                            dropdownChoices.nationality_choices.map((nationality) => (
+                                <div key={nationality.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`nationality_${nationality.key}`}
+                                        name="nationality"
+                                        value={nationality.key}
+                                        checked={formData.nationality ? formData.nationality.includes(nationality.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`nationality_${nationality.key}`} className="text-sm">
+                                        {nationality.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Pregnancy Status */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Pregnancy Status</label>
+                        {dropdownChoices.pregnancy_status_choices &&
+                            dropdownChoices.pregnancy_status_choices.map((pregnancy) => (
+                                <div key={pregnancy.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`pregnancy_${pregnancy.key}`}
+                                        name="pregnancy"
+                                        value={pregnancy.key}
+                                        checked={formData.pregnancy ? formData.pregnancy.includes(pregnancy.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`pregnancy_${pregnancy.key}`} className="text-sm">
+                                        {pregnancy.value}
                                     </label>
                                 </div>
                             ))}

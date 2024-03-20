@@ -6,3 +6,11 @@ static/*
 static
 trapp/build
 
+# Ignore everything in the migrations directory
+migrations/*
+
+# But do not ignore the init.py file
+!migrations/init.py
+
+# Database
+db.sqlite3

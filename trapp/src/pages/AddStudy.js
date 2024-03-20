@@ -553,6 +553,27 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+                    {/* Socioeconomic Status */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Socioeconomic Status</label>
+                        {dropdownChoices.socioeconomic_status_choices &&
+                            dropdownChoices.socioeconomic_status_choices.map((socioeconomic) => (
+                                <div key={socioeconomic.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`socioeconomic_${socioeconomic.key}`}
+                                        name="socioeconomic"
+                                        value={socioeconomic.key}
+                                        checked={formData.socioeconomic ? formData.socioeconomic.includes(socioeconomic.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`socioeconomic_${socioeconomic.key}`} className="text-sm">
+                                        {socioeconomic.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
 
                     
 

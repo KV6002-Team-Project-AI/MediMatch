@@ -43,6 +43,7 @@ class StudySerializer(serializers.ModelSerializer):
         model = Study
         fields = [
             'user', 
+            'study_id',
             'name', 
             'category', 
             'description', 

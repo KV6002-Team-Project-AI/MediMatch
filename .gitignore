@@ -7,10 +7,18 @@ static
 trapp/build
 
 # Ignore everything in the migrations directory
-migrations/*
+Mo/migrations/*
+Syed/migrations/*
+ResearchSwipe/migrations/*
+Aymman/migrations/*
+Abdul/migrations/*
 
 # But do not ignore the init.py file
-!migrations/init.py
+!Mo/migrations/init.py
+!Syed/migrations/init.py
+!ResearchSwipe/migrations/init.py
+!Aymman/migrations/init.py
+!Abdul/migrations/init.py
 
 # Database
 db.sqlite3

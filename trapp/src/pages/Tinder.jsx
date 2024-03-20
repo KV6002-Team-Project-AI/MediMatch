@@ -19,6 +19,7 @@ const Tinder = () => {
     setTimeout(() => setRejectColor(''), 750); // Reset the background color after 2 seconds
   };
 
+
   return (
     <>
       <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-content`}>

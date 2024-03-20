@@ -161,7 +161,16 @@ class DropdownChoicesAPIView(views.APIView):
             'measurement_system_choices': MEASUREMENT_CHOICES,
             'study_preference_choices': STUDY_PREFERENCE_CHOICES,
             'interest_choices': INTEREST_CHOICES,
+
+            # NLP Syed choices
+            'medical_history_choices': MEDICAL_HISTORY_CHOICES,
+            'medication_history_choices': MEDICATION_HISTORY_CHOICES,
+            'current_medication_choices': CURRENT_MEDICATION_CHOICES,
+            'family_medication_history_choices': FAMILY_MEDICATION_HISTORY_CHOICES,
+            'allergies_choices': ALLERGIES_CHOICES,
+            'lifestyle_choices': LIFESTYLE_CHOICES,
         }
+
         # Converts each choice tuple into a dictionary format that is easy to handle in the frontend
         formatted_choices = {key: [{'key': choice[0], 'value': choice[1]} for choice in value] for key, value in choices.items()}
         return Response(formatted_choices)

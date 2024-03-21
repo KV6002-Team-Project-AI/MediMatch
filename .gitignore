@@ -22,3 +22,5 @@ Abdul/migrations/*
 
 # Database
 db.sqlite3
+
+media/*

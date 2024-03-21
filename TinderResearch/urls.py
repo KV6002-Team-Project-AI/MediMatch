@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/validate_token/', ValidateTokenView.as_view(), name='validate_token'),
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/dropdown-choices/', DropdownChoicesAPIView.as_view(), name='dropdown-choices'),
+    path('api/update-profile-image/', UpdateProfileImageView.as_view(), name='update-profile-image'),
    
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     
@@ -31,8 +32,8 @@ urlpatterns = [
 
 
     # The catch-all pattern for your React frontend should be the last pattern
-    re_path(r'^(?!admin).*$', TemplateView.as_view(template_name='index.html')),
-]
+    re_path(r'^(?!admin|media).*$', TemplateView.as_view(template_name='index.html')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

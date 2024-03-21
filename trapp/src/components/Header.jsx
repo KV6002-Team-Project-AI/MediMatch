@@ -59,7 +59,7 @@ function Header() {
         <div className="fixed inset-x-0 top-0 bg-white shadow-md pt-1.5 h-16 z-10">
             <ul className="flex justify-between items-center text-sm font-medium px-4 gap-1">
                 <li>
-                    <Link to="/" className="flex items-center">
+                    <Link to="/tinder" className="flex items-center">
                         <img src={puzzleLogo} alt="Puzzle Logo" className="h-8 w-8" />
                         <img src={mediMatchLogo} alt="MediMatch Logo" className="h-12 w-auto" />
                     </Link>

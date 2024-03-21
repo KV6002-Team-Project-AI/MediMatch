@@ -271,9 +271,9 @@ HAIR_COLOR_CHOICES = [
     ]
 
 SOCIOECONOMIC_STATUS_CHOICES = [
-        ('low', 'Low'),
-        ('middle', 'Middle'),
-        ('high', 'High'),
+        ('low', 'Low Class'),
+        ('middle', 'Middle Class'),
+        ('high', 'High Class'),
     ]
 
 HEALTH_STATUS_CHOICES = [
@@ -290,7 +290,6 @@ MEASUREMENT_CHOICES = [
 GROUP_CHOICES = [
     ('group', 'Group'), 
     ('solo', 'Solo'), 
-    ('no preference', 'No Preference'),
 ]
 
 PREGNANCY_STATUS_CHOICES = [
@@ -585,7 +584,6 @@ MEDICAL_HISTORY_CHOICES = [
     ('asthma', 'Asthma'),
     ('thyroid_disorder', 'Thyroid Disorder'),
     ('mental_health_condition', 'Mental Health Condition'),
-    ('other', 'Other'),
 ]
 
 MEDICATION_HISTORY_CHOICES = [
@@ -595,7 +593,6 @@ MEDICATION_HISTORY_CHOICES = [
     ('thyroid_medication', 'Thyroid Medication'),
     ('antidepressants', 'Antidepressants'),
     ('anxiolytics', 'Anxiolytics'),
-    ('other', 'Other'),
 ]
 
 CURRENT_MEDICATION_CHOICES = [
@@ -604,7 +601,6 @@ CURRENT_MEDICATION_CHOICES = [
     ('antihistamines', 'Antihistamines'),
     ('antacids', 'Antacids'),
     ('vitamins', 'Vitamins'),
-    ('other', 'Other'),
 ]
 
 FAMILY_MEDICATION_HISTORY_CHOICES = [
@@ -614,7 +610,6 @@ FAMILY_MEDICATION_HISTORY_CHOICES = [
     ('high_cholesterol', 'High Cholesterol'),
     ('hypertension', 'Hypertension'),
     ('mental_health_conditions', 'Mental Health Conditions'),
-    ('other', 'Other'),
 ]
 
 ALLERGIES_CHOICES = [
@@ -624,7 +619,6 @@ ALLERGIES_CHOICES = [
     ('medications', 'Medications'),
     ('latex', 'Latex'),
     ('dust', 'Dust'),
-    ('other', 'Other'),
 ]
 
 LIFESTYLE_CHOICES = [
@@ -636,7 +630,6 @@ LIFESTYLE_CHOICES = [
     ('non_smoker', 'Non-Smoker'),
     ('occasional_drinker', 'Occasional Drinker'),
     ('non_drinker', 'Non-Drinker'),
-    ('other', 'Other'),
 ]
 
 #End of data validation

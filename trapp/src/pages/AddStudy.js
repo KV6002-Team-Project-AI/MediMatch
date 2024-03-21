@@ -48,7 +48,23 @@ import withAuthentication from '../HOCauth';
     const [showAge, setShowAge] = useState(false);
     const [showHeight, setShowHeight] = useState(false);
     const [showWeight, setShowWeight] = useState(false);
-
+    const [showSex, setShowSex] = useState(false);
+    const [showHairColor, setShowHairColor] = useState(false);
+    const [showProfession, setShowProfession] = useState(false);
+    const [showEthnicity, setShowEthnicity] = useState(false);
+    const [showNationality, setShowNationality] = useState(false);
+    const [showPregnancyStatus, setShowPregnancyStatus] = useState(false);
+    const [showLanguagePreference, setShowLanguagePreference] = useState(false);
+    const [showActivity, setShowActivity] = useState(false);
+    const [showSocioeconomic, setShowSocioeconomic] = useState(false);
+    const [showHealth, setShowHealth] = useState(false);
+    const [showMedicalHistory, setShowMedicalHistory] = useState(false);
+    const [showMedicationHistory, setShowMedicationHistory] = useState(false);
+    const [showCurrentMedication, setShowCurrentMedication] = useState(false);
+    const [showFamilyMedicationHistory, setShowFamilyMedicationHistory] = useState(false);
+    const [showAllergies, setShowAllergies] = useState(false);
+    const [showLifestyle, setShowLifestyle] = useState(false);
+    
     useEffect(() => {
         fetch('http://localhost:8000/api/dropdown-choices/')
             .then(response => response.json())
@@ -211,6 +227,45 @@ import withAuthentication from '../HOCauth';
                                 ))}
                         </select>
                     </div>
+                    {/* Work Preference */}
+                    <div>
+                        <label htmlFor="work_preference" className="block text-gray-700 text-sm font-bold mb-2">Type *</label>
+                        <select
+                            id="work_preference"
+                            name="work_preference"
+                            value={formData.work}
+                            onChange={handleChange}
+                            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        >
+                            <option value="">Select Study Type</option>
+                            {dropdownChoices.work_preference_choices &&
+                                dropdownChoices.work_preference_choices.map((work) => (
+                                    <option key={work.key} value={work.key}>
+                                        {work.value}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
+                    {/* Duration */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Study Duration *</label>
+                        <select
+                            id="duration"
+                            name="duration"
+                            value={formData.duration}
+                            onChange={handleChange}
+                            className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
+                        >
+                            <option value="">Select Duration</option>
+                            {dropdownChoices.duration_of_participation_choices &&
+                                dropdownChoices.duration_of_participation_choices.map((duration) => (
+                                    <option key={duration.key} value={duration.key}>
+                                        {duration.value}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
                     {/* Start Date */}
                     <div>
                         <label htmlFor="date_of_birth" className="block text-gray-700 text-sm font-bold mb-2">
@@ -225,7 +280,7 @@ import withAuthentication from '../HOCauth';
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                     </div>
-                    {/* Start Date */}
+                    {/* Expiry Date */}
                     <div>
                         <label htmlFor="date_of_birth" className="block text-gray-700 text-sm font-bold mb-2">
                             Expiry Date *
@@ -240,13 +295,13 @@ import withAuthentication from '../HOCauth';
                         />
                     </div>
 
-                    <h3 className="text-lg font-bold mb-4 text-gray-700">Study Requirements</h3>
+                    <h3 className="text-lg font-bold mb-4 text-gray-700">Study Preferences</h3>
                     <p className='text-red-600 text-sm'>*Please ignore boxes if there is no preference.</p>
 
                     {/* Checkbox for Age */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Does this study have age requirements?
+                            Does this study have age preferences?
                         </label>
                         <input
                             type="checkbox"
@@ -294,7 +349,7 @@ import withAuthentication from '../HOCauth';
                     {/* Checkbox for Weight */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Does this study have weight requirements?
+                            Does this study have weight preferences?
                         </label>
                         <input
                             type="checkbox"
@@ -339,7 +394,7 @@ import withAuthentication from '../HOCauth';
                     {/* Checkbox for Height */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">
-                            Does this study have height requirements?
+                            Does this study have height preferences?
                         </label>
                         <input
                             type="checkbox"
@@ -387,8 +442,14 @@ import withAuthentication from '../HOCauth';
 
                     {/* Sex */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Sex</label>
-                        {dropdownChoices.biological_sex_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have sex preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showSex}
+                            onChange={() => setShowSex(!showSex)}
+                        />
+                        {showSex &&
+                            dropdownChoices.biological_sex_choices &&
                             dropdownChoices.biological_sex_choices.map((sex) => (
                                 <div key={sex.key} className="flex items-center mb-2">
                                     <input
@@ -408,8 +469,14 @@ import withAuthentication from '../HOCauth';
                     </div>
                     {/* Hair Color */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Hair Color</label>
-                        {dropdownChoices.hair_color_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have hair color preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showHairColor}
+                            onChange={() => setShowHairColor(!showHairColor)}
+                        />
+                        {showHairColor &&
+                            dropdownChoices.hair_color_choices &&
                             dropdownChoices.hair_color_choices.map((hair) => (
                                 <div key={hair.key} className="flex items-center mb-2">
                                     <input
@@ -427,10 +494,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Profession */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Profession</label>
-                        {dropdownChoices.profession_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have profession preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showProfession}
+                            onChange={() => setShowProfession(!showProfession)}
+                        />
+                        {showProfession &&
+                            dropdownChoices.profession_choices &&
                             dropdownChoices.profession_choices.map((profession) => (
                                 <div key={profession.key} className="flex items-center mb-2">
                                     <input
@@ -448,31 +522,45 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
-                    {/* Ethinicity */}
+
+                    {/* Ethnicity */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Ethinicity</label>
-                        {dropdownChoices.ethnicity_choices &&
-                            dropdownChoices.ethnicity_choices.map((ethinicity) => (
-                                <div key={ethinicity.key} className="flex items-center mb-2">
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have ethnicity preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showEthnicity}
+                            onChange={() => setShowEthnicity(!showEthnicity)}
+                        />
+                        {showEthnicity &&
+                            dropdownChoices.ethnicity_choices &&
+                            dropdownChoices.ethnicity_choices.map((ethnicity) => (
+                                <div key={ethnicity.key} className="flex items-center mb-2">
                                     <input
                                         type="checkbox"
-                                        id={`ethinicity_${ethinicity.key}`}
-                                        name="ethinicity"
-                                        value={ethinicity.key}
-                                        checked={formData.ethinicity ? formData.ethinicity.includes(ethinicity.key) : false}
+                                        id={`ethnicity_${ethnicity.key}`}
+                                        name="ethnicity"
+                                        value={ethnicity.key}
+                                        checked={formData.ethnicity ? formData.ethnicity.includes(ethnicity.key) : false}
                                         onChange={handleChange}
                                         className="mr-2 leading-tight"
                                     />
-                                    <label htmlFor={`ethinicity_${ethinicity.key}`} className="text-sm">
-                                        {ethinicity.value}
+                                    <label htmlFor={`ethnicity_${ethnicity.key}`} className="text-sm">
+                                        {ethnicity.value}
                                     </label>
                                 </div>
                             ))}
                     </div>
+
                     {/* Nationality */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Nationality</label>
-                        {dropdownChoices.nationality_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have nationality preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showNationality}
+                            onChange={() => setShowNationality(!showNationality)}
+                        />
+                        {showNationality &&
+                            dropdownChoices.nationality_choices &&
                             dropdownChoices.nationality_choices.map((nationality) => (
                                 <div key={nationality.key} className="flex items-center mb-2">
                                     <input
@@ -490,10 +578,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Pregnancy Status */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Pregnancy Status</label>
-                        {dropdownChoices.pregnancy_status_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have pregnancy preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showPregnancyStatus}
+                            onChange={() => setShowPregnancyStatus(!showPregnancyStatus)}
+                        />
+                        {showPregnancyStatus &&
+                            dropdownChoices.pregnancy_status_choices &&
                             dropdownChoices.pregnancy_status_choices.map((pregnancy) => (
                                 <div key={pregnancy.key} className="flex items-center mb-2">
                                     <input
@@ -511,10 +606,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Language Preference */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Language Preference</label>
-                        {dropdownChoices.language_preferences_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have language preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showLanguagePreference}
+                            onChange={() => setShowLanguagePreference(!showLanguagePreference)}
+                        />
+                        {showLanguagePreference &&
+                            dropdownChoices.language_preferences_choices &&
                             dropdownChoices.language_preferences_choices.map((language) => (
                                 <div key={language.key} className="flex items-center mb-2">
                                     <input
@@ -532,10 +634,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Activity Level */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Activity Level</label>
-                        {dropdownChoices.activity_level_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have activity preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showActivity}
+                            onChange={() => setShowActivity(!showActivity)}
+                        />
+                        {showActivity &&
+                            dropdownChoices.activity_level_choices &&
                             dropdownChoices.activity_level_choices.map((activity) => (
                                 <div key={activity.key} className="flex items-center mb-2">
                                     <input
@@ -553,10 +662,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Socioeconomic Status */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Socioeconomic Status</label>
-                        {dropdownChoices.socioeconomic_status_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have socioeconomic preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showSocioeconomic}
+                            onChange={() => setShowSocioeconomic(!showSocioeconomic)}
+                        />
+                        {showSocioeconomic &&
+                            dropdownChoices.socioeconomic_status_choices &&
                             dropdownChoices.socioeconomic_status_choices.map((socioeconomic) => (
                                 <div key={socioeconomic.key} className="flex items-center mb-2">
                                     <input
@@ -574,31 +690,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
-                    {/* Duration */}
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Duration</label>
-                        {dropdownChoices.duration_of_participation_choices &&
-                            dropdownChoices.duration_of_participation_choices.map((duration) => (
-                                <div key={duration.key} className="flex items-center mb-2">
-                                    <input
-                                        type="checkbox"
-                                        id={`duration_${duration.key}`}
-                                        name="duration"
-                                        value={duration.key}
-                                        checked={formData.duration ? formData.duration.includes(duration.key) : false}
-                                        onChange={handleChange}
-                                        className="mr-2 leading-tight"
-                                    />
-                                    <label htmlFor={`duration_${duration.key}`} className="text-sm">
-                                        {duration.value}
-                                    </label>
-                                </div>
-                            ))}
-                    </div>
+
                     {/* Health Status */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Health Status</label>
-                        {dropdownChoices.health_status_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have health preferences?</label>
+                        <input
+                            type="checkbox"
+                            checked={showHealth}
+                            onChange={() => setShowHealth(!showHealth)}
+                        />
+                        {showHealth &&
+                            dropdownChoices.health_status_choices &&
                             dropdownChoices.health_status_choices.map((health) => (
                                 <div key={health.key} className="flex items-center mb-2">
                                     <input
@@ -616,31 +718,19 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
-                    {/* Work Preference */}
-                    <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Work Preference</label>
-                        {dropdownChoices.work_preference_choices &&
-                            dropdownChoices.work_preference_choices.map((work) => (
-                                <div key={work.key} className="flex items-center mb-2">
-                                    <input
-                                        type="checkbox"
-                                        id={`work_${work.key}`}
-                                        name="work"
-                                        value={work.key}
-                                        checked={formData.work ? formData.work.includes(work.key) : false}
-                                        onChange={handleChange}
-                                        className="mr-2 leading-tight"
-                                    />
-                                    <label htmlFor={`work_${work.key}`} className="text-sm">
-                                        {work.value}
-                                    </label>
-                                </div>
-                            ))}
-                    </div>
+
+                    
+
                     {/* Medical History */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Medical History</label>
-                        {dropdownChoices.medical_history_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study require medical history?</label>
+                        <input
+                            type="checkbox"
+                            checked={showMedicalHistory}
+                            onChange={() => setShowMedicalHistory(!showMedicalHistory)}
+                        />
+                        {showMedicalHistory &&
+                            dropdownChoices.medical_history_choices &&
                             dropdownChoices.medical_history_choices.map((medical_history) => (
                                 <div key={medical_history.key} className="flex items-center mb-2">
                                     <input
@@ -658,10 +748,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Medication History */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Medication History</label>
-                        {dropdownChoices.medication_history_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study require medication history?</label>
+                        <input
+                            type="checkbox"
+                            checked={showMedicationHistory}
+                            onChange={() => setShowMedicationHistory(!showMedicationHistory)}
+                        />
+                        {showMedicationHistory &&
+                            dropdownChoices.medication_history_choices &&
                             dropdownChoices.medication_history_choices.map((medication) => (
                                 <div key={medication.key} className="flex items-center mb-2">
                                     <input
@@ -679,10 +776,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Current Medication */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Current Medication</label>
-                        {dropdownChoices.current_medication_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study require current medication?</label>
+                        <input
+                            type="checkbox"
+                            checked={showCurrentMedication}
+                            onChange={() => setShowCurrentMedication(!showCurrentMedication)}
+                        />
+                        {showCurrentMedication &&
+                            dropdownChoices.current_medication_choices &&
                             dropdownChoices.current_medication_choices.map((current_medication) => (
                                 <div key={current_medication.key} className="flex items-center mb-2">
                                     <input
@@ -700,10 +804,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Family Medication History */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Family Medication History</label>
-                        {dropdownChoices.family_medication_history_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study require family medication history?</label>
+                        <input
+                            type="checkbox"
+                            checked={showFamilyMedicationHistory}
+                            onChange={() => setShowFamilyMedicationHistory(!showFamilyMedicationHistory)}
+                        />
+                        {showFamilyMedicationHistory &&
+                            dropdownChoices.family_medication_history_choices &&
                             dropdownChoices.family_medication_history_choices.map((family_medication) => (
                                 <div key={family_medication.key} className="flex items-center mb-2">
                                     <input
@@ -721,10 +832,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Allergies */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Allergies</label>
-                        {dropdownChoices.allergies_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have allergy preferences? </label>
+                        <input
+                            type="checkbox"
+                            checked={showAllergies}
+                            onChange={() => setShowAllergies(!showAllergies)}
+                        />
+                        {showAllergies &&
+                            dropdownChoices.allergies_choices &&
                             dropdownChoices.allergies_choices.map((allergies) => (
                                 <div key={allergies.key} className="flex items-center mb-2">
                                     <input
@@ -742,10 +860,17 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Lifestyle */}
                     <div>
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Lifestyle</label>
-                        {dropdownChoices.lifestyle_choices &&
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have lifestyle preferences? </label>
+                        <input
+                            type="checkbox"
+                            checked={showLifestyle}
+                            onChange={() => setShowLifestyle(!showLifestyle)}
+                        />
+                        {showLifestyle &&
+                            dropdownChoices.lifestyle_choices &&
                             dropdownChoices.lifestyle_choices.map((lifestyle) => (
                                 <div key={lifestyle.key} className="flex items-center mb-2">
                                     <input
@@ -764,7 +889,6 @@ import withAuthentication from '../HOCauth';
                             ))}
                     </div>
 
-                    
 
                     {/* Terms of Service Agreement Field */}
                     <div>

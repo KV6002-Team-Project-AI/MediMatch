@@ -47,6 +47,10 @@ class StudySerializer(serializers.ModelSerializer):
             'name', 
             'category', 
             'description', 
+            'start_date',
+            'duration', 
+            'expiry_date', 
+            'work_preference',
 
             # numericals
             'min_age', 
@@ -66,11 +70,7 @@ class StudySerializer(serializers.ModelSerializer):
             'language_preference', 
             'activity_level', 
             'socioeconomic_status', 
-            'start_date',
-            'duration', 
-            'expiry_date', 
             'health_status', 
-            'work_preference',
 
             # NLP 
             'medical_history', 

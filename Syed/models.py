@@ -17,7 +17,7 @@ class Study(models.Model):
     
     #DropDown Specific
     category = models.TextField(null=True, choices=STUDY_PREFERENCE_CHOICES, blank=True)
-    sex = models.CharField(max_length=100, choices=SEX_CHOICES, null=True, blank=True)
+    biological_sex = models.CharField(max_length=100, choices=SEX_CHOICES, null=True, blank=True)
     hair_color = models.CharField(max_length=100, choices=HAIR_COLOR_CHOICES, null=True, blank=True)
     profession = models.CharField(max_length=100, choices=PROFESSION_CHOICES, null=True, blank=True)
     ethnicity = models.CharField(max_length=100, choices=ETHNICITY_CHOICES, null=True, blank=True)

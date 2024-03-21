@@ -576,4 +576,67 @@ INTEREST_CHOICES = [
     ('languages', 'Languages'),
 ]
 
+# Syed Non-Trivial Information
+
+MEDICAL_HISTORY_CHOICES = [
+    ('heart_condition', 'Heart Condition'),
+    ('diabetes', 'Diabetes'),
+    ('hypertension', 'Hypertension'),
+    ('asthma', 'Asthma'),
+    ('thyroid_disorder', 'Thyroid Disorder'),
+    ('mental_health_condition', 'Mental Health Condition'),
+    ('other', 'Other'),
+]
+
+MEDICATION_HISTORY_CHOICES = [
+    ('blood_pressure_medication', 'Blood Pressure Medication'),
+    ('insulin', 'Insulin'),
+    ('asthma_inhaler', 'Asthma Inhaler'),
+    ('thyroid_medication', 'Thyroid Medication'),
+    ('antidepressants', 'Antidepressants'),
+    ('anxiolytics', 'Anxiolytics'),
+    ('other', 'Other'),
+]
+
+CURRENT_MEDICATION_CHOICES = [
+    ('antibiotics', 'Antibiotics'),
+    ('pain_relief', 'Pain Relief'),
+    ('antihistamines', 'Antihistamines'),
+    ('antacids', 'Antacids'),
+    ('vitamins', 'Vitamins'),
+    ('other', 'Other'),
+]
+
+FAMILY_MEDICATION_HISTORY_CHOICES = [
+    ('heart_disease', 'Heart Disease'),
+    ('diabetes', 'Diabetes'),
+    ('cancer', 'Cancer'),
+    ('high_cholesterol', 'High Cholesterol'),
+    ('hypertension', 'Hypertension'),
+    ('mental_health_conditions', 'Mental Health Conditions'),
+    ('other', 'Other'),
+]
+
+ALLERGIES_CHOICES = [
+    ('peanuts', 'Peanuts'),
+    ('shellfish', 'Shellfish'),
+    ('pollen', 'Pollen'),
+    ('medications', 'Medications'),
+    ('latex', 'Latex'),
+    ('dust', 'Dust'),
+    ('other', 'Other'),
+]
+
+LIFESTYLE_CHOICES = [
+    ('sedentary', 'Sedentary'),
+    ('active', 'Active'),
+    ('vegetarian', 'Vegetarian'),
+    ('vegan', 'Vegan'),
+    ('smoker', 'Smoker'),
+    ('non_smoker', 'Non-Smoker'),
+    ('occasional_drinker', 'Occasional Drinker'),
+    ('non_drinker', 'Non-Drinker'),
+    ('other', 'Other'),
+]
+
 #End of data validation

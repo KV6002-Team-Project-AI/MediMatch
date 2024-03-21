@@ -553,6 +553,216 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+                    {/* Socioeconomic Status */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Socioeconomic Status</label>
+                        {dropdownChoices.socioeconomic_status_choices &&
+                            dropdownChoices.socioeconomic_status_choices.map((socioeconomic) => (
+                                <div key={socioeconomic.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`socioeconomic_${socioeconomic.key}`}
+                                        name="socioeconomic"
+                                        value={socioeconomic.key}
+                                        checked={formData.socioeconomic ? formData.socioeconomic.includes(socioeconomic.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`socioeconomic_${socioeconomic.key}`} className="text-sm">
+                                        {socioeconomic.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Duration */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Duration</label>
+                        {dropdownChoices.duration_of_participation_choices &&
+                            dropdownChoices.duration_of_participation_choices.map((duration) => (
+                                <div key={duration.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`duration_${duration.key}`}
+                                        name="duration"
+                                        value={duration.key}
+                                        checked={formData.duration ? formData.duration.includes(duration.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`duration_${duration.key}`} className="text-sm">
+                                        {duration.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Health Status */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Health Status</label>
+                        {dropdownChoices.health_status_choices &&
+                            dropdownChoices.health_status_choices.map((health) => (
+                                <div key={health.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`health_${health.key}`}
+                                        name="health"
+                                        value={health.key}
+                                        checked={formData.health ? formData.health.includes(health.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`health_${health.key}`} className="text-sm">
+                                        {health.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Work Preference */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Work Preference</label>
+                        {dropdownChoices.work_preference_choices &&
+                            dropdownChoices.work_preference_choices.map((work) => (
+                                <div key={work.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`work_${work.key}`}
+                                        name="work"
+                                        value={work.key}
+                                        checked={formData.work ? formData.work.includes(work.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`work_${work.key}`} className="text-sm">
+                                        {work.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Medical History */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Medical History</label>
+                        {dropdownChoices.medical_history_choices &&
+                            dropdownChoices.medical_history_choices.map((medical_history) => (
+                                <div key={medical_history.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`medical_history_${medical_history.key}`}
+                                        name="medical_history"
+                                        value={medical_history.key}
+                                        checked={formData.medical_history ? formData.medical_history.includes(medical_history.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`medical_history_${medical_history.key}`} className="text-sm">
+                                        {medical_history.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Medication History */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Medication History</label>
+                        {dropdownChoices.medication_history_choices &&
+                            dropdownChoices.medication_history_choices.map((medication) => (
+                                <div key={medication.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`medication_${medication.key}`}
+                                        name="medication"
+                                        value={medication.key}
+                                        checked={formData.medication ? formData.medication.includes(medication.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`medication_${medication.key}`} className="text-sm">
+                                        {medication.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Current Medication */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Current Medication</label>
+                        {dropdownChoices.current_medication_choices &&
+                            dropdownChoices.current_medication_choices.map((current_medication) => (
+                                <div key={current_medication.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`current_medication_${current_medication.key}`}
+                                        name="current_medication"
+                                        value={current_medication.key}
+                                        checked={formData.current_medication ? formData.current_medication.includes(current_medication.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`current_medication_${current_medication.key}`} className="text-sm">
+                                        {current_medication.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Family Medication History */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Family Medication History</label>
+                        {dropdownChoices.family_medication_history_choices &&
+                            dropdownChoices.family_medication_history_choices.map((family_medication) => (
+                                <div key={family_medication.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`family_medication_${family_medication.key}`}
+                                        name="family_medication"
+                                        value={family_medication.key}
+                                        checked={formData.family_medication ? formData.family_medication.includes(family_medication.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`family_medication_${family_medication.key}`} className="text-sm">
+                                        {family_medication.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Allergies */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Allergies</label>
+                        {dropdownChoices.allergies_choices &&
+                            dropdownChoices.allergies_choices.map((allergies) => (
+                                <div key={allergies.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`allergies_${allergies.key}`}
+                                        name="allergies"
+                                        value={allergies.key}
+                                        checked={formData.allergies ? formData.allergies.includes(allergies.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`allergies_${allergies.key}`} className="text-sm">
+                                        {allergies.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
+                    {/* Lifestyle */}
+                    <div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Lifestyle</label>
+                        {dropdownChoices.lifestyle_choices &&
+                            dropdownChoices.lifestyle_choices.map((lifestyle) => (
+                                <div key={lifestyle.key} className="flex items-center mb-2">
+                                    <input
+                                        type="checkbox"
+                                        id={`lifestyle_${lifestyle.key}`}
+                                        name="lifestyle"
+                                        value={lifestyle.key}
+                                        checked={formData.lifestyle ? formData.lifestyle.includes(lifestyle.key) : false}
+                                        onChange={handleChange}
+                                        className="mr-2 leading-tight"
+                                    />
+                                    <label htmlFor={`lifestyle_${lifestyle.key}`} className="text-sm">
+                                        {lifestyle.value}
+                                    </label>
+                                </div>
+                            ))}
+                    </div>
 
                     
 

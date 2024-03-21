@@ -57,7 +57,7 @@ class StudySerializer(serializers.ModelSerializer):
             'max_weight', 
             
             # trivial
-            'sex', 
+            'biological_sex', 
             'hair_color', 
             'profession', 
             'ethnicity', 
@@ -80,6 +80,14 @@ class StudySerializer(serializers.ModelSerializer):
             'allergies', 
             'lifestyle', 
         ]
+
+    # def create(self, validated_data):
+    #     user_data = validated_data.pop('user')
+    #     # The 'create' method will save the User.
+    #     user = UserSerializer.create(UserSerializer(), validated_data=user_data)
+        
+    #     profile = self.Meta.model.objects.create(user=user, **validated_data)
+    #     return profile
 
 
 

@@ -1,5 +1,5 @@
 from django.db import models, transaction
-from ResearchSwipe.models import *  # Import Django's built-in User model
+from ResearchSwipe.models import * 
 from Syed.models import Study
 
 class Matches(models.Model):

@@ -32,7 +32,7 @@ urlpatterns = [
 
 
     # The catch-all pattern for your React frontend should be the last pattern
-    re_path(r'^(?!admin|media).*$', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

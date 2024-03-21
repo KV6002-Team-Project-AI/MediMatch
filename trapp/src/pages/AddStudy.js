@@ -6,6 +6,7 @@ import withAuthentication from '../HOCauth';
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
+        user: JSON.parse(localStorage.getItem('userInfo')).id,
         name: '',
         description: '',
         category: '',
@@ -185,7 +186,6 @@ import withAuthentication from '../HOCauth';
                 lifestyle: null
             }));
         }
-
 
     }, [
         showSex,  
@@ -396,7 +396,8 @@ import withAuthentication from '../HOCauth';
         console.log(updatedFormData);
 
         const url = 'http://localhost:8000/api/studycreate/';
-        const method = formData.user ? 'PUT' : 'POST';
+        const method = 'POST';
+        // formData.user ? 'PUT' : 
         
         if (!updatedFormData.termsOfService) {
             alert('You must agree to the terms of service.');

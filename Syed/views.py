@@ -1,16 +1,10 @@
 from django.shortcuts import render
-
-from rest_framework import status, views, permissions, generics
+from rest_framework import status, views, permissions
 from rest_framework.response import Response
-from django.contrib.auth.hashers import make_password
 from .models import Study
 from ResearchSwipe.models import User
 from .serializers import StudySerializer
-from rest_framework_simplejwt.tokens import RefreshToken
-from django.conf import settings
 
-
-# Create your views here.
 
 class StudyCreate(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -26,6 +20,7 @@ class StudyCreate(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = StudySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)  # Assuming you want to save the user automatically
+            # Assuming you want to save the user automatically
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

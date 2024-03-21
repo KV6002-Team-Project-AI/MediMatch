@@ -48,6 +48,7 @@ import withAuthentication from '../HOCauth';
     const [showAge, setShowAge] = useState(false);
     const [showHeight, setShowHeight] = useState(false);
     const [showWeight, setShowWeight] = useState(false);
+
     const [showSex, setShowSex] = useState(false);
     const [showHairColor, setShowHairColor] = useState(false);
     const [showProfession, setShowProfession] = useState(false);
@@ -86,7 +87,124 @@ import withAuthentication from '../HOCauth';
             }
         })
         .catch(error => console.error('Error fetching recruitee details:', error));
-    }, []);
+
+        // 
+        if (!showSex) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                biological_sex: null
+            }));
+        }
+        if (!showHairColor) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                hair_color: null
+            }));
+        }
+        if (!showProfession) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                profession: null
+            }));
+        }
+        if (!showEthnicity) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                ethnicity: null
+            }));
+        }
+        if (!showNationality) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                nationality: null
+            }));
+        }
+        if (!showPregnancyStatus) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                pregnancy_status: null
+            }));
+        }
+        if (!showLanguagePreference) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                language_preference: null
+            }));
+        }
+        if (!showActivity) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                activity_level: null
+            }));
+        }
+        if (!showSocioeconomic) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                socioeconomic_status: null
+            }));
+        }
+        if (!showHealth) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                health_status: null
+            }));
+        }
+        if (!showMedicalHistory) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                medical_history: null
+            }));
+        }
+        if (!showMedicationHistory) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                medication_history: null
+            }));
+        }
+        if (!showCurrentMedication) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                current_medication: null
+            }));
+        }
+        if (!showFamilyMedicationHistory) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                family_medication_history: null
+            }));
+        }
+        if (!showAllergies) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                allergies: null
+            }));
+        }
+        if (!showLifestyle) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                lifestyle: null
+            }));
+        }
+
+
+    }, [
+        showSex,  
+        showHairColor,
+        showProfession, 
+        showEthnicity,
+        showNationality,
+        showPregnancyStatus,
+        showLanguagePreference,
+        showActivity,
+        showSocioeconomic,
+        showHealth,
+        showMedicalHistory,
+        showMedicationHistory,
+        showCurrentMedication,
+        showFamilyMedicationHistory,
+        showAllergies,
+        showLifestyle
+    ]);
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
@@ -252,7 +370,6 @@ import withAuthentication from '../HOCauth';
         }
     };
 
-    // Generic function to handle checkbox preferences
     const handleCheckboxChange = (e, preferenceName) => {
         const { value, checked } = e.target;
 
@@ -265,12 +382,23 @@ import withAuthentication from '../HOCauth';
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        console.log(formData)
+        // Iterate through formData and set empty arrays or empty strings to null
+        const updatedFormData = { ...formData };
+        for (const key in updatedFormData) {
+            if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
+                updatedFormData[key] = null;
+            } else if (updatedFormData[key] === '') {
+                updatedFormData[key] = null;
+            }
+        }
+
+        // Submit the updated formData
+        console.log(updatedFormData);
 
         const url = 'http://localhost:8000/api/studycreate/';
         const method = formData.user ? 'PUT' : 'POST';
         
-        if (!formData.termsOfService) {
+        if (!updatedFormData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
@@ -283,7 +411,7 @@ import withAuthentication from '../HOCauth';
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updatedFormData),
         })
         .then(response => {
             if (!response.ok) {
@@ -504,7 +632,7 @@ import withAuthentication from '../HOCauth';
                         <div className='flex space-x-4 w-full'>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Minimum Weight
+                                    Minimum Weight *
                                 </label>
                                 <input
                                     id="weightMin"
@@ -512,6 +640,7 @@ import withAuthentication from '../HOCauth';
                                     type="number"
                                     value={formData.min_weight}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     placeholder="Minimum weight"
                                     min="1"
@@ -521,7 +650,7 @@ import withAuthentication from '../HOCauth';
                             </div>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Maximum Weight
+                                    Maximum Weight *
                                 </label>
                                 <input
                                     id="weightMax"
@@ -529,6 +658,7 @@ import withAuthentication from '../HOCauth';
                                     type="number"
                                     value={formData.max_weight}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     placeholder="Maximum weight"
                                     min="2"
@@ -555,7 +685,7 @@ import withAuthentication from '../HOCauth';
                         <div className='flex space-x-4 w-full'>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Minimum Height
+                                    Minimum Height *
                                 </label>
                                 <input
                                     id="heightMin"
@@ -563,6 +693,7 @@ import withAuthentication from '../HOCauth';
                                     type="number"
                                     value={formData.min_height}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     placeholder="Minimum height"
                                     min="1"
@@ -572,7 +703,7 @@ import withAuthentication from '../HOCauth';
                             </div>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Maximum Height
+                                    Maximum Height *
                                 </label>
                                 <input
                                     id="heightMax"
@@ -580,6 +711,7 @@ import withAuthentication from '../HOCauth';
                                     type="number"
                                     value={formData.max_height}
                                     onChange={handleChange}
+                                    onBlur={handleBlur}
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     placeholder="Maximum height"
                                     min="2"
@@ -592,7 +724,7 @@ import withAuthentication from '../HOCauth';
 
                     {/* checkboxes */}
 
-                    {/* Sex */}
+                    {/* Sex preferences */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have sex preferences?</label>
                         <input
@@ -613,6 +745,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.biological_sex ? formData.biological_sex.includes(sex.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'biological_sex')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.biological_sex || formData.biological_sex.length === 0} 
                                     />
                                     <label htmlFor={`sex_${sex.key}`} className="text-sm">
                                         {sex.value}
@@ -620,6 +753,7 @@ import withAuthentication from '../HOCauth';
                                 </div>
                             ))}
                     </div>
+
                     {/* Hair Color */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have hair color preferences?</label>
@@ -637,9 +771,10 @@ import withAuthentication from '../HOCauth';
                                         id={`hair_${hair.key}`}
                                         name="hair"
                                         value={hair.key}
-                                        checked={formData.hair ? formData.hair.includes(hair.key) : false}
+                                        checked={formData.hair_color ? formData.hair_color.includes(hair.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'hair_color')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.hair_color || formData.hair_color.length === 0} 
                                     />
                                     <label htmlFor={`hair_${hair.key}`} className="text-sm">
                                         {hair.value}
@@ -668,6 +803,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.profession ? formData.profession.includes(profession.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'profession')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.profession || formData.profession.length === 0}
                                     />
                                     <label htmlFor={`profession_${profession.key}`} className="text-sm">
                                         {profession.value}
@@ -696,6 +832,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.ethnicity ? formData.ethnicity.includes(ethnicity.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'ethnicity')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.ethnicity || formData.ethnicity.length === 0}
                                     />
                                     <label htmlFor={`ethnicity_${ethnicity.key}`} className="text-sm">
                                         {ethnicity.value}
@@ -724,6 +861,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.nationality ? formData.nationality.includes(nationality.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'nationality')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.nationality || formData.nationality.length === 0}
                                     />
                                     <label htmlFor={`nationality_${nationality.key}`} className="text-sm">
                                         {nationality.value}
@@ -749,9 +887,10 @@ import withAuthentication from '../HOCauth';
                                         id={`pregnancy_${pregnancy.key}`}
                                         name="pregnancy"
                                         value={pregnancy.key}
-                                        checked={formData.pregnancy ? formData.pregnancy.includes(pregnancy.key) : false}
+                                        checked={formData.pregnancy_status ? formData.pregnancy_status.includes(pregnancy.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'pregnancy_status')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.pregnancy_status || formData.pregnancy_status.length === 0}
                                     />
                                     <label htmlFor={`pregnancy_${pregnancy.key}`} className="text-sm">
                                         {pregnancy.value}
@@ -777,9 +916,10 @@ import withAuthentication from '../HOCauth';
                                         id={`language_${language.key}`}
                                         name="language"
                                         value={language.key}
-                                        checked={formData.language ? formData.language.includes(language.key) : false}
+                                        checked={formData.language_preference ? formData.language_preference.includes(language.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'language_preference')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.language_preference || formData.language_preference.length === 0}
                                     />
                                     <label htmlFor={`language_${language.key}`} className="text-sm">
                                         {language.value}
@@ -805,9 +945,10 @@ import withAuthentication from '../HOCauth';
                                         id={`activity_${activity.key}`}
                                         name="activity"
                                         value={activity.key}
-                                        checked={formData.activity ? formData.activity.includes(activity.key) : false}
+                                        checked={formData.activity_level ? formData.activity_level.includes(activity.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'activity_level')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.activity_level || formData.activity_level.length === 0}
                                     />
                                     <label htmlFor={`activity_${activity.key}`} className="text-sm">
                                         {activity.value}
@@ -833,9 +974,10 @@ import withAuthentication from '../HOCauth';
                                         id={`socioeconomic_${socioeconomic.key}`}
                                         name="socioeconomic"
                                         value={socioeconomic.key}
-                                        checked={formData.socioeconomic ? formData.socioeconomic.includes(socioeconomic.key) : false}
+                                        checked={formData.socioeconomic_status ? formData.socioeconomic_status.includes(socioeconomic.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'socioeconomic_status')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.socioeconomic_status || formData.socioeconomic_status.length === 0}
                                     />
                                     <label htmlFor={`socioeconomic_${socioeconomic.key}`} className="text-sm">
                                         {socioeconomic.value}
@@ -861,9 +1003,10 @@ import withAuthentication from '../HOCauth';
                                         id={`health_${health.key}`}
                                         name="health"
                                         value={health.key}
-                                        checked={formData.health ? formData.health.includes(health.key) : false}
+                                        checked={formData.health_status ? formData.health_status.includes(health.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'health_status')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.health_status || formData.health_status.length === 0}
                                     />
                                     <label htmlFor={`health_${health.key}`} className="text-sm">
                                         {health.value}
@@ -892,6 +1035,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.medical_history ? formData.medical_history.includes(medical_history.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'medical_history')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.medical_history || formData.medical_history.length === 0}
                                     />
                                     <label htmlFor={`medical_history_${medical_history.key}`} className="text-sm">
                                         {medical_history.value}
@@ -917,9 +1061,10 @@ import withAuthentication from '../HOCauth';
                                         id={`medication_${medication.key}`}
                                         name="medication"
                                         value={medication.key}
-                                        checked={formData.medication ? formData.medication.includes(medication.key) : false}
+                                        checked={formData.medication_history ? formData.medication_history.includes(medication.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'medication_history')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.medication_history || formData.medication_history.length === 0}
                                     />
                                     <label htmlFor={`medication_${medication.key}`} className="text-sm">
                                         {medication.value}
@@ -948,6 +1093,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.current_medication ? formData.current_medication.includes(current_medication.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'current_medication')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.current_medication || formData.current_medication.length === 0}
                                     />
                                     <label htmlFor={`current_medication_${current_medication.key}`} className="text-sm">
                                         {current_medication.value}
@@ -973,9 +1119,10 @@ import withAuthentication from '../HOCauth';
                                         id={`family_medication_${family_medication.key}`}
                                         name="family_medication"
                                         value={family_medication.key}
-                                        checked={formData.family_medication ? formData.family_medication.includes(family_medication.key) : false}
+                                        checked={formData.family_medication_history ? formData.family_medication_history.includes(family_medication.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'family_medication_history')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.family_medication_history || formData.family_medication_history.length === 0}
                                     />
                                     <label htmlFor={`family_medication_${family_medication.key}`} className="text-sm">
                                         {family_medication.value}
@@ -1004,6 +1151,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.allergies ? formData.allergies.includes(allergies.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'allergies')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.allergies || formData.allergies.length === 0}
                                     />
                                     <label htmlFor={`allergies_${allergies.key}`} className="text-sm">
                                         {allergies.value}
@@ -1032,6 +1180,7 @@ import withAuthentication from '../HOCauth';
                                         checked={formData.lifestyle ? formData.lifestyle.includes(lifestyle.key) : false}
                                         onChange={(e) => handleCheckboxChange(e, 'lifestyle')}
                                         className="mr-2 leading-tight"
+                                        required={!formData.lifestyle || formData.lifestyle.length === 0}
                                     />
                                     <label htmlFor={`lifestyle_${lifestyle.key}`} className="text-sm">
                                         {lifestyle.value}

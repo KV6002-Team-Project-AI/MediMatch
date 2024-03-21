@@ -6,7 +6,7 @@ from Syed.views import StudyCreate
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,12 @@ urlpatterns = [
     #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
     
     # ... include your other url patterns here ...
+    #ayman paths
+    path('api/get-recruitees/', get_Recruitees, name='get_recruitees'),
+    path('api/get-recruitee/<int:pk>/', get_Recruitee, name='get_single_recruitee'),
+    path('api/get-study/<int:pk>/', get_study, name='get_single_study'),
+    path('api/get-studies/', get_studies, name='get_studies'),
+   
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),

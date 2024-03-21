@@ -5,7 +5,7 @@ import withAuthentication from '../HOCauth';
 
 const RecruiteeProfileCard = () => {
 
-    const name = ["Using AI to integrate "]
+    const name = ["Using AI to integrate audio with pictures"]
     const description = [];
     const start_date = [];
     const duration = []
@@ -14,7 +14,7 @@ const RecruiteeProfileCard = () => {
 
     return (
         <div className="mx-3 my-20">
-            
+
         </div> 
     );
   };

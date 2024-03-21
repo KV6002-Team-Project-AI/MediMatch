@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
+import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-function UserProfile({ user, getReadableValue }) {
+function UserProfile({ user, getReadableValue, onUpdateProfileImage }) {
+  
+
+
+  const [selectedImage, setSelectedImage] = useState(null);
+  const profileImageUrl = user.profile_image_url
+  ? new URL(user.profile_image_url, 'http://localhost:8000').href
+  : '/static/images/avatar/1.jpg';
+  console.log('Selected image file:', selectedImage);
+  console.log('Profile image URL:', profileImageUrl);
     const features = [
         user.height ? `${user.height} CM` : '',
         user.weight ? `${user.weight} KG` : '',
@@ -18,6 +28,17 @@ function UserProfile({ user, getReadableValue }) {
         getReadableValue('interest_choices', user.interest_4)
     ].filter(Boolean);
 
+      const handleImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
+      setSelectedImage(file);
+      onUpdateProfileImage(file);
+
+      // Debugging: Log the object URL for the selected image
+      const objectUrl = URL.createObjectURL(file);
+      console.log('New image object URL:', objectUrl);
+    }
+  };
     const navigate = useNavigate(); // Use the navigate function
 
     const [open, setOpen] = React.useState(false);
@@ -30,9 +51,24 @@ function UserProfile({ user, getReadableValue }) {
     const id = open && Boolean(anchorEl) ? 'transition-popper' : undefined;
 
     return (
-        <div className="mx-3 my-20">
-            <Box className="flex flex-col items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl p-6">
-                <Avatar src={user.profilePic || '/static/images/avatar/1.jpg'} sx={{ width: 128, height: 128 }} />
+      <div className="mx-3 my-20">
+          <Box className="flex flex-col items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl p-6">
+          <Avatar
+              src={selectedImage ? URL.createObjectURL(selectedImage) : profileImageUrl}
+              sx={{ width: 128, height: 128 }}
+            />
+              <input
+                  accept="image/*"
+                  type="file"
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
+                  id="profile-image-input"
+              />
+              <label htmlFor="profile-image-input">
+                  <Button size="small" component="span">
+                      <EditIcon />
+                  </Button>
+              </label>
                 <Typography variant="h5" className="mt-4">{user.full_name}</Typography>
                 <Typography variant="subtitle1">{user.email}</Typography>
 

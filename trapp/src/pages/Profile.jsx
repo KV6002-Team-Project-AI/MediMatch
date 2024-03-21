@@ -29,6 +29,35 @@ const Profile = ({ userRoles }) => {
         fetchRecruiteeInfo();
     }, []);
 
+    const onUpdateProfileImage = async (newImage) => {
+        // Example logic to send an image update to your backend
+        const formData = new FormData();
+        formData.append('profile_image', newImage);
+    
+        const accessToken = localStorage.getItem('accessToken');
+        try {
+            const response = await fetch('http://localhost:8000/api/update-profile-image/', { // Adjust the URL based on your API endpoint
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: formData
+            });
+    
+            if (response.ok) {
+                const updatedData = await response.json();
+                setRecruiteeInfo(updatedData);
+                // Refresh the page after the state has been updated
+                window.location.reload();
+            } else {
+                console.error('Failed to update profile image');
+            }
+        } catch (error) {
+            console.error('Error updating profile image:', error);
+        }
+    };
+    
+    
     // Function to get readable value
     const getReadableValue = (key, value) => {
         const choice = dropdownChoices[key]?.find(choice => choice.key === value);
@@ -36,10 +65,11 @@ const Profile = ({ userRoles }) => {
     };
 
     return recruiteeInfo ? (
-        <UserProfile user={recruiteeInfo} getReadableValue={getReadableValue} />
+        <UserProfile user={recruiteeInfo} getReadableValue={getReadableValue} onUpdateProfileImage={onUpdateProfileImage} />
     ) : (
         <div>Loading...</div>
     );
+    
 };
 
 export default withAuthentication(Profile);

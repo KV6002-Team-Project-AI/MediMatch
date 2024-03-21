@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from .datavalidation import *
+from django.utils import timezone
 
 
 
@@ -32,16 +33,14 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    # Use the custom user manager
-    objects = UserManager()
-
-    # Your custom fields
+    # Your existing fields...
     is_recruitee = models.BooleanField(default=False)
     is_recruiter = models.BooleanField(default=False)
-
-    # Make sure email is unique
     email = models.EmailField(unique=True)
 
+    # New field for profile image
+    profile_image = models.ImageField(upload_to='profile_images/',null=True, blank=True,)
+    
     def __str__(self):
         return self.email
 
@@ -106,5 +105,57 @@ class Recruiter(models.Model):
     research_area = models.TextField()
     company_info = models.TextField()
     # Add other recruiter-specific fields
+
+
+# For tracking individual page views and visit durations
+class PageView(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='page_views')
+    page_url = models.URLField()
+    entry_time = models.DateTimeField(default=timezone.now)
+    exit_time = models.DateTimeField(null=True, blank=True)
+    duration = models.DurationField(null=True, blank=True)  # Calculated automatically
+
+    def save(self, *args, **kwargs):
+        if self.entry_time and self.exit_time:
+            self.duration = self.exit_time - self.entry_time
+        super(PageView, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.email} viewed {self.page_url}"
+
+# For tracking user actions like clicks, scrolls, etc.
+class UserAction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='actions')
+    action_type = models.CharField(max_length=50)  # e.g., 'click', 'scroll'
+    element_id = models.CharField(max_length=100, null=True, blank=True)  # The HTML element interacted with
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.email} {self.action_type} on {self.element_id}"
+
+# For tracking performance metrics like page load times
+class PerformanceMetric(models.Model):
+    page_url = models.URLField()
+    metric_type = models.CharField(max_length=50)  # e.g., 'load_time', 'first_byte', 'time_to_interactive'
+    value = models.FloatField()  # The measured value for this metric
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.metric_type} for {self.page_url} = {self.value}"
+    
+class TrafficSource(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='traffic_sources')
+    source = models.CharField(max_length=100)  # e.g., 'Google', 'Facebook', 'Direct'
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class ContentInteraction(models.Model):
+    content_type = models.CharField(max_length=100)  # e.g., 'Article', 'Video'
+    action = models.CharField(max_length=50)  # e.g., 'Like', 'Share', 'Comment'
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class ErrorLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    error_message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
 

@@ -13,6 +13,14 @@ ResearchSwipe/migrations/*
 Aymman/migrations/*
 Abdul/migrations/*
 
+Mo/__pycache__/*
+Syed/__pycache__/*
+ResearchSwipe/__pycache__/*
+Aymman/__pycache__/*
+Abdul/__pycache__/*
+TinderResearch/__pycache__/*
+
+
 # But do not ignore the init.py file
 !Mo/migrations/init.py
 !Syed/migrations/init.py

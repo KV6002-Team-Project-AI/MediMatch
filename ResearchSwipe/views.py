@@ -93,7 +93,7 @@ class RecruiteeDetail(views.APIView):
         if recruitee is None:
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = RecruiteeSerializer(recruitee)
+        serializer = RecruiteeSerializer(recruitee, context={'request': request})
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
@@ -107,16 +107,24 @@ class RecruiteeDetail(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
-        try:
-            recruitee = Recruitee.objects.get(user=request.user)
-        except Recruitee.DoesNotExist:
+        recruitee = self.get_object(request.user)
+        if recruitee is None:
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = RecruiteeSerializer(recruitee, data=request.data, context={'request': request})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Update the recruitee fields
+        recruitee_serializer = RecruiteeSerializer(recruitee, data=request.data, partial=True, context={'request': request})
+        if recruitee_serializer.is_valid():
+            recruitee_serializer.save()
+
+            # Check if there is a file in the request to update the user's profile image
+            if 'profile_image' in request.FILES:
+                user = recruitee.user
+                user.profile_image = request.FILES['profile_image']
+                user.save()
+
+            return Response(recruitee_serializer.data)
+        return Response(recruitee_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 
 
@@ -141,7 +149,17 @@ class UserRolesView(views.APIView):
         serializer = UserRoleSerializer(request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
+class UpdateProfileImageView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class DropdownChoicesAPIView(views.APIView):
     def get(self, request):

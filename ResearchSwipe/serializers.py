@@ -9,7 +9,7 @@ from django.contrib.auth.models import update_last_login
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_recruitee', 'is_recruiter')
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_recruitee', 'is_recruiter', 'profile_image')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
@@ -74,6 +74,7 @@ class RecruiteeSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
     full_name = serializers.SerializerMethodField()
     email = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Recruitee
@@ -81,6 +82,7 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'user',
             'full_name',
             'email',
+            'profile_image_url',
             'age',
             'date_of_birth',
             'biological_sex',
@@ -121,10 +123,16 @@ class RecruiteeSerializer(serializers.ModelSerializer):
         )
 
     def get_full_name(self, obj):
-        return obj.user.get_full_name()
+            return obj.user.get_full_name()
 
     def get_email(self, obj):
-        return obj.user.email
+            return obj.user.email
+
+    def get_profile_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.user.profile_image and hasattr(obj.user.profile_image, 'url'):
+            return request.build_absolute_uri(obj.user.profile_image.url)
+        return None
 
     def create(self, validated_data):
         user = self.context['request'].user

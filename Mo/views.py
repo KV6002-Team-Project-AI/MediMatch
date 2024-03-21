@@ -17,7 +17,7 @@ class MatchActionView(APIView):
         action = request.data.get('action')  # 'accept' or 'reject'
         actor_type = request.data.get('actor_type')  # 'recruitee' or 'study'
 
-        if not id or not action or not actor_type:
+        if not match_id or not action or not actor_type:
             return Response({'detail': 'Missing parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:

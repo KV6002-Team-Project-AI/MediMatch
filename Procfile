@@ -1,1 +1,1 @@
-web: gunicorn TinderResearch.wsgi
+web: gunicorn TinderResearch.wsgi:application

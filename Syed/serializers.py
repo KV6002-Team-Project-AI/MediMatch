@@ -81,13 +81,35 @@ class StudySerializer(serializers.ModelSerializer):
             'lifestyle', 
         ]
 
-    # def create(self, validated_data):
-    #     user_data = validated_data.pop('user')
-    #     # The 'create' method will save the User.
-    #     user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        
-    #     profile = self.Meta.model.objects.create(user=user, **validated_data)
-    #     return profile
+    def create(self, validated_data):
+        medical_history_data = validated_data.pop('medical_history', [])
+        medication_history_data = validated_data.pop('medication_history', [])
+        current_medication_data = validated_data.pop('current_medication', [])
+        family_medication_history_data = validated_data.pop('family_medication_history', [])
+        allergies_data = validated_data.pop('allergies', [])
+        lifestyle_data = validated_data.pop('lifestyle', [])
+
+        study = Study.objects.create(**validated_data)
+
+        for history_data in medical_history_data:
+            MedicalHistory.objects.create(study=study, **history_data)
+
+        for history_data in medication_history_data:
+            MedicationHistory.objects.create(study=study, **history_data)
+
+        for medication_data in current_medication_data:
+            CurrentMedication.objects.create(study=study, **medication_data)
+
+        for history_data in family_medication_history_data:
+            FamilyMedicalHistory.objects.create(study=study, **history_data)
+
+        for allergy_data in allergies_data:
+            Allergy.objects.create(study=study, **allergy_data)
+
+        for lifestyle_data in lifestyle_data:
+            Lifestyle.objects.create(study=study, **lifestyle_data)
+
+        return study
 
 
 

@@ -17,6 +17,10 @@ class Study(models.Model):
     
     #DropDown Specific
     category = models.TextField(null=True, choices=STUDY_PREFERENCE_CHOICES, blank=True)
+    work_preference = models.CharField(max_length=50, choices=GROUP_CHOICES, null=True, blank=True)
+    duration = models.CharField(max_length=100, choices=DURATION_CHOICES, null=True, blank=True)
+
+    # Checkbox Specific
     biological_sex = models.CharField(max_length=100, choices=SEX_CHOICES, null=True, blank=True)
     hair_color = models.CharField(max_length=100, choices=HAIR_COLOR_CHOICES, null=True, blank=True)
     profession = models.CharField(max_length=100, choices=PROFESSION_CHOICES, null=True, blank=True)
@@ -26,9 +30,7 @@ class Study(models.Model):
     language_preference = models.CharField(max_length=255, choices=LANGUAGE_CHOICES, null=True, blank=True)
     activity_level = models.CharField(max_length=100, choices=ACTIVITY_LEVEL_CHOICES, null=True, blank=True)
     socioeconomic_status = models.CharField(max_length=100, choices=SOCIOECONOMIC_STATUS_CHOICES, null=True, blank=True)
-    duration = models.PositiveIntegerField(null=True, choices=DURATION_CHOICES, blank=True)
     health_status = models.CharField(max_length=50, choices=HEALTH_STATUS_CHOICES, null=True, blank=True)
-    work_preference = models.CharField(max_length=50, choices=GROUP_CHOICES, null=True, blank=True)
 
     # NLP related
     medical_history = models.ManyToManyField('MedicalHistory', blank=True)

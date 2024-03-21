@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-%17xdo4$j21)e@3uu#h+dkwr)v#xippiv2^*e5=++3q-po_i6x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['medimatch-solutions-9a4b38cd0846.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -67,6 +67,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://localhost:3000',
+    'http://medimatch-solutions-9a4b38cd0846.herokuapp.com'
     # Add other origins as needed
 ]
 
@@ -156,6 +157,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Media files
 MEDIA_URL = '/media/'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'ResearchSwipe.User'

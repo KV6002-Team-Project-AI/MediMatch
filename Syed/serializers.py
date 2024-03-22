@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.db import transaction
 from .models import Study, MedicalHistory, MedicationHistory, CurrentMedication, FamilyMedicalHistory, Allergy, Lifestyle, BiologicalSex, HairColor, Profession, Ethnicity, Nationality, PregnancyStatus, LanguagePreference, ActivityLevel, SocioeconomicStatus, HealthStatus
 
 class MedicalHistorySerializer(serializers.ModelSerializer):
@@ -136,22 +137,24 @@ class StudySerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        medical_history_data = validated_data.pop('medical_history', [])
-        medication_history_data = validated_data.pop('medication_history', [])
-        current_medication_data = validated_data.pop('current_medication', [])
-        family_medication_history_data = validated_data.pop('family_medication_history', [])
-        allergies_data = validated_data.pop('allergies', [])
-        lifestyle_data = validated_data.pop('lifestyle', [])
-        biological_sex_data = validated_data.pop('biological_sex', [])
-        hair_color_data = validated_data.pop('hair_color', [])
-        profession_data = validated_data.pop('profession', [])
-        ethnicity_data = validated_data.pop('ethnicity', [])
-        nationality_data = validated_data.pop('nationality', [])
-        pregnancy_status_data = validated_data.pop('pregnancy_status', [])
-        language_preference_data = validated_data.pop('language_preference', [])
-        activity_level_data = validated_data.pop('activity_level', [])
-        socioeconomic_status_data = validated_data.pop('socioeconomic_status', [])
-        health_status_data = validated_data.pop('health_status', [])
+
+        with transaction.atomic():
+            medical_history_data = validated_data.pop('medical_history', [])
+            medication_history_data = validated_data.pop('medication_history', [])
+            current_medication_data = validated_data.pop('current_medication', [])
+            family_medication_history_data = validated_data.pop('family_medication_history', [])
+            allergies_data = validated_data.pop('allergies', [])
+            lifestyle_data = validated_data.pop('lifestyle', [])
+            biological_sex_data = validated_data.pop('biological_sex', [])
+            hair_color_data = validated_data.pop('hair_color', [])
+            profession_data = validated_data.pop('profession', [])
+            ethnicity_data = validated_data.pop('ethnicity', [])
+            nationality_data = validated_data.pop('nationality', [])
+            pregnancy_status_data = validated_data.pop('pregnancy_status', [])
+            language_preference_data = validated_data.pop('language_preference', [])
+            activity_level_data = validated_data.pop('activity_level', [])
+            socioeconomic_status_data = validated_data.pop('socioeconomic_status', [])
+            health_status_data = validated_data.pop('health_status', [])
 
         study = Study.objects.create(**validated_data)
 

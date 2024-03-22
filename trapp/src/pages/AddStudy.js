@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 
-    const AddStudy = ({ userRoles }) => {
+const AddStudy = ({ userRoles }) => {
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
@@ -382,23 +382,23 @@ import withAuthentication from '../HOCauth';
         e.preventDefault();
 
         // Iterate through formData and set empty arrays or empty strings to null
-        // const updatedFormData = { ...formData };
-        // for (const key in updatedFormData) {
-        //     if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
-        //         updatedFormData[key] = null;
-        //     } else if (updatedFormData[key] === '') {
-        //         updatedFormData[key] = null;
-        //     }
-        // }
-        
+        const updatedFormData = { ...formData };
+        for (const key in updatedFormData) {
+            if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
+                updatedFormData[key] = null;
+            } else if (updatedFormData[key] === '') {
+                updatedFormData[key] = null;
+            }
+        }
+
         // Submit the updated formData
-        console.log(formData);
+        console.log(updatedFormData);
 
         const url = 'http://localhost:8000/api/studycreate/';
         const method = 'POST';
         // formData.user ? 'PUT' : 
         
-        if (!formData.termsOfService) {
+        if (!updatedFormData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
@@ -411,7 +411,7 @@ import withAuthentication from '../HOCauth';
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify(updatedFormData),
         })
         .then(response => {
             if (!response.ok) {

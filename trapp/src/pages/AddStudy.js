@@ -49,7 +49,6 @@ import withAuthentication from '../HOCauth';
     const [showAge, setShowAge] = useState(false);
     const [showHeight, setShowHeight] = useState(false);
     const [showWeight, setShowWeight] = useState(false);
-
     const [showSex, setShowSex] = useState(false);
     const [showHairColor, setShowHairColor] = useState(false);
     const [showProfession, setShowProfession] = useState(false);
@@ -87,7 +86,7 @@ import withAuthentication from '../HOCauth';
                 });
             }
         })
-        .catch(error => console.error('Error fetching recruitee details:', error));
+        .catch(error => console.error('Error fetching study details:', error));
 
         // 
         if (!showSex) {
@@ -383,23 +382,23 @@ import withAuthentication from '../HOCauth';
         e.preventDefault();
 
         // Iterate through formData and set empty arrays or empty strings to null
-        const updatedFormData = { ...formData };
-        for (const key in updatedFormData) {
-            if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
-                updatedFormData[key] = null;
-            } else if (updatedFormData[key] === '') {
-                updatedFormData[key] = null;
-            }
-        }
-
+        // const updatedFormData = { ...formData };
+        // for (const key in updatedFormData) {
+        //     if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
+        //         updatedFormData[key] = null;
+        //     } else if (updatedFormData[key] === '') {
+        //         updatedFormData[key] = null;
+        //     }
+        // }
+        
         // Submit the updated formData
-        console.log(updatedFormData);
+        console.log(formData);
 
         const url = 'http://localhost:8000/api/studycreate/';
         const method = 'POST';
         // formData.user ? 'PUT' : 
         
-        if (!updatedFormData.termsOfService) {
+        if (!formData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
@@ -412,7 +411,7 @@ import withAuthentication from '../HOCauth';
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
             },
-            body: JSON.stringify(updatedFormData),
+            body: JSON.stringify(formData),
         })
         .then(response => {
             if (!response.ok) {

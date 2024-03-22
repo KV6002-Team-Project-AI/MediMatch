@@ -28,8 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
         # Create the new user
         return super().create(validated_data)
 
-    
-
 
 class MyAuthTokenSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)

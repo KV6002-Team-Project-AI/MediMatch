@@ -5,17 +5,29 @@
     <link rel="icon" type="image/png" href="puzzle.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MediMatch</title>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZF563T4VVD"></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQGVC0WJND"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      
+      // Set default consent for cookies to 'denied'
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        // Add other consent settings as needed
+      });
+      
+      // Initialize Google Analytics
       gtag('js', new Date());
-
-      gtag('config', 'G-ZF563T4VVD'); // Replace with your Google Analytics tracking ID
+      gtag('config', 'G-BQGVC0WJND', {
+        // Additional config such as anonymize_ip can be added here
+      });
     </script>
   </head>
   <body class="bg-blue-300">
     <div id="root"></div>
-    <script type="module" src=""></script>
+    <!-- Your app's bundle script will be inserted here -->
+    <script type="module" src="/static/js/main.%REACT_APP_BUILD_HASH%.js"></script>
   </body>
 </html>

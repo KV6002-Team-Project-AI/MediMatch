@@ -72,6 +72,6 @@ const Profile = ({ userRoles }) => {
     );
     
 };
-const trackingId = 'G-ZF563T4VVD';
+const trackingId = 'G-BQGVC0WJND';
 export default withAuthentication(withPageViewTracker(Profile, trackingId));
 

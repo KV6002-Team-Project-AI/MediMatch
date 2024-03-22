@@ -10,12 +10,9 @@ class StudyCreate(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # This is optional, only if you need to send initial data to your React form
-        initial_data = {
-            # Include any initial data you want to send, for example:
-            # "categories": Category.objects.all().values_list('name', flat=True)
-        }
-        return Response(initial_data)
+        studies = Study.objects.all()  # Retrieve all studies from the database
+        serializer = StudySerializer(studies, many=True)  # Serialize the queryset
+        return Response(serializer.data)  # Return serialized data as response
 
     def post(self, request, *args, **kwargs):
         serializer = StudySerializer(data=request.data)

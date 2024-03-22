@@ -1,11 +1,34 @@
+import { useEffect, useState } from 'react';
 import addLogo from '../assets/add.svg'
 import { useNavigate  } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 
 const Research = ({ userRoles }) =>  {
     const navigate = useNavigate();
+    const [studies, setStudies] = useState([]);
 
-    
+    useEffect(() => {
+        fetch('http://localhost:8000/api/studycreate/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setStudies(data); // Update state with fetched data
+            console.log(studies)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }, []); // Empty dependency array ensures this effect runs only once when the component mounts
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;

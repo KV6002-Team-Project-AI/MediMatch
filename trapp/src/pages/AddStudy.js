@@ -1269,11 +1269,18 @@ const AddStudy = ({ userRoles }) => {
                         </div>
                     </div>
 
-                    {/* Submit Button */}
-                    <div className="flex justify-center mt-4">
+                    {/* Buttons */}
+                    <div className="flex justify-center mt-4 gap-3">
+                        <button
+                            type="button"
+                            className="w-full text-white font-semibold bg-gray-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-gray-600 transform hover:-translate-y-0.5"
+                            onClick={() => navigate('/research')} 
+                        >
+                            Cancel
+                        </button>
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                            className="w-full text-white font-semibold bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5"
                         >
                             Submit
                         </button>

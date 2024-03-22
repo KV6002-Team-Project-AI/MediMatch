@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import UserProfile from '../components/userProfile';
 import withAuthentication from '../HOCauth';
+import withPageViewTracker from '../withPageViewTracker';
 
 const Profile = ({ userRoles }) => {
     const [recruiteeInfo, setRecruiteeInfo] = useState(null);
@@ -71,5 +72,6 @@ const Profile = ({ userRoles }) => {
     );
     
 };
+const trackingId = 'G-ZF563T4VVD';
+export default withAuthentication(withPageViewTracker(Profile, trackingId));
 
-export default withAuthentication(Profile);

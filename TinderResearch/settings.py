@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-%17xdo4$j21)e@3uu#h+dkwr)v#xippiv2^*e5=++3q-po_i6x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['medimatch-solutions-9a4b38cd0846.herokuapp.com', 'localhost', '127.0.0.1']
 
@@ -101,7 +101,7 @@ SIMPLE_JWT = {
     'AUTH_COOKIE_DOMAIN': '127.0.0.1:8000',     # A string like ".yourdomain.com", or None for standard domain cookie.
     'AUTH_COOKIE_SECURE': True,     # Whether the auth tokens should only be sent over HTTPS.
     'AUTH_COOKIE_HTTP_ONLY': False,  # HttpOnly flag used for security.
-    'AUTH_COOKIE_SAMESITE': None,  # Strict or Lax or None
+    'AUTH_COOKIE_SAMESITE': 'Lax',  # Strict or Lax or None
 }
 
 

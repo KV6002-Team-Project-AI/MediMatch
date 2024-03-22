@@ -55,10 +55,12 @@
     
     // Set default consent to 'denied'
     gtag('consent', 'default', {
-      'ad_storage': 'denied',
-      'analytics_storage': 'denied'
-      // Other parameters...
-    });
+  'ad_storage': 'denied',
+  'analytics_storage': 'denied',
+  'ad_user_data': 'denied', // Default state for new parameter
+  'ad_personalization': 'denied' // Default state for new parameter
+});
+
     
     // Check if consent has already been granted
     // Function to get cookie by name
@@ -99,10 +101,11 @@
     // User grants consent
     function allConsentGranted() {
       gtag('consent', 'update', {
-        'ad_storage': 'granted',
-        'analytics_storage': 'granted'
-        // Other parameters...
-      });
+    'ad_storage': 'granted',
+    'analytics_storage': 'granted',
+    'ad_user_data': 'granted', // New parameter for Consent Mode v2
+    'ad_personalization': 'granted' // New parameter for Consent Mode v2
+  });
       // Hide the consent banner
       document.getElementById('consent-banner').style.display = 'none';
       // Set the consent cookie to 'granted'
@@ -112,10 +115,11 @@
     // User denies consent
     function denyConsent() {
       gtag('consent', 'update', {
-        'ad_storage': 'denied',
-        'analytics_storage': 'denied'
-        // Other parameters...
-      });
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied',
+    'ad_user_data': 'denied', // New parameter for Consent Mode v2
+    'ad_personalization': 'denied' // New parameter for Consent Mode v2
+  });
       // Hide the consent banner
       document.getElementById('consent-banner').style.display = 'none';
       // Set the consent cookie to 'denied'

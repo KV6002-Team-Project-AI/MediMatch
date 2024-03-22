@@ -4,7 +4,7 @@ import infoLogo from '../assets/info.png'
 import summarise from '../assets/summary.png'
 import withAuthentication from '../HOCauth';
 
-const RecruiteeProfileCard = () => {
+const StudyProfileCard = () => {
 
 
     const features = ["Brown Hair", "25 Years old", "1.76 metres"];
@@ -30,7 +30,7 @@ const RecruiteeProfileCard = () => {
     return (
       <>
       <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-content`}>
-        <div className='fixed top-16 left-0 right-0 mx-auto mt-4 w-full max-w-screen-md x-4 z-10'>
+        <div className='fixed top-16 left-0 right-0 mx-auto mt-4 w-full max-w-screen-md px-4 z-10'>
           <div className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
             <select className="font-semibold py-2 px-2 rounded-lg w-full text-center">
               <option value="Study 1">Study 1</option>
@@ -63,10 +63,10 @@ const RecruiteeProfileCard = () => {
     
             <div className="font-semibold justify-center mt-3 mb-3 underline underline-offset-2">Interests: </div>
             <div className="flex gap-2">
-              {interests.map((interests, index) => (
-                <div key={index} className="bg-green-100 w-full text-green-800 p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                  {interests}
-                </div>
+              {interests.map((interest, index) => (
+                  <div key={index} className="bg-green-100 w-full text-green-800 p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                      {interest}
+                  </div>
               ))}
             </div>
           </div>
@@ -91,4 +91,4 @@ const RecruiteeProfileCard = () => {
   };
   
 
-export default withAuthentication(RecruiteeProfileCard);
+export default withAuthentication(StudyProfileCard);

@@ -16,33 +16,33 @@ const AddStudy = ({ userRoles }) => {
         expiry_date: '',
 
         // min max numericals
-        min_age: null,
-        max_age: null,
-        min_height: null,
-        max_height: null,
-        min_weight: null,
-        max_weight: null,
+        min_age: '',
+        max_age: '',
+        min_height: '',
+        max_height: '',
+        min_weight: '',
+        max_weight: '',
 
         // Select box specific
-        biological_sex: null,
-        hair_color: null,
-        profession: null,
-        ethnicity: null,
-        nationality: null,
-        pregnancy_status: null,
-        language_preference: null,
-        activity_level: null,
-        socioeconomic_status: null,
-        health_status: null,
+        biological_sex: [],
+        hair_color: [],
+        profession: [],
+        ethnicity: [],
+        nationality: [],
+        pregnancy_status: [],
+        language_preference: [],
+        activity_level: [],
+        socioeconomic_status: [],
+        health_status: [],
         termsOfService: false,
 
         // NLP related
-        medical_history: null,
-        medication_history: null,
-        current_medication: null,
-        family_medication_history: null,
-        allergies: null,
-        lifestyle: null,
+        medical_history: [],
+        medication_history: [],
+        current_medication: [],
+        family_medication_history: [],
+        allergies: [],
+        lifestyle: [],
     });
 
     // State variables for toggling display of components
@@ -92,97 +92,97 @@ const AddStudy = ({ userRoles }) => {
         if (!showSex) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                biological_sex: null
+                biological_sex: []
             }));
         }
         if (!showHairColor) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                hair_color: null
+                hair_color: []
             }));
         }
         if (!showProfession) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                profession: null
+                profession: []
             }));
         }
         if (!showEthnicity) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                ethnicity: null
+                ethnicity: []
             }));
         }
         if (!showNationality) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                nationality: null
+                nationality: []
             }));
         }
         if (!showPregnancyStatus) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                pregnancy_status: null
+                pregnancy_status: []
             }));
         }
         if (!showLanguagePreference) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                language_preference: null
+                language_preference: []
             }));
         }
         if (!showActivity) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                activity_level: null
+                activity_level: []
             }));
         }
         if (!showSocioeconomic) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                socioeconomic_status: null
+                socioeconomic_status: []
             }));
         }
         if (!showHealth) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                health_status: null
+                health_status: []
             }));
         }
         if (!showMedicalHistory) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                medical_history: null
+                medical_history: []
             }));
         }
         if (!showMedicationHistory) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                medication_history: null
+                medication_history: []
             }));
         }
         if (!showCurrentMedication) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                current_medication: null
+                current_medication: []
             }));
         }
         if (!showFamilyMedicationHistory) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                family_medication_history: null
+                family_medication_history: []
             }));
         }
         if (!showAllergies) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                allergies: null
+                allergies: []
             }));
         }
         if (!showLifestyle) {
             setFormData(prevFormData => ({
                 ...prevFormData,
-                lifestyle: null
+                lifestyle: []
             }));
         }
 
@@ -222,19 +222,19 @@ const AddStudy = ({ userRoles }) => {
         if (!showAge && (name === 'min_age' || name === 'max_age')) {
             setFormData({
                 ...formData,
-                [name]: null
+                [name]: ''
             });
         }
         if (!showWeight && (name === 'min_weight' || name === 'max_weight')) {
             setFormData({
                 ...formData,
-                [name]: null
+                [name]: ''
             });
         }
         if (!showHeight && (name === 'min_height' || name === 'max_height')) {
             setFormData({
                 ...formData,
-                [name]: null
+                [name]: ''
             });
         }
         // ADD MORE CHECKBOXES
@@ -385,9 +385,9 @@ const AddStudy = ({ userRoles }) => {
         const updatedFormData = { ...formData };
         for (const key in updatedFormData) {
             if (Array.isArray(updatedFormData[key]) && updatedFormData[key].length === 0) {
-                updatedFormData[key] = null;
+                updatedFormData[key] = [];
             } else if (updatedFormData[key] === '') {
-                updatedFormData[key] = null;
+                updatedFormData[key] = '';
             }
         }
 

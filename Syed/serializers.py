@@ -83,22 +83,22 @@ class HealthStatusSerializer(serializers.ModelSerializer):
         fields = ['name']
 
 class StudySerializer(serializers.ModelSerializer):
-    medical_history = MedicalHistorySerializer(many=True, read_only=True)
-    medication_history = MedicationHistorySerializer(many=True, read_only=True)
-    current_medication = CurrentMedicationSerializer(many=True, read_only=True)
-    family_medication_history = FamilyMedicalHistorySerializer(many=True, read_only=True)
-    allergies = AllergySerializer(many=True, read_only=True)
-    lifestyle = LifestyleSerializer(many=True, read_only=True)
-    biological_sex = BiologicalSexSerializer(many=True, read_only=True)
-    hair_color = HairColorSerializer(many=True, read_only=True)
-    profession = ProfessionSerializer(many=True, read_only=True)
-    ethnicity = EthnicitySerializer(many=True, read_only=True)
-    nationality = NationalitySerializer(many=True, read_only=True)
-    pregnancy_status = PregnancyStatusSerializer(many=True, read_only=True)
-    language_preference = LanguagePreferenceSerializer(many=True, read_only=True)
-    activity_level = ActivityLevelSerializer(many=True, read_only=True)
-    socioeconomic_status = SocioeconomicStatusSerializer(many=True, read_only=True)
-    health_status = HealthStatusSerializer(many=True, read_only=True)
+    medical_history = MedicalHistorySerializer(many=True, required=False)
+    medication_history = MedicationHistorySerializer(many=True, required=False)
+    current_medication = CurrentMedicationSerializer(many=True, required=False)
+    family_medication_history = FamilyMedicalHistorySerializer(many=True, required=False)
+    allergies = AllergySerializer(many=True, required=False)
+    lifestyle = LifestyleSerializer(many=True, required=False)
+    biological_sex = BiologicalSexSerializer(many=True, required=False)
+    hair_color = HairColorSerializer(many=True, required=False)
+    profession = ProfessionSerializer(many=True, required=False)
+    ethnicity = EthnicitySerializer(many=True, required=False)
+    nationality = NationalitySerializer(many=True, required=False)
+    pregnancy_status = PregnancyStatusSerializer(many=True, required=False)
+    language_preference = LanguagePreferenceSerializer(many=True, required=False)
+    activity_level = ActivityLevelSerializer(many=True, required=False)
+    socioeconomic_status = SocioeconomicStatusSerializer(many=True, required=False)
+    health_status = HealthStatusSerializer(many=True, required=False)
 
     class Meta:
         model = Study
@@ -137,73 +137,25 @@ class StudySerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-
-        with transaction.atomic():
-            medical_history_data = validated_data.pop('medical_history', [])
-            medication_history_data = validated_data.pop('medication_history', [])
-            current_medication_data = validated_data.pop('current_medication', [])
-            family_medication_history_data = validated_data.pop('family_medication_history', [])
-            allergies_data = validated_data.pop('allergies', [])
-            lifestyle_data = validated_data.pop('lifestyle', [])
-            biological_sex_data = validated_data.pop('biological_sex', [])
-            hair_color_data = validated_data.pop('hair_color', [])
-            profession_data = validated_data.pop('profession', [])
-            ethnicity_data = validated_data.pop('ethnicity', [])
-            nationality_data = validated_data.pop('nationality', [])
-            pregnancy_status_data = validated_data.pop('pregnancy_status', [])
-            language_preference_data = validated_data.pop('language_preference', [])
-            activity_level_data = validated_data.pop('activity_level', [])
-            socioeconomic_status_data = validated_data.pop('socioeconomic_status', [])
-            health_status_data = validated_data.pop('health_status', [])
+        related_data = {field: validated_data.pop(field, []) for field in [
+            'medical_history', 'medication_history', 'current_medication',
+            'family_medication_history', 'allergies', 'lifestyle',
+            'biological_sex', 'hair_color', 'profession', 'ethnicity', 
+            'nationality', 'pregnancy_status', 'language_preference',
+            'activity_level', 'socioeconomic_status', 'health_status'
+        ]}
 
         study = Study.objects.create(**validated_data)
 
-        for history_data in medical_history_data:
-            MedicalHistory.objects.create(study=study, **history_data)
-
-        for history_data in medication_history_data:
-            MedicationHistory.objects.create(study=study, **history_data)
-
-        for medication_data in current_medication_data:
-            CurrentMedication.objects.create(study=study, **medication_data)
-
-        for history_data in family_medication_history_data:
-            FamilyMedicalHistory.objects.create(study=study, **history_data)
-
-        for allergy_data in allergies_data:
-            Allergy.objects.create(study=study, **allergy_data)
-
-        for lifestyle_data in lifestyle_data:
-            Lifestyle.objects.create(study=study, **lifestyle_data)
-
-        for sex_data in biological_sex_data:
-            BiologicalSex.objects.create(study=study, **sex_data)
-
-        for color_data in hair_color_data:
-            HairColor.objects.create(study=study, **color_data)
-
-        for profession_data in profession_data:
-            Profession.objects.create(study=study, **profession_data)
-
-        for ethnicity_data in ethnicity_data:
-            Ethnicity.objects.create(study=study, **ethnicity_data)
-
-        for nationality_data in nationality_data:
-            Nationality.objects.create(study=study, **nationality_data)
-
-        for pregnancy_data in pregnancy_status_data:
-            PregnancyStatus.objects.create(study=study, **pregnancy_data)
-
-        for language_data in language_preference_data:
-            LanguagePreference.objects.create(study=study, **language_data)
-
-        for activity_data in activity_level_data:
-            ActivityLevel.objects.create(study=study, **activity_data)
-
-        for socioeconomic_data in socioeconomic_status_data:
-            SocioeconomicStatus.objects.create(study=study, **socioeconomic_data)
-
-        for health_data in health_status_data:
-            HealthStatus.objects.create(study=study, **health_data)
+        for field_name, items in related_data.items():
+            field = getattr(study, field_name)
+            for item_data in items:
+                # For simplicity, assuming item_data contains the ID of existing items
+                item_instance = field.model.objects.get(id=item_data['id'])
+                field.add(item_instance)
 
         return study
+
+    def update(self, instance, validated_data):
+        # Update many-to-many fields similar to create method, and handle other updates as needed
+        return super().update(instance, validated_data)

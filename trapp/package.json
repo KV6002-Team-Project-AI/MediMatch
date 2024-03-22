@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@duetds/react": "^8.2.0",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
-    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@mui/icons-material": "^5.15.13",
     "@mui/material": "^5.15.13",
     "@testing-library/jest-dom": "^5.17.0",
@@ -22,6 +22,7 @@
     "react-router-dom": "^6.22.3",
     "react-scripts": "^5.0.1",
     "react-stack-cards": "^1.0.8",
+    "semantic-ui-react": "^2.1.5",
     "sweetalert2": "^11.10.6",
     "web-vitals": "^2.1.4"
   },

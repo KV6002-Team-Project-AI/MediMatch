@@ -8,9 +8,6 @@ from django.conf import settings
 from django.contrib import admin
 from Aymman.views import get_Recruitee, get_Recruitees, get_studies, get_study
 
-# Import your Match views here
-from Mo.views import MatchActionView
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -33,10 +30,6 @@ urlpatterns = [
    
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
-
-    # Match-related paths
-    path('api/matches/action/', MatchActionView.as_view(), name='match-action'),
-
 
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),

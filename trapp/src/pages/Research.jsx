@@ -4,6 +4,8 @@ import { useNavigate  } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 import StudyComponent from '../components/StudyComponent';
 
+import { ButtonContent, Button, Icon } from 'semantic-ui-react'
+
 const Research = ({ userRoles }) =>  {
     const navigate = useNavigate()
     const [studies, setStudies] = useState([]);
@@ -61,7 +63,7 @@ const Research = ({ userRoles }) =>  {
                                 <div className='flex p-2 gap-2 justify-between'>
                                     <div className='flex-col'>
                                         <h2 className="text-xl font-bold">{study.name}</h2>
-                                        <h3 className='italic font-mono'>Recruiter name</h3>
+                                        <h3 className='italic font-mono'>{study.work_preference}</h3>
                                     </div>
                                     <div className="text-right">
                                         <h2>{study.category}</h2>

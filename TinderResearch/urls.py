@@ -6,7 +6,10 @@ from Syed.views import StudyCreate
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies, get_study
+
+# Import your Match views here
+from Mo.views import MatchActionView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -22,19 +25,17 @@ urlpatterns = [
     path('api/dropdown-choices/', DropdownChoicesAPIView.as_view(), name='dropdown-choices'),
     path('api/update-profile-image/', UpdateProfileImageView.as_view(), name='update-profile-image'),
    
-    #path('api/cookie/', CookieLoggingMiddleware.as_view(), name='cookie'),
-    
-    # ... include your other url patterns here ...
-    #ayman paths
+    # Ayman paths
     path('api/get-recruitees/', get_Recruitees, name='get_recruitees'),
     path('api/get-recruitee/<int:pk>/', get_Recruitee, name='get_single_recruitee'),
     path('api/get-study/<int:pk>/', get_study, name='get_single_study'),
     path('api/get-studies/', get_studies, name='get_studies'),
    
-
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
 
+    # Match-related paths
+    path('api/matches/action/', MatchActionView.as_view(), name='match-action'),
 
 
     # The catch-all pattern for your React frontend should be the last pattern

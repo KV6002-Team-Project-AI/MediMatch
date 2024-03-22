@@ -7,26 +7,122 @@
     <title>MediMatch</title>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-BQGVC0WJND"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      
-      // Set default consent for cookies to 'denied'
-      gtag('consent', 'default', {
-        'ad_storage': 'denied',
-        'analytics_storage': 'denied',
-        // Add other consent settings as needed
-      });
-      
-      // Initialize Google Analytics
-      gtag('js', new Date());
-      gtag('config', 'G-BQGVC0WJND', {
-        // Additional config such as anonymize_ip can be added here
-      });
-    </script>
+    
+<style>
+  #consent-banner {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+    color: white;
+    z-index: 1000; /* Make sure it appears above other content */
+    padding: 1em;
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+    align-items: center; /* Center the content vertically */
+  }
+
+  #consent-banner button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    color: #333;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #consent-banner button:hover {
+    background-color: #f7f7f7;
+  }
+</style>
+
   </head>
   <body class="bg-blue-300">
     <div id="root"></div>
+     <!-- Consent Banner Markup -->
+    <div id="consent-banner" style="display: none;">
+      This website uses cookies. 
+      <button onclick="allConsentGranted()">Accept</button>
+      <button onclick="denyConsent()">Deny</button>
+    </div>
+    
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    
+    // Set default consent to 'denied'
+    gtag('consent', 'default', {
+      'ad_storage': 'denied',
+      'analytics_storage': 'denied'
+      // Other parameters...
+    });
+    
+    // Check if consent has already been granted
+    // Function to get cookie by name
+    function getCookie(name) {
+      let cookieArray = document.cookie.split(';');
+      for(let i = 0; i < cookieArray.length; i++) {
+        let cookiePair = cookieArray[i].split('=');
+        if(name == cookiePair[0].trim()) {
+          return decodeURIComponent(cookiePair[1]);
+        }
+      }
+      return null;
+    }
+    
+    // Check if consent has already been granted
+    const userConsent = getCookie('userConsent'); // 'userConsent' is the name of the cookie where consent is stored
+    
+    if (userConsent === 'granted') {
+      // Consent has been granted
+      allConsentGranted();
+    } else {
+      // Show the consent banner
+      document.getElementById('consent-banner').style.display = 'block';
+    }
+    
+    
+    // Function to set a cookie
+    function setCookie(name, value, days) {
+      var expires = "";
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+    
+    // User grants consent
+    function allConsentGranted() {
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'analytics_storage': 'granted'
+        // Other parameters...
+      });
+      // Hide the consent banner
+      document.getElementById('consent-banner').style.display = 'none';
+      // Set the consent cookie to 'granted'
+      setCookie('userConsent', 'granted', 365); // Keep for 365 days for example
+    }
+    
+    // User denies consent
+    function denyConsent() {
+      gtag('consent', 'update', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied'
+        // Other parameters...
+      });
+      // Hide the consent banner
+      document.getElementById('consent-banner').style.display = 'none';
+      // Set the consent cookie to 'denied'
+      setCookie('userConsent', 'denied', 365); // Keep for 365 days for example
+    }
+    
+    </script>
     <!-- Your app's bundle script will be inserted here -->
     <script type="module" src="/static/js/main.%REACT_APP_BUILD_HASH%.js"></script>
   </body>

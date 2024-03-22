@@ -16,12 +16,12 @@ const AddStudy = ({ userRoles }) => {
         expiry_date: '',
 
         // min max numericals
-        min_age: '',
-        max_age: '',
-        min_height: '',
-        max_height: '',
-        min_weight: '',
-        max_weight: '',
+        min_age: 1,
+        max_age: 120,
+        min_height: 1,
+        max_height: 400,
+        min_weight: 1,
+        max_weight: 400,
 
         // Select box specific
         biological_sex: [],
@@ -89,6 +89,47 @@ const AddStudy = ({ userRoles }) => {
         .catch(error => console.error('Error fetching study details:', error));
 
         // 
+        if (showAge) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_age: '',
+                max_age: ''
+                
+            }));
+        } else if (!showAge) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_age: 1,
+                max_age: 150
+            }));
+        }
+        if (showWeight) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_weight: '',
+                max_weight: ''
+            }));
+        } else if (!showWeight) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_weight: 1,
+                max_weight: 400
+            }));
+        }
+        if (showHeight) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_height: '',
+                max_height: ''
+            }));
+        } else if (!showHeight) {
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                min_height: 1,
+                max_height: 400
+            }));
+        }
+
         if (!showSex) {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -187,6 +228,9 @@ const AddStudy = ({ userRoles }) => {
         }
 
     }, [
+        showAge,
+        showWeight,
+        showHeight,
         showSex,  
         showHairColor,
         showProfession, 
@@ -371,11 +415,30 @@ const AddStudy = ({ userRoles }) => {
 
     const handleCheckboxChange = (e, preferenceName) => {
         const { value, checked } = e.target;
-
-        setFormData(prevFormData => ({
-            ...prevFormData,
-            [preferenceName]: checked ? [...(prevFormData[preferenceName] || []), value] : (prevFormData[preferenceName] || []).filter(val => val !== value)
-        }));
+    
+        // Retrieve the existing list of the preference from formData
+        const currentPreference = [...formData[preferenceName]];
+    
+        // If the checkbox is checked, add the selected value to the list as a dictionary
+        if (checked) {
+            // Create a new object with the name attribute set to the selected value
+            const newItem = { name: value };
+            // Add the new item to the list
+            const updatedPreference = [...currentPreference, newItem];
+            // Update the formData state with the updated list
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [preferenceName]: updatedPreference
+            }));
+        } else {
+            // If the checkbox is unchecked, remove the item from the list
+            const updatedPreference = currentPreference.filter(item => item.name !== value);
+            // Update the formData state with the updated list
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [preferenceName]: updatedPreference
+            }));
+        }
     };
 
     const handleSubmit = (e) => {
@@ -484,7 +547,7 @@ const AddStudy = ({ userRoles }) => {
                             <option value="">Select Research Field</option>
                             {dropdownChoices.study_preference_choices &&
                                 dropdownChoices.study_preference_choices.map((option) => (
-                                    <option key={option.key} value={option.key}>
+                                    <option key={option.key} value={option.value}>
                                         {option.value}
                                     </option>
                                 ))}
@@ -504,7 +567,7 @@ const AddStudy = ({ userRoles }) => {
                             <option value="">Select Study Type</option>
                             {dropdownChoices.work_preference_choices &&
                                 dropdownChoices.work_preference_choices.map((work) => (
-                                    <option key={work.key} value={work.key}>
+                                    <option key={work.key} value={work.value}>
                                         {work.value}
                                     </option>
                                 ))}
@@ -524,7 +587,7 @@ const AddStudy = ({ userRoles }) => {
                             <option value="">Select Duration</option>
                             {dropdownChoices.duration_of_participation_choices &&
                                 dropdownChoices.duration_of_participation_choices.map((duration) => (
-                                    <option key={duration.key} value={duration.key}>
+                                    <option key={duration.key} value={duration.value}>
                                         {duration.value}
                                     </option>
                                 ))}
@@ -632,7 +695,7 @@ const AddStudy = ({ userRoles }) => {
                         <div className='flex space-x-4 w-full'>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Minimum Weight *
+                                    Minimum Weight (kg) *
                                 </label>
                                 <input
                                     id="weightMin"
@@ -650,7 +713,7 @@ const AddStudy = ({ userRoles }) => {
                             </div>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Maximum Weight *
+                                    Maximum Weight (kg) *
                                 </label>
                                 <input
                                     id="weightMax"
@@ -685,7 +748,7 @@ const AddStudy = ({ userRoles }) => {
                         <div className='flex space-x-4 w-full'>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Minimum Height *
+                                    Minimum Height (cm) *
                                 </label>
                                 <input
                                     id="heightMin"
@@ -703,7 +766,7 @@ const AddStudy = ({ userRoles }) => {
                             </div>
                             <div className='w-full'>
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="age">
-                                    Maximum Height *
+                                    Maximum Height (cm) *
                                 </label>
                                 <input
                                     id="heightMax"
@@ -741,8 +804,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`sex_${sex.key}`}
                                         name="sex"
-                                        value={sex.key}
-                                        checked={formData.biological_sex ? formData.biological_sex.includes(sex.key) : false}
+                                        value={sex.value}
+                                        checked={formData.biological_sex.some(item => item.name === sex.value)} 
                                         onChange={(e) => handleCheckboxChange(e, 'biological_sex')}
                                         className="mr-2 leading-tight"
                                         required={!formData.biological_sex || formData.biological_sex.length === 0} 
@@ -769,9 +832,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`hair_${hair.key}`}
-                                        name="hair"
-                                        value={hair.key}
-                                        checked={formData.hair_color ? formData.hair_color.includes(hair.key) : false}
+                                        name="hair_color"
+                                        value={hair.value}
+                                        checked={formData.hair_color.some(item => item.name === hair.value)} 
                                         onChange={(e) => handleCheckboxChange(e, 'hair_color')}
                                         className="mr-2 leading-tight"
                                         required={!formData.hair_color || formData.hair_color.length === 0} 
@@ -799,8 +862,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`profession_${profession.key}`}
                                         name="profession"
-                                        value={profession.key}
-                                        checked={formData.profession ? formData.profession.includes(profession.key) : false}
+                                        value={profession.value}
+                                        checked={formData.profession.some(item => item.name === profession.value)} 
                                         onChange={(e) => handleCheckboxChange(e, 'profession')}
                                         className="mr-2 leading-tight"
                                         required={!formData.profession || formData.profession.length === 0}
@@ -828,8 +891,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`ethnicity_${ethnicity.key}`}
                                         name="ethnicity"
-                                        value={ethnicity.key}
-                                        checked={formData.ethnicity ? formData.ethnicity.includes(ethnicity.key) : false}
+                                        value={ethnicity.value}
+                                        checked={formData.ethnicity.some(item => item.name === ethnicity.value)} 
                                         onChange={(e) => handleCheckboxChange(e, 'ethnicity')}
                                         className="mr-2 leading-tight"
                                         required={!formData.ethnicity || formData.ethnicity.length === 0}
@@ -857,8 +920,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`nationality_${nationality.key}`}
                                         name="nationality"
-                                        value={nationality.key}
-                                        checked={formData.nationality ? formData.nationality.includes(nationality.key) : false}
+                                        value={nationality.value}
+                                        checked={formData.nationality.some(item => item.name === nationality.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'nationality')}
                                         className="mr-2 leading-tight"
                                         required={!formData.nationality || formData.nationality.length === 0}
@@ -885,9 +948,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`pregnancy_${pregnancy.key}`}
-                                        name="pregnancy"
-                                        value={pregnancy.key}
-                                        checked={formData.pregnancy_status ? formData.pregnancy_status.includes(pregnancy.key) : false}
+                                        name="pregnancy_status"
+                                        value={pregnancy.value}
+                                        checked={formData.pregnancy_status.some(item => item.name === pregnancy.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'pregnancy_status')}
                                         className="mr-2 leading-tight"
                                         required={!formData.pregnancy_status || formData.pregnancy_status.length === 0}
@@ -914,9 +977,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`language_${language.key}`}
-                                        name="language"
-                                        value={language.key}
-                                        checked={formData.language_preference ? formData.language_preference.includes(language.key) : false}
+                                        name="language_preference"
+                                        value={language.value}
+                                        checked={formData.language_preference.some(item => item.name === language.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'language_preference')}
                                         className="mr-2 leading-tight"
                                         required={!formData.language_preference || formData.language_preference.length === 0}
@@ -927,7 +990,6 @@ const AddStudy = ({ userRoles }) => {
                                 </div>
                             ))}
                     </div>
-
                     {/* Activity Level */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have activity preferences?</label>
@@ -943,9 +1005,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`activity_${activity.key}`}
-                                        name="activity"
-                                        value={activity.key}
-                                        checked={formData.activity_level ? formData.activity_level.includes(activity.key) : false}
+                                        name="activity_level"
+                                        value={activity.value}
+                                        checked={formData.activity_level.some(item => item.name === activity.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'activity_level')}
                                         className="mr-2 leading-tight"
                                         required={!formData.activity_level || formData.activity_level.length === 0}
@@ -972,9 +1034,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`socioeconomic_${socioeconomic.key}`}
-                                        name="socioeconomic"
-                                        value={socioeconomic.key}
-                                        checked={formData.socioeconomic_status ? formData.socioeconomic_status.includes(socioeconomic.key) : false}
+                                        name="socioeconomic_status"
+                                        value={socioeconomic.value}
+                                        checked={formData.socioeconomic_status.some(item => item.name === socioeconomic.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'socioeconomic_status')}
                                         className="mr-2 leading-tight"
                                         required={!formData.socioeconomic_status || formData.socioeconomic_status.length === 0}
@@ -1001,9 +1063,9 @@ const AddStudy = ({ userRoles }) => {
                                     <input
                                         type="checkbox"
                                         id={`health_${health.key}`}
-                                        name="health"
-                                        value={health.key}
-                                        checked={formData.health_status ? formData.health_status.includes(health.key) : false}
+                                        name="health_status"
+                                        value={health.value}
+                                        checked={formData.health_status.some(item => item.name === health.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'health_status')}
                                         className="mr-2 leading-tight"
                                         required={!formData.health_status || formData.health_status.length === 0}
@@ -1031,8 +1093,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`medical_history_${medical_history.key}`}
                                         name="medical_history"
-                                        value={medical_history.key}
-                                        checked={formData.medical_history ? formData.medical_history.includes(medical_history.key) : false}
+                                        value={medical_history.value}
+                                        checked={formData.medical_history.some(item => item.name === medical_history.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'medical_history')}
                                         className="mr-2 leading-tight"
                                         required={!formData.medical_history || formData.medical_history.length === 0}
@@ -1060,8 +1122,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`medication_${medication.key}`}
                                         name="medication"
-                                        value={medication.key}
-                                        checked={formData.medication_history ? formData.medication_history.includes(medication.key) : false}
+                                        value={medication.value}
+                                        checked={formData.medication_history.some(item => item.name === medication.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'medication_history')}
                                         className="mr-2 leading-tight"
                                         required={!formData.medication_history || formData.medication_history.length === 0}
@@ -1089,8 +1151,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`current_medication_${current_medication.key}`}
                                         name="current_medication"
-                                        value={current_medication.key}
-                                        checked={formData.current_medication ? formData.current_medication.includes(current_medication.key) : false}
+                                        value={current_medication.value}
+                                        checked={formData.current_medication.some(item => item.name === current_medication.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'current_medication')}
                                         className="mr-2 leading-tight"
                                         required={!formData.current_medication || formData.current_medication.length === 0}
@@ -1101,7 +1163,6 @@ const AddStudy = ({ userRoles }) => {
                                 </div>
                             ))}
                     </div>
-
                     {/* Family Medication History */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Does this study require family medication history?</label>
@@ -1118,8 +1179,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`family_medication_${family_medication.key}`}
                                         name="family_medication"
-                                        value={family_medication.key}
-                                        checked={formData.family_medication_history ? formData.family_medication_history.includes(family_medication.key) : false}
+                                        value={family_medication.value}
+                                        checked={formData.family_medication_history.some(item => item.name === family_medication.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'family_medication_history')}
                                         className="mr-2 leading-tight"
                                         required={!formData.family_medication_history || formData.family_medication_history.length === 0}
@@ -1147,8 +1208,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`allergies_${allergies.key}`}
                                         name="allergies"
-                                        value={allergies.key}
-                                        checked={formData.allergies ? formData.allergies.includes(allergies.key) : false}
+                                        value={allergies.value}
+                                        checked={formData.allergies.some(item => item.name === allergies.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'allergies')}
                                         className="mr-2 leading-tight"
                                         required={!formData.allergies || formData.allergies.length === 0}
@@ -1159,7 +1220,6 @@ const AddStudy = ({ userRoles }) => {
                                 </div>
                             ))}
                     </div>
-
                     {/* Lifestyle */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Does this study have lifestyle preferences? </label>
@@ -1176,8 +1236,8 @@ const AddStudy = ({ userRoles }) => {
                                         type="checkbox"
                                         id={`lifestyle_${lifestyle.key}`}
                                         name="lifestyle"
-                                        value={lifestyle.key}
-                                        checked={formData.lifestyle ? formData.lifestyle.includes(lifestyle.key) : false}
+                                        value={lifestyle.value}
+                                        checked={formData.lifestyle.some(item => item.name === lifestyle.value)}
                                         onChange={(e) => handleCheckboxChange(e, 'lifestyle')}
                                         className="mr-2 leading-tight"
                                         required={!formData.lifestyle || formData.lifestyle.length === 0}
@@ -1188,7 +1248,6 @@ const AddStudy = ({ userRoles }) => {
                                 </div>
                             ))}
                     </div>
-
 
                     {/* Terms of Service Agreement Field */}
                     <div>
@@ -1209,7 +1268,6 @@ const AddStudy = ({ userRoles }) => {
                             </label>
                         </div>
                     </div>
-
 
                     {/* Submit Button */}
                     <div className="flex justify-center mt-4">

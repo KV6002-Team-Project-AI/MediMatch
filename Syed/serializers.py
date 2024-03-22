@@ -150,10 +150,12 @@ class StudySerializer(serializers.ModelSerializer):
         for field_name, items in related_data.items():
             field = getattr(study, field_name)
             for item_data in items:
-                # For simplicity, assuming item_data contains the ID of existing items
-                item_instance = field.model.objects.get(id=item_data['id'])
-                field.add(item_instance)
-
+                # Assuming item_data contains the name of the item
+                item_name = item_data.get('name', None)
+                if item_name:
+                    # Creating a new instance using the provided name
+                    item_instance = field.model.objects.create(name=item_name)
+                    field.add(item_instance)
         return study
 
     def update(self, instance, validated_data):

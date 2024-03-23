@@ -27,13 +27,12 @@ function Menu() {
             <li key={item.name} onClick={item.badge ? toggleNotifications : undefined} className="flex-shrink">
               <Link to={item.path} className={`transition duration-200 ease-in-out hover:bg-gray-100 ${location.pathname === item.path ? 'text-red-600' : 'text-gray-600'} rounded-lg p-2 inline-flex items-center justify-center`}>
                 {item.icon}
-                <span className="hidden sm:inline">{item.name}</span>
+                <span className="hidden sm:inline ml-1">{item.name}</span>
               </Link>
             </li>
           ))}
         </ul>
       </div>
-
   );
 }
 

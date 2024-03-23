@@ -23,7 +23,7 @@ class MatchActionView(APIView):
             match = Matches.objects.get(study_id=study_id, user__user_id=user_id)
             
             # Logic to handle acceptance or rejection based on the role of the authenticated user
-            updated_status = 'accepted' if action == 'accept' else 'rejected' if action == 'reject' else None
+            updated_status = 'accepted' if action == 'accepted' else 'rejected' if action == 'rejected' else None
             if updated_status is None:
                 return Response({'detail': 'Invalid status.'}, status=status.HTTP_400_BAD_REQUEST)
 

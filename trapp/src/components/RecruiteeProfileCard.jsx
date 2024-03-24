@@ -1,28 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import withAuthentication from '../HOCauth';
 
 const RecruiteeProfileCard = () => {
-  const features = ["Brown Hair", "25 Years old", "1.76 metres"];
-  const interests = ['Football', 'Swimming', 'Reading'];
-
+  const [currentMatch, setCurrentMatch] = useState(null);
+  const [matches, setMatches] = useState([]);
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
 
+  const features = ["Brown Hair", "25 Years old", "1.76 metres"];
+  const interests = ['Football', 'Swimming', 'Reading'];
+
+  const fetchMatches = () => {
+    const token = localStorage.getItem('accessToken'); // Retrieve the JWT token from localStorage
+    if (token) {
+      fetch('http://127.0.0.1:8000/api/recruiter/matches/', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(response => response.json())
+      .then(data => {
+        const pendingMatches = data.filter(match => match.study_status === 'pending');
+        setMatches(pendingMatches);
+        setCurrentMatch(pendingMatches.length > 0 ? pendingMatches[0] : null);
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  };
+
+  // Fetch matches on component mount
+  useEffect(fetchMatches, []);
+
+  const handleAction = (action) => {
+    if (!currentMatch) return;
+
+    const token = localStorage.getItem('accessToken');
+    fetch('http://127.0.0.1:8000/api/recruiter/matches/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id: currentMatch.user_id,
+        study_id: currentMatch.study_id,
+        action: action,
+      }),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Network response was not ok, status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(() => {
+      fetchMatches(); // Refetch the matches after the action is completed
+    })
+    .catch(error => console.error('Error:', error));
+  };
+
+  // These functions will call the handleAction with the correct status
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
-    setTimeout(() => setAcceptColor(''), 750);
+    handleAction('accepted', currentMatch.user_id, currentMatch.study_id);
+    setTimeout(() => setAcceptColor(''), 750); // Remove the color after some time
   };
-
+  
   const handleRejectClick = () => {
     setRejectColor('bg-red-500');
-    setTimeout(() => setRejectColor(''), 750);
+    handleAction('rejected', currentMatch.user_id, currentMatch.study_id);
+    setTimeout(() => setRejectColor(''), 750); // Remove the color after some time
   };
-
+  
   return (
-    <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center items-center transition-colors duration-500`}>
+    <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-3 items-center transition-colors duration-500`}>
       <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
                       sm:max-w-md sm:mt-5
                       md:max-w-lg md:mt-10 md:mx-0
@@ -33,11 +87,20 @@ const RecruiteeProfileCard = () => {
           <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
           <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
         </div>
-        <div className="text-center mt-4">
-          <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">John Doe</p>
-          <p className='mt-2 text-gray-600 text-sm sm:text-base md:text-lg lg:text-lg xl:md'>Welcome to my natural habitat, where I express my interests and features.</p>
-        </div>
-
+        {currentMatch ? (
+          <div className="text-center mt-4">
+            <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
+              {`John Doe (ID: ${currentMatch.user_id})`}
+            </p>
+          </div>
+        ) : (
+          <div className="text-center mt-4">
+            <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
+              No pending matches.
+            </p>
+          </div>
+        )}
+  
         <div className="mt-4">
           <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Features:</h3>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
@@ -59,21 +122,23 @@ const RecruiteeProfileCard = () => {
             ))}
           </div>
         </div>
-
+  
+        {currentMatch && (
           <div className="flex justify-between items-center mt-6">
-              <button onClick={handleRejectClick} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Reject
-              </button>
-              <button className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1mx-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Refresh
-              </button>
-              <button onClick={handleAcceptClick} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Accept
-              </button>
+            <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+              Reject
+            </button>
+            <button className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
+              Refresh
+            </button>
+            <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+              Accept
+            </button>
           </div>
+        )}
       </div>
     </div>
-);
+  );
 };
 
 export default withAuthentication(RecruiteeProfileCard);

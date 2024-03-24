@@ -12,7 +12,6 @@ class Matches(models.Model):
     match_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Recruitee, on_delete=models.CASCADE, related_name='user_interactions', null=True)
     study = models.ForeignKey(Study, on_delete=models.CASCADE, related_name='study_interactions')
-
     recruitee_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
     study_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
 

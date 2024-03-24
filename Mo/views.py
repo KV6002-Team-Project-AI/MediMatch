@@ -88,3 +88,22 @@ class RecruiterMatchUpdateView(APIView):
                 return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class RecruiterStudiesView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+            try:
+                pending_matches = Matches.objects.filter(
+                    study_status='pending',
+                    study__user=request.user
+                ).select_related('user')
+                
+                serializer = ProfileInteractionSerializer(pending_matches, many=True)
+                
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            except Matches.DoesNotExist:
+                return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

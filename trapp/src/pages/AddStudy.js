@@ -88,6 +88,7 @@ const AddStudy = ({ userRoles }) => {
         })
         .catch(error => console.error('Error fetching study details:', error));
 
+        console.log(formData)
         // 
         if (showAge) {
             setFormData(prevFormData => ({
@@ -259,29 +260,28 @@ const AddStudy = ({ userRoles }) => {
         // Update formData with the new input value
         setFormData(prevFormData => ({
             ...prevFormData,
-            [name]: type === 'checkbox' ? checked ? [...(prevFormData[name] || []), value] : (prevFormData[name] || []).filter(val => val !== value) : value
+            [name]: type === 'checkbox' ? checked : value
         }));
     
         // Logic to set values to null when show checkboxes are false
         if (!showAge && (name === 'min_age' || name === 'max_age')) {
-            setFormData({
-                ...formData,
-                [name]: ''
-            });
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [name]: checked ? prevFormData[name] : ''
+            }));
         }
         if (!showWeight && (name === 'min_weight' || name === 'max_weight')) {
-            setFormData({
-                ...formData,
-                [name]: ''
-            });
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [name]: checked ? prevFormData[name] : ''
+            }));
         }
         if (!showHeight && (name === 'min_height' || name === 'max_height')) {
-            setFormData({
-                ...formData,
-                [name]: ''
-            });
+            setFormData(prevFormData => ({
+                ...prevFormData,
+                [name]: checked ? prevFormData[name] : ''
+            }));
         }
-        // ADD MORE CHECKBOXES
     
         // Validate min and max fields for age, weight, and height
         if (name.includes('min') || name.includes('max')) {
@@ -329,22 +329,12 @@ const AddStudy = ({ userRoles }) => {
             }
     
             // Calculate the difference in days between start and expiry dates
-            const timeDiff = expiryDate.getTime() - startDate.getTime();
+            const timeDiff =  startDate.getTime() - expiryDate.getTime();
             const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
     
-            // Check if there are at least 3 days between start and expiry dates
-            if (daysDiff < 3) {
-                alert('The start date and expiry date should have at least 3 days between them.');
-                setFormData({
-                    ...formData,
-                    [name]: '' // Reset the date
-                });
-                return;
-            }
-    
             // Check if the expiry date is prior to start date
-            if (expiryDate < startDate) {
-                alert('Expiry date cannot be set prior to start date.');
+            if (expiryDate > startDate) {
+                alert('Study should expire before the start date.');
                 setFormData({
                     ...formData,
                     expiry_date: '' // Reset the expiry date
@@ -392,6 +382,15 @@ const AddStudy = ({ userRoles }) => {
             const maxValue = parseInt(formData[`max_${type}`]);
     
             // Perform validation checks
+            if (minValue > maxValue) {
+                alert(`Minimum ${type} cannot be greater than maximum ${type}.`);
+                // Reset the value of the input field
+                setFormData({
+                    ...formData,
+                    [name]: '' // Reset the value
+                });
+                return;
+            }
             if (minValue > maxValue) {
                 alert(`Minimum ${type} cannot be greater than maximum ${type}.`);
                 // Reset the value of the input field
@@ -527,7 +526,7 @@ const AddStudy = ({ userRoles }) => {
                             className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Add Description"
                             style={{ maxHeight: '250px' , minHeight: '100px'  }}
-                            maxLength={250} // Set maximum word limit to 250
+                            maxLength={500} // Set maximum word limit to 250
                             required
                         />
                     </div>

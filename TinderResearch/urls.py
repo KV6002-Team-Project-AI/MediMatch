@@ -33,6 +33,7 @@ urlpatterns = [
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
+    path('studydelete/<int:study_id>/', StudyCreate.as_view(), name='study_delete'),
     path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched-recruitees'),
 
     #Mo paths

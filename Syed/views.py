@@ -30,20 +30,37 @@ class StudyCreate(views.APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, study_id, *args, **kwargs):
+        try:
+            # Get the study instance
+            study = Study.objects.get(pk=study_id)
 
-    def delete(self, request, *args, **kwargs):
-        # Get the authenticated user
-        User = get_user_model()
-        user = request.user
+            # Delete the study along with related information
+            study.delete()
+
+            return Response({'detail': 'Study and related information deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
         
-        # Get the study object to delete
-        study_id = kwargs.get('study_id')  # Assuming 'study_id' is passed as a parameter in the URL
-        study = get_object_or_404(Study, pk=study_id, user=user)
+        except Study.DoesNotExist:
+            return Response({'detail': 'Study not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Optionally, log the exception here
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 
-        # Delete the study object, which will cascade delete related objects due to ForeignKey and ManyToManyField relationships
-        study.delete()
+    # def delete(self, request, *args, **kwargs):
+    #     # Get the authenticated user
+    #     User = get_user_model()
+    #     user = request.user
+        
+    #     # Get the study object to delete
+    #     study_id = kwargs.get('study_id')  # Assuming 'study_id' is passed as a parameter in the URL
+    #     study = get_object_or_404(Study, pk=study_id, user=user)
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+    #     # Delete the study object, which will cascade delete related objects due to ForeignKey and ManyToManyField relationships
+    #     study.delete()
+
+    #     return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MatchedRecruitees(views.APIView):

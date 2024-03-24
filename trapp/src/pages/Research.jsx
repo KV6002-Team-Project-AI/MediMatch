@@ -67,23 +67,22 @@ const Research = ({ userRoles }) => {
             });
     }, []);
 
-    function getCsrfToken() {
-        const csrfToken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
-        return csrfToken;
-    }
+    // function getCsrfToken() {
+    //     const csrfToken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
+    //     return csrfToken;
+    // }
 
-    const csrfToken = getCsrfToken();
+    // const csrfToken = getCsrfToken();
 
-    const handleSubmit = (studyId) => {
-        const url = `http://localhost:8000/api/studycreate/${studyId}`;
+    const handleDelete = (studyId) => {
+        const url = `http://localhost:8000/api/studydelete/${studyId}/`;
         const method = 'DELETE';
 
         fetch(url, {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-                'X-CSRFToken': csrfToken,
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
         })
             .then(response => {
@@ -333,7 +332,7 @@ const Research = ({ userRoles }) => {
                                         >
                                             <div
                                                 className={`w-full bg-red-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5`}
-                                                onClick={() => handleSubmit(study.study_id)}
+                                                onClick={() => handleDelete(study.study_id)}
                                             >
                                                 <DeleteIcon />
                                             </div>

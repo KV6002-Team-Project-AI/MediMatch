@@ -28,6 +28,7 @@ const Matches = ({ userRoles }) => {
         })
         .then(data => {
             setMatches(data);
+            console.log(data);
             // Extract unique study names
             const uniqueNames = Array.from(new Set(data.map(match => match.study.name)));
             setUniqueStudyNames(uniqueNames);
@@ -41,6 +42,10 @@ const Matches = ({ userRoles }) => {
             console.error('Error:', error);
         });
     }, [noMatch]);
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 
     // Filter matches based on selected study
     const filteredMatches = selectedStudy ? matches.filter(match => match.study.name === selectedStudy) : matches;
@@ -56,18 +61,24 @@ const Matches = ({ userRoles }) => {
     return (
         <div className="mx-3 my-20">
             {/* DROP DOWN STUDIES */}
-            <div className="grid grid-col mb-4">
-                {/* Dropdown menu */}
-                <select 
-                    className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                    value={selectedStudy}
-                    onChange={(e) => setSelectedStudy(e.target.value)}
-                >
-                    <option value="">Select Study</option>
-                    {uniqueStudyNames.map((name, index) => (
-                        <option key={index} value={name}>{name}</option>
-                    ))}
-                </select>
+            <div className="grid grid-col pb-4">
+                <div className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
+                    <div className='w-full px-1'>
+                        <div className='flex p-2 gap-2 justify-center'>
+                            {/* Dropdown menu */}
+                            <select 
+                                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                value={selectedStudy}
+                                onChange={(e) => setSelectedStudy(e.target.value)}
+                            >
+                                <option value="">Select Study</option>
+                                {uniqueStudyNames.map((name, index) => (
+                                    <option key={index} value={name}>{name}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             {!noMatch && 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
@@ -102,7 +113,7 @@ const Matches = ({ userRoles }) => {
                                 </div>
                                 {/* Features */}
                                 {!expandedProfiles[index] && 
-                                    <div className="flex gap-2 text-sm m-3">
+                                    <div className="flex gap-2 text-sm m-3 text-center">
                                         <div className="bg-blue-100 w-full text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
                                             {match.recruitee.age} y.o.
                                         </div>
@@ -112,6 +123,9 @@ const Matches = ({ userRoles }) => {
                                         <div className="bg-green-100 w-full text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
                                             {match.recruitee.weight} kg
                                         </div>
+                                        <div className="bg-green-100 w-full text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                            {capitalizeFirstLetter(match.recruitee.biological_sex)}
+                                        </div>
                                     </div>
                                 }
 
@@ -119,10 +133,6 @@ const Matches = ({ userRoles }) => {
                                 {expandedProfiles[index] && (
                                     <>
                                         <h1 className="text-center font-semibold text-md">More Information</h1>
-                                        <div className='flex-col mx-3 mb-2 text-black gap-2 text-justify'>
-                                            <p>{match.recruitee.bio}</p>
-                                        </div>
-                                        <h1 className="text-center font-semibold text-md">Features</h1>
                                         <div className='flex-col mx-3 mb-2 text-black gap-2 text-justify'>
                                             <p>{match.recruitee.bio}</p>
                                         </div>

@@ -21,7 +21,7 @@ function Menu() {
   ];
 
   return (
-      <div className="fixed inset-x-0 bottom-0 bg-white shadow-md pt-3 z-20 h-16">
+      <div className="fixed inset-x-0 bottom-0 bg-white shadow-md pt-3 z-20 h-14">
         <ul className="flex justify-around items-center text-md font-medium">
           {menuItems.map((item) => (
             <li key={item.name} onClick={item.badge ? toggleNotifications : undefined} className="flex-shrink">

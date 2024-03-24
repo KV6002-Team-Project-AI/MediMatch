@@ -2,18 +2,21 @@ import profilePic from '../assets/profile-pic.jpg'
 import infoLogo from '../assets/info.png'
 import withAuthentication from '../HOCauth'; // Import the HOC
 import { useState, useEffect } from "react";
+import { useNavigate  } from 'react-router-dom';
 
 const Matches = ({ userRoles }) =>  {
-
+    const navigate = useNavigate()
     const features = ["Brown Hair", "25 Years old", "1.76 metres"]
-    const  [matches, setMatches] = useState([])
+    const [matches, setMatches] = useState([])
+    const [noMatch, setNoMatch] = useState([])
+    const [expandedMatches, setExpandedMatches] = useState([]);
 
     // if (!userRoles.is_recruiter && !userRoles.is_superuser) {
     //     return <div className='mt-20'>You do not have permission to view this page.</div>;
     // }
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/recruiter/matches/', {
+        fetch('http://localhost:8000/api/matchedrecruitees/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -28,11 +31,20 @@ const Matches = ({ userRoles }) =>  {
         })
         .then(data => {
             console.log(data)
+
+            // setMatches(data); 
+            // console.log(matches)
+
+            // if (matches.length === 0) {
+            //     setNoMatch(true);
+            // } else {
+            //     setNoMatch(false);
+            // }
         })
         .catch(error => {
             console.error('Error:', error);
         });
-    }, []); 
+    }, []);
 
     return (
         <div className="mx-3 my-20">
@@ -57,7 +69,7 @@ const Matches = ({ userRoles }) =>  {
                         </div>
                         <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                             <div className='w-full bg-red-600  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'>
-                                Reject
+                                Unmatch
                             </div>
                             <div className='w-full bg-green-600 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-green-800 transform hover:-translate-y-0.5'>
                                 Accept

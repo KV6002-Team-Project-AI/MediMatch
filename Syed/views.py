@@ -4,6 +4,8 @@ from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from .models import Study
+from ResearchSwipe.serializers import RecruiteeSerializer
+from Mo.models import Matches
 from ResearchSwipe.models import User
 from .serializers import StudySerializer
 
@@ -43,3 +45,35 @@ class StudyCreate(views.APIView):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
     
+
+
+class MatchedRecruitees(views.APIView):
+
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # Retrieve all studies associated with the signed-in recruiter
+            studies = Study.objects.filter(user=request.user)
+
+            # Retrieve all matches where both study_status and recruitee_status are 'accepted'
+            # and where the study belongs to the signed-in recruiter
+            matches = Matches.objects.filter(
+                study_status='accepted',
+                recruitee_status='accepted',
+                study__in=studies  # Filter by studies associated with the recruiter
+            )
+
+            # Extract the recruitees corresponding to these matches
+            recruitees = [match.user for match in matches]
+
+            # Serialize the recruitees data
+            serializer = RecruiteeSerializer(recruitees, many=True)
+            
+            # Return the serialized data as a response
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Matches.DoesNotExist:
+            return Response({'detail': 'No matches found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Optionally, log the exception here
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

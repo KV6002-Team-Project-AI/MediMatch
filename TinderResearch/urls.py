@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 from ResearchSwipe.views import *
-from Syed.views import StudyCreate
+from Syed.views import StudyCreate, MatchedRecruitees
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
@@ -31,6 +31,7 @@ urlpatterns = [
    
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
+    path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched-recruitees'),
 
     #Mo paths
     path('api/matches/', MatchActionView.as_view(), name='matches'),

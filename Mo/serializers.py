@@ -6,6 +6,8 @@ from Syed.serializers import StudySerializer
 class ProfileInteractionSerializer(serializers.ModelSerializer):
     study = StudySerializer(read_only=True)
     recruitee = RecruiteeSerializer(read_only=True)
+    recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
+    study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
 
     class Meta:
         model = Matches

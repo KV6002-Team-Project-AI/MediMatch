@@ -1,77 +1,80 @@
-import React from 'react';
+import React, { useState } from 'react';
+import profilePic from '../assets/profile-pic.jpg';
+import infoLogo from '../assets/info.png';
+import summariseLogo from '../assets/summary.png';
+import withAuthentication from '../HOCauth';
 
 const RecruiteeProfileCard = () => {
-  // Placeholder data - replace these with real data fetched from your database
-  const profileData = {
-    name: "John Doe",
-    age: "30",
-    bio: "Experienced data analyst with a passion for big data and predictive analytics. Seeking opportunities to contribute to innovative research in data science.",
-    workPreference: "Solo",
-    profession: "Data Analyst",
-    biologicalSex: "Male",
-    studyPreference: "Data Science",
-    interest1: "Machine Learning",
-    interest2: "Statistical Models",
-    interest3: "AI Development"
+  const features = ["Brown Hair", "25 Years old", "1.76 metres"];
+  const interests = ['Football', 'Swimming', 'Reading'];
+
+  const [AcceptColor, setAcceptColor] = useState('');
+  const [RejectColor, setRejectColor] = useState('');
+
+  const handleAcceptClick = () => {
+    setAcceptColor('bg-green-500');
+    setTimeout(() => setAcceptColor(''), 750);
   };
 
-  // Dummy functions for button clicks - replace these with real functions
-  const handleReject = () => console.log('Rejected');
-  const handleRefresh = () => console.log('Refreshed');
-  const handleAccept = () => console.log('Accepted');
+  const handleRejectClick = () => {
+    setRejectColor('bg-red-500');
+    setTimeout(() => setRejectColor(''), 750);
+  };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="max-w-lg mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl">
-        <div className="md:flex">
-          <div className="p-8">
-            <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{profileData.profession}</div>
-            <div className="block mt-1 text-lg leading-tight font-medium text-black">{profileData.name}, {profileData.age}</div>
-            <p className="mt-2 text-gray-500">{profileData.bio}</p>
+    <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center items-center transition-colors duration-500`}>
+      <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
+                      sm:max-w-md sm:mt-5
+                      md:max-w-lg md:mt-10 md:mx-0
+                      lg:max-w-xl lg:mt-16 lg:mx-0
+                      xl:max-w-2xl xl:py-8 xl:mx-0'>
+        <div className="flex justify-between items-center">
+          <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+          <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
+          <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+        </div>
+        <div className="text-center mt-4">
+          <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">John Doe</p>
+          <p className='mt-2 text-gray-600 text-sm sm:text-base md:text-lg lg:text-lg xl:md'>Welcome to my natural habitat, where I express my interests and features.</p>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Features:</h3>
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
+            {features.map((feature, index) => (
+              <span key={index} className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
+                {feature}
+              </span>
+            ))}
           </div>
-          <div className="border-t-2 border-gray-200 md:border-t-0 md:border-l">
-            <div className="p-8">
-              <div className="text-sm font-semibold text-gray-700">Work Preference</div>
-              <div className="text-md text-indigo-500">{profileData.workPreference}</div>
-              <div className="mt-4 text-sm font-semibold text-gray-700">Study Preference</div>
-              <div className="text-md text-indigo-500">{profileData.studyPreference}</div>
-              <div className="mt-4 text-sm font-semibold text-gray-700">Biological Sex</div>
-              <div className="text-md text-indigo-500">{profileData.biologicalSex}</div>
-            </div>
+        </div>
+
+        <div className="mt-4">
+          <h3 className="text-center font-semibold text-lg sm:text-xl md:text-2xl">Interests:</h3>
+          <div className="flex flex-wrap justify-center gap-2 mt-2">
+            {interests.map((interest, index) => (
+              <span key={index} className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
+                {interest}
+              </span>
+            ))}
           </div>
         </div>
-        <div className="border-t-2 border-gray-200 p-8">
-          <div className="text-sm font-semibold text-gray-700">Interests</div>
-          <ul className="mt-2 text-gray-500 list-disc list-inside">
-            <li>{profileData.interest1}</li>
-            <li>{profileData.interest2}</li>
-            <li>{profileData.interest3}</li>
-          </ul>
-        </div>
-        {/* Buttons */}
-        <div className="flex justify-around items-center p-4 bg-gray-50">
-          <button
-            onClick={handleReject}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out focus:outline-none"
-          >
-            Reject
-          </button>
-          <button
-            onClick={handleRefresh}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out focus:outline-none"
-          >
-            Refresh
-          </button>
-          <button
-            onClick={handleAccept}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out focus:outline-none"
-          >
-            Accept
-          </button>
-        </div>
+
+          <div className="flex justify-between items-center mt-6">
+              <button onClick={handleRejectClick} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                  Reject
+              </button>
+              <button className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1mx-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                  Refresh
+              </button>
+              <button onClick={handleAcceptClick} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                  Accept
+              </button>
+          </div>
       </div>
     </div>
-  );
+);
 };
 
-export default RecruiteeProfileCard;
+export default withAuthentication(RecruiteeProfileCard);
+

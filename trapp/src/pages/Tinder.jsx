@@ -4,7 +4,7 @@ import withAuthentication from '../HOCauth'; // Import the HOC
 import StudyProfileCard from '../components/StudyProfileCard';
 
 const Tinder = ({ userRoles }) => {
-    if (!userRoles.is_recruiter) {
+    if (userRoles.is_recruiter) {
         return (
             <RecruiteeProfileCard />
         );

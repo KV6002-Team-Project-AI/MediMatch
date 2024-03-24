@@ -57,15 +57,12 @@ class RecruiterMatchUpdateView(APIView):
             return Response({'detail': 'Invalid action.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Verify the study belongs to the logged-in recruiter and the match exists for the given user_id
             study = Study.objects.get(pk=study_id, user=request.user)
-            match = Matches.objects.get(study=study, user__user_id=user_id)  # Adjusted to filter by both study and user_id
+            match = Matches.objects.get(study=study, user__user_id=user_id)
 
-            # Update the match status based on the action
             match.study_status = action
             match.save()
 
-            # Serialize the updated match to return it as a response
             serializer = ProfileInteractionSerializer(match)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -74,6 +71,20 @@ class RecruiterMatchUpdateView(APIView):
         except Matches.DoesNotExist:
             return Response({'detail': 'Match not found or you do not have permission to update it.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            # Optionally, log the exception here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
+    def get(self, request, *args, **kwargs):
+            try:
+                pending_matches = Matches.objects.filter(
+                    study_status='pending',
+                    study__user=request.user
+                ).select_related('user')
+                
+                serializer = ProfileInteractionSerializer(pending_matches, many=True)
+                
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            
+            except Matches.DoesNotExist:
+                return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
+            except Exception as e:
+                return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from .models import Study
-from ResearchSwipe.serializers import RecruiteeSerializer
+from .serializers import RecruiteeWithStudySerializer
 from Mo.models import Matches
 from ResearchSwipe.models import User
 from .serializers import StudySerializer
@@ -44,11 +44,9 @@ class StudyCreate(views.APIView):
         study.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
 
 
 class MatchedRecruitees(views.APIView):
-
 
     def get(self, request, *args, **kwargs):
         try:
@@ -63,11 +61,8 @@ class MatchedRecruitees(views.APIView):
                 study__in=studies  # Filter by studies associated with the recruiter
             )
 
-            # Extract the recruitees corresponding to these matches
-            recruitees = [match.user for match in matches]
-
-            # Serialize the recruitees data
-            serializer = RecruiteeSerializer(recruitees, many=True)
+            # Serialize the matches data with study and recruitee information
+            serializer = RecruiteeWithStudySerializer(matches, many=True)
             
             # Return the serialized data as a response
             return Response(serializer.data, status=status.HTTP_200_OK)

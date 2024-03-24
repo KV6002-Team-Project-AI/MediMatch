@@ -390,16 +390,8 @@ const AddStudy = ({ userRoles }) => {
                     [name]: '' // Reset the value
                 });
                 return;
-            }
-            if (minValue > maxValue) {
-                alert(`Minimum ${type} cannot be greater than maximum ${type}.`);
-                // Reset the value of the input field
-                setFormData({
-                    ...formData,
-                    [name]: '' // Reset the value
-                });
-                return;
-            }
+            } 
+            
             if (minValue === maxValue) {
                 alert(`Minimum ${type} cannot be the same as maximum ${type}.`);
                 // Reset the value of the input field

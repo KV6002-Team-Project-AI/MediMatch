@@ -52,7 +52,7 @@ class MatchedRecruitees(views.APIView):
         try:
             # Retrieve all studies associated with the signed-in recruiter
             studies = Study.objects.filter(user=request.user)
-            
+
             # Retrieve all matches where both study_status and recruitee_status are 'accepted'
             # and where the study belongs to the signed-in recruiter
             matches = Matches.objects.filter(

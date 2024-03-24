@@ -43,6 +43,7 @@ class MatchActionView(APIView):
             return Response({'detail': 'Match not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Recruitee.DoesNotExist:
             return Response({'detail': 'Recruitee not found.'}, status=status.HTTP_404_NOT_FOUND)
+    
 
 class RecruiterMatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
@@ -72,6 +73,28 @@ class RecruiterMatchUpdateView(APIView):
             return Response({'detail': 'Study not found or you do not have permission to access it.'}, status=status.HTTP_404_NOT_FOUND)
         except Matches.DoesNotExist:
             return Response({'detail': 'Match not found or you do not have permission to update it.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Optionally, log the exception here
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            # Retrieve all matches where both study_status and recruitee_status are 'accepted'
+            # and where the study belongs to the signed-in recruiter
+            matches = Matches.objects.filter(
+                study_status='accepted',
+                recruitee_status='accepted',
+                study__user=request.user  # Filter by the signed-in recruiter
+            )
+            
+            # Serialize the matches data
+            serializer = ProfileInteractionSerializer(matches, many=True)
+            
+            # Return the serialized data as a response
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Matches.DoesNotExist:
+            return Response({'detail': 'No matches found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             # Optionally, log the exception here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

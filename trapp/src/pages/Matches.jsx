@@ -1,16 +1,38 @@
 import profilePic from '../assets/profile-pic.jpg'
 import infoLogo from '../assets/info.png'
 import withAuthentication from '../HOCauth'; // Import the HOC
+import { useState, useEffect } from "react";
 
 const Matches = ({ userRoles }) =>  {
 
     const features = ["Brown Hair", "25 Years old", "1.76 metres"]
+    const  [matches, setMatches] = useState([])
 
-    
+    // if (!userRoles.is_recruiter && !userRoles.is_superuser) {
+    //     return <div className='mt-20'>You do not have permission to view this page.</div>;
+    // }
 
-    if (!userRoles.is_recruiter && !userRoles.is_superuser) {
-        return <div className='mt-20'>You do not have permission to view this page.</div>;
-    }
+    useEffect(() => {
+        fetch('http://localhost:8000/api/recruiter/matches/', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }, []); 
 
     return (
         <div className="mx-3 my-20">

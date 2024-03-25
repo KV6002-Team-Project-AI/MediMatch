@@ -29,7 +29,6 @@ const StudyProfileCard = () => {
     }
   };
 
-  // Fetch matches on component mount
   useEffect(fetchMatches, []);
 
   const handleAction = (action) => {
@@ -74,7 +73,6 @@ const StudyProfileCard = () => {
   };
   
   return (
-
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
 
           <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
@@ -84,21 +82,15 @@ const StudyProfileCard = () => {
                           xl:max-w-2xl xl:py-8 xl:mx-0'>
             
             {currentMatch && (
-              <div className="flex justify-between items-center">
-                <button>
-                    <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-                </button>
-                <button>
-                <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
-                </button>
-                <button>
-                <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-                </button>
-              </div>
+                <div className="absolute top-0 right-0 m-4">
+                    <button>
+                      <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+                    </button>
+                </div>
             )}
         {currentMatch ? (
           <>
-          <div className="text-center mt-4">
+          <div className="text-center ">
             <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
               {`${currentMatch.study_name}`}
             </p>
@@ -110,11 +102,16 @@ const StudyProfileCard = () => {
             </p>
           </div>
 
-          <div className="mt-2">
-          <h3 className="text-center text-lg bg-blue-200 text-blue-800 px-2 py-2 rounded-full shadow hover:bg-blue-300 transition sm:text-base md:text-lg">Category: {currentMatch.recruiter.category}</h3>
+          <div className="border-t-2 border-gray-200 mt-2"></div>
+
+        <div className='flex justify-center'>
+          <div className="flex flex-col mt-2 justify-center items-center">
+          <h4 className="inline-block bg-red-200 text-red-800 px-2 py-2 rounded-full shadow hover:bg-red-300 transition text-sm leading-none">
+            Category: {currentMatch.recruiter.category}
+          </h4>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
               <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.start_date} y.o.
+                  {currentMatch.recruiter.start_date}
               </div>
               <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruiter.duration} 
@@ -124,31 +121,35 @@ const StudyProfileCard = () => {
               </div>
           </div>
         </div>
+        </div>
+
+        <div className="border-t-2 border-gray-200 mt-2"></div>
 
         <div className="mt-4">
-          <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Requirements:</h3>
-          <div className="flex flex-wrap justify-center gap-2 mt-2">
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.min_age}
-              </div>
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.max_age}
-              </div>
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.min_height}
-              </div>
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.max_height}
-              </div>
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.biological_sex}
-              </div>
-              <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.profession}
-              </div>
+        <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Requirements:</h3>
+        <div className="flex overflow-x-auto mt-1 gap-2 mx-2" style={{scrollbarWidth: 'none'}}>
+          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.min_age} y.o.
+          </div>
+          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.max_age} y.o.
+          </div>
+          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.min_height} cm
+          </div>
+          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.max_height} cm
+          </div>
+          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.biological_sex}Male
+          </div>
+          <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
+              {currentMatch.recruiter.profession}Banker
           </div>
         </div>
+      </div>
           {currentMatch && (
+            
             <div className="flex justify-between items-center mt-6">
               <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                 Reject
@@ -169,14 +170,10 @@ const StudyProfileCard = () => {
             </p>
           </div>
         )}
-
-
-  
-        
       </div>
     </div>
   );
 };
 
-export default (StudyProfileCard);
+export default withAuthentication(StudyProfileCard);
 

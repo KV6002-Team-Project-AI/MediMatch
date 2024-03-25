@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
 
-const Matches = ({ userRoles }) => {
+const MatchesRecruitee = ({ userRoles }) => {
     const navigate = useNavigate();
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
@@ -13,7 +12,7 @@ const Matches = ({ userRoles }) => {
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
 
     const fetchMatchesData = () => {
-        fetch('http://localhost:8000/api/matchedrecruitees/', {
+        fetch('http://localhost:8000/api/matchedrecruiters/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -30,7 +29,7 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study.name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
             setUniqueStudyNames(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
@@ -47,8 +46,8 @@ const Matches = ({ userRoles }) => {
         fetchMatchesData();
     }, []);
 
-    if (!userRoles.is_recruiter && !userRoles.is_superuser) {
-        return <div className='mt-20'>You do not have permission to view this page.</div>;
+    if (!userRoles.is_recruitee && !userRoles.is_superuser) {
+        // return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
 
     function capitalizeFirstLetter(string) {
@@ -56,7 +55,7 @@ const Matches = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study.name === selectedStudy) : matches;
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -80,7 +79,7 @@ const Matches = ({ userRoles }) => {
                 user_id: user_id,
                 study_id: study_id,
                 action: "rejected",
-            }),           
+            }),  
         })
         .then(response => {
             if (response.ok) {
@@ -126,18 +125,13 @@ const Matches = ({ userRoles }) => {
                             {/* Render match details */}
                             <div className='w-full'>
                                 <div className='flex p-2 w-full m-2'>
-                                    <img
-                                        src={match.recruitee.user.profile_image ? match.recruitee.user.profile_image : profilePic}
-                                        alt="Person"
-                                        className="w-20 h-20 rounded-full mr-3"
-                                    />
                                     <div className='flex-col w-full item-center mt-2'>
                                         <div className="flex justify-between">
-                                            <h2 className="text-xl font-bold mb-2">{match.recruitee.full_name}, <span className="font-normal">{match.recruitee.age}</span></h2>
+                                            <h2 className="text-xl font-bold mb-2">{match.study_name}</h2>
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study.name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_name}
                                             </p>
                                         </div>
                                     </div>
@@ -231,4 +225,4 @@ const Matches = ({ userRoles }) => {
     )
 }
 
-export default withAuthentication(Matches);
+export default withAuthentication(MatchesRecruitee);

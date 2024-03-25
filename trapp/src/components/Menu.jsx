@@ -16,12 +16,14 @@ const Menu = ({ userRoles }) => {
 
   const menuItems = [
     { name: 'Tinder', icon: <HomeIcon />, path: '/tinder' },
-    { name: 'Matches', icon: <FavoriteIcon />, path: '/matches', badge: true },
     { name: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
   ];
   
-  if (!userRoles.is_recruitee && !userRoles.is_superuser) {
+  if (userRoles.is_recruiter) {
     menuItems.splice(1, 0, { name: 'Research', icon: <InsightsIcon />, path: '/research' });
+    menuItems.splice(2, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches' });
+  } else if (userRoles.is_recruitee) {
+    menuItems.splice(1, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matchesRecruitee' });
   }
 
   return (

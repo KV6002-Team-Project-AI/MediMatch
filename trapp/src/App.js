@@ -4,6 +4,7 @@ import Menu from './components/Menu';
 import Header from './components/Header';
 import Tinder from './pages/Tinder';
 import Matches from './pages/Matches';
+import MatchesRecruitee from './pages/MatchesRecruitee';
 import Profile from './pages/Profile';
 import Research from './pages/Research';
 import AddStudy from './pages/AddStudy';
@@ -35,6 +36,7 @@ function App() {
         <Route path='/' element={<LandingPage />}/>
         <Route path='/tinder' element={<Tinder />}/>
         <Route path='/matches' element={<Matches />}/>
+        <Route path='/matchesRecruitee' element={<MatchesRecruitee />}/>
         <Route path='/profile' element={<Profile />}/>
         <Route path='/research' element={<Research />}/>
         <Route path='/signin' element={<SignIn />}/>

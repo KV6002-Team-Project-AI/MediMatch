@@ -4,8 +4,9 @@ from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from .models import Study
-from .serializers import RecruiteeWithStudySerializer
+from .serializers import RecruiteeWithStudySerializer, RecruiterMatchUpdateSerializer
 from Mo.models import Matches
+from Mo.serializers import ProfileInteractionSerializer
 from ResearchSwipe.models import User
 from .serializers import StudySerializer
 
@@ -64,6 +65,7 @@ class StudyCreate(views.APIView):
 
 
 class MatchedRecruitees(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         try:
@@ -88,4 +90,29 @@ class MatchedRecruitees(views.APIView):
             return Response({'detail': 'No matches found.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             # Optionally, log the exception here
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+  
+class RecruiterMatchUpdate(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, match_id):
+        try:
+            # Retrieve the match instance
+            match_instance = Matches.objects.get(match_id=match_id)
+
+            # Update only the study_status to "rejected"
+            match_instance.study_status = 'rejected'
+            match_instance.save()
+
+            # Serialize the updated match instance
+            serializer = ProfileInteractionSerializer(match_instance)
+
+            # Return the serialized data as a response
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Matches.DoesNotExist:
+            return Response({'detail': 'Match not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            # Handle any other exceptions
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

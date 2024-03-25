@@ -30,7 +30,7 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
 class CustomRecruiterSerializer(RecruiterSerializer):
     class Meta(RecruiterSerializer.Meta):
         fields = (
-            'user', 
+            'user_id', 
             'research_area',
             'company_info'
         )

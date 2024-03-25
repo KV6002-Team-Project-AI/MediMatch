@@ -102,16 +102,16 @@ const Matches = ({ userRoles }) => {
             <div className="grid grid-col pb-4">
                 <div className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
                     <div className='w-full px-1'>
-                        <div className='flex p-2 gap-2 justify-center text-sm'>
+                        <div className='flex p-2 gap-2 justify-center text-sm '>
                             {/* Dropdown menu */}
                             <select 
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                                className="px-4 py-2  border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                                 value={selectedStudy}
                                 onChange={(e) => setSelectedStudy(e.target.value)}
                             >
                                 <option value="">Select Study</option>
                                 {uniqueStudyNames.map((name, index) => (
-                                    <option key={index} value={name}>{name}</option>
+                                    <option  key={index} value={name}>{name}</option>
                                 ))}
                             </select>
                         </div>

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from Mo.models import Matches
 from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
+from ResearchSwipe.models import User
 from .models import Study, MedicalHistory, MedicationHistory, CurrentMedication, FamilyMedicalHistory, Allergy, Lifestyle, BiologicalSex, HairColor, Profession, Ethnicity, Nationality, PregnancyStatus, LanguagePreference, ActivityLevel, SocioeconomicStatus, HealthStatus
 
 class MedicalHistorySerializer(serializers.ModelSerializer):
@@ -164,6 +165,7 @@ class StudySerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
 
+# For recruiters to retrieve recruitees and studies
 class RecruiteeWithStudySerializer(serializers.ModelSerializer):
     study = StudySerializer(read_only=True)
     recruitee = RecruiteeSerializer(source='user', read_only=True)  # Include recruitee information
@@ -171,67 +173,13 @@ class RecruiteeWithStudySerializer(serializers.ModelSerializer):
     class Meta:
         model = Matches
         fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')
+        
 
-class RecruiterMatchSerializer(serializers.ModelSerializer):
-    recruitee = RecruiteeSerializer(read_only=True)
-    study = StudySerializer(read_only=True)
-
-    class Meta:
-        model = Matches
-        fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')
-
-class RecruiterMatchUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Matches
-        fields = ('match_id', 'study', 'recruitee_status', 'study_status')
-
-    def update(self, instance, validated_data):
-        instance.study_status = "rejected"
-        instance.save()
-        return instance
-    
+# For recruitees to retrieve recruiters and studies
 class RecruiterWithStudySerializer(serializers.ModelSerializer):
-    study = StudySerializer(read_only=True)
-    recruiter = RecruiterSerializer(source='study.user', read_only=True) 
+    study = StudySerializer(read_only=True) 
+    # recruiter = RecruiterSerializer(source='study.user', read_only=True)  # Serialize recruiter information
 
     class Meta:
         model = Matches
-        fields = ('match_id', 'study', 'recruiter', 'recruiter_status', 'study_status')
-
-
-class RecruiterWithStudiesSerializer(serializers.Serializer):
-    match_id = serializers.IntegerField()  # Field to include match ID
-    recruiter = serializers.SerializerMethodField()  # Field to include recruiter information
-    studies = StudySerializer(many=True)  # Field to include associated studies
-
-    def get_recruiter(self, matches):
-        # Retrieve the recruiter's information from the study associated with the match
-        recruiter_info = matches.study.user
-        # Serialize the recruiter data
-        return RecruiterSerializer(recruiter_info).data
-    
-
-class MatchesSerializer(serializers.ModelSerializer):
-    study = serializers.SerializerMethodField()
-    recruitee = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Matches
-        fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')
-
-    def get_study(self, obj):
-        study = obj.study
-        return {
-            'study_id': study.study_id,
-            'name': study.name,
-            'description': study.description,
-            'start_date': study.start_date,
-            'expiry_date': study.expiry_date,
-            # Add other fields as needed
-        }
-
-    def get_recruitee(self, obj):
-        recruitee = obj.user
-        return {
-            'user_id': recruitee.id,
-        }
+        fields = ('match_id', 'study', 'recruitee_status', 'study_status') 

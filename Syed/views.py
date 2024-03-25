@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from .models import Study
-from .serializers import RecruiteeWithStudySerializer, MatchesSerializer
+from .serializers import RecruiteeWithStudySerializer, RecruiterWithStudySerializer
 from Mo.models import Matches
 from ResearchSwipe.models import User, Recruiter
 from .serializers import StudySerializer
@@ -73,29 +73,31 @@ class MatchedRecruitees(views.APIView):
         except Exception as e:
             # Optionally, log the exception here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
+       
+    
 class MatchedRecruiters(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         try:
-            # Retrieve the logged-in recruitee
-            recruitee = request.user
+            # Retrieve the logged-in recruitee's user ID
+            recruitee_id = request.user.id
             
-            # Retrieve all matches where both study_status and recruitee_status are 'accepted'
+            # Retrieve all matches where recruitee_status and study_status are 'accepted' and user_id matches
             accepted_matches = Matches.objects.filter(
-                study_status='accepted',
                 recruitee_status='accepted',
-                user_id=recruitee.id
+                study_status='accepted',
+                user_id=recruitee_id
             )
 
-            # Serialize the matches data along with recruiter and study information
-            serializer = MatchesSerializer(accepted_matches, many=True)
-            
+            # Serialize the matched recruiter information along with study details
+            serializer = RecruiterWithStudySerializer(accepted_matches, many=True)
+            print('*', serializer)
+
             # Return the serialized data as a response
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Exception as e:
             # Handle exceptions here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        

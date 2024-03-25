@@ -34,12 +34,14 @@ urlpatterns = [
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
     path('api/studydelete/<int:study_id>/', StudyCreate.as_view(), name='study_delete'),
-    
+
     path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched_recruitees'),
     path('api/matchedrecruiters/', MatchedRecruiters.as_view(), name='matched_recruiters'),
 
+    # path('api/studyrecruiters/', StudyRecruiters.as_view(), name='study_recruiters'),
+    
+
     #Mo paths
-    path('api/matches/', MatchActionView.as_view(), name='matches'),
     path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
     path('api/recruiter/studies/', RecruiterStudiesView.as_view(), name='recruiter-studies'),
     path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),

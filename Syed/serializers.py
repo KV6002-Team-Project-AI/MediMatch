@@ -184,3 +184,8 @@ class RecruiterMatchUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Matches
         fields = ('match_id', 'study', 'recruitee_status', 'study_status')
+
+    def update(self, instance, validated_data):
+        instance.study_status = "rejected"
+        instance.save()
+        return instance

@@ -75,7 +75,7 @@ const Research = ({ userRoles }) => {
     // const csrfToken = getCsrfToken();
 
     const handleDelete = (studyId) => {
-        const url = `http://localhost:8000/api/studydelete/${studyId}/`;
+        const url = `http://localhost:8000/api/studydelete/`;
         const method = 'DELETE';
 
         fetch(url, {

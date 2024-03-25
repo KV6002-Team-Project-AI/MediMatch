@@ -36,7 +36,6 @@ condition_templates = [
 relations = ['Mother', 'He', 'She', 'I', 'Father']
 
 def generate_condition_sentence():
-    # Modified to handle templates with two values.
     template_info = random.choice(condition_templates)
     template = template_info[0]
     first_entity = template_info[1]
@@ -48,7 +47,6 @@ def generate_condition_sentence():
 
     sentence = template.format(medication=medication, condition=condition, relation=relation)
 
-    # Entities handling adjusted for potential None values in second_entity.
     entities = []
     if first_entity == "MEDICATION":
         start_index_m = sentence.find(medication)
@@ -65,6 +63,6 @@ def generate_condition_sentence():
 
     return sentence, {"entities": entities}
 
-# Example usage
+# Generate
 for _ in range(20):
     print(generate_condition_sentence())

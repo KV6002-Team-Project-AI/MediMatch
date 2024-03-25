@@ -1,6 +1,5 @@
 import random
 
-# Simplifying for clarity - each activity now has a verb and noun form where appropriate
 lifestyle_activities = {
     'diet': [
         ('following a vegan diet', 'vegan diet'),
@@ -15,7 +14,6 @@ lifestyle_activities = {
     ]
 }
 
-# More specific templates that can handle the variations in verb/noun forms
 templates = [
     "I enjoy {activity_verb}.",
     "I've never touched {activity_noun}.",
@@ -27,31 +25,25 @@ templates = [
     "Though I enjoy {activity_noun}, I prioritize {activity_verb} for my well-being."
 ]
 
-
 def generate_lifestyle_sentence():
     activity_category = random.choice(list(lifestyle_activities.keys()))
     activity_verb, activity_noun = random.choice(lifestyle_activities[activity_category])
 
-    # Choose a template that fits the chosen activity category
+    # Choose template 
     template = random.choice(templates)
-
-    # Fill in the template directly with the selected activity
     sentence = template.format(activity_verb=activity_verb, activity_noun=activity_noun,
                                Activity_verb=activity_verb.capitalize())
 
-    # Finding and annotating entities based on both verb and noun forms
+    # Verb and noun
     entities = []
     for occurrence in (activity_verb, activity_noun):
         start_index = sentence.find(occurrence)
         if start_index != -1:
             entities.append((start_index, start_index + len(occurrence), 'LIFESTYLE'))
 
-    # Ensuring unique entities in case of overlap
     unique_entities = list(set(entities))
-
     return sentence, {"entities": unique_entities}
 
-
-# Generate sample sentences
+# Generate
 for _ in range(20):
     print(generate_lifestyle_sentence())

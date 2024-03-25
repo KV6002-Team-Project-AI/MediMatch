@@ -1,6 +1,5 @@
 import random
 
-# Keep changing to make dataste more diverse
 allergies = [
     'dairy', 'peanuts', 'eggs', 'pollen', 'soy', 'certain fruits',
     'tree nuts', 'cats', 'dust mites', 'dairy products', 'dog saliva',
@@ -11,7 +10,6 @@ allergies = [
     'almonds', 'walnuts', 'cashews', 'hazelnuts'
 ]
 
-# Templates for sentences
 templates = [
     ("{subject} {have} allergies to {allergies}.", "have"),
     ("{subject} allergies include {allergies}.", "include"),
@@ -52,7 +50,7 @@ def generate_allergy_sentence(num_allergies=1, person='first'):
 
     return sentence, {"entities": entities}
 
-# Loop to use
+# Generate
 for _ in range(20):
     print(generate_allergy_sentence(num_allergies=random.randint(1, 3),
                                     person=random.choice(['first', 'third_female', 'third_male'])))

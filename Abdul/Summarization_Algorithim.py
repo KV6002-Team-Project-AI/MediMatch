@@ -1,3 +1,5 @@
+# Supposed to be intergated, couldnt manage to it in time, variables would basically fetch from DB and then same algorithim is used per user.
+
 full_names = "Abdullah Musleh"
 ages = "21"
 biological_sexes = "male"

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Matches
-from ResearchSwipe.serializers import RecruiteeSerializer
+from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
 from Syed.serializers import StudySerializer
 
 class CustomRecruiteeSerializer(RecruiteeSerializer):
@@ -25,6 +25,16 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'interest_4',
             'bio'
         )
+
+
+class CustomRecruiterSerializer(RecruiterSerializer):
+    class Meta(RecruiterSerializer.Meta):
+        fields = (
+            'user', 
+            'research_area',
+            'company_info'
+        )
+
 
 class CustomStudySerializer(StudySerializer):
     class Meta(StudySerializer.Meta):
@@ -57,9 +67,12 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
     recruiter = CustomStudySerializer(source='study', read_only=True)
+    recruiter_info = CustomRecruiterSerializer(source='recruiter', read_only=True)
+
+
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'recruiter', 'recruitee_status', 'study_status', 'recruitee')
+        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'recruiter', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
 
 
     def update(self, instance, validated_data):

@@ -164,10 +164,6 @@ const RecruiteeProfileCard = () => {
             </p>
           </div>
         )}
-
-
-  
-        
       </div>
     </div>
   );

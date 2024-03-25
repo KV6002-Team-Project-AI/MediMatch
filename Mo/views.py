@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import F
 from .models import Matches
 from ResearchSwipe.models import Recruitee
 from Syed.models import Study
@@ -27,8 +28,6 @@ class MatchActionView(APIView):
 
             if request.user.recruitee.pk == int(user_id):
                 match.recruitee_status = updated_status
-            elif request.user.recruiter and match.study.user == request.user:
-                match.study_status = updated_status
             else:
                 return Response({'detail': 'You do not have permission to update this match.'}, status=status.HTTP_403_FORBIDDEN)
 
@@ -46,7 +45,7 @@ class MatchActionView(APIView):
             pending_matches = Matches.objects.filter(
                 recruitee_status='pending',
                 user__user_id=request.user
-            ).select_related('user')
+            ).select_related('user').order_by(F('study_rank').asc(nulls_last=True))
             
             serializer = ProfileInteractionSerializer(pending_matches, many=True)
             
@@ -90,7 +89,7 @@ class RecruiterMatchUpdateView(APIView):
                 pending_matches = Matches.objects.filter(
                     study_status='pending',
                     study__user=request.user
-                ).select_related('user')
+                ).select_related('user').order_by(F('recruitee_rank').asc(nulls_last=True))
                 
                 serializer = ProfileInteractionSerializer(pending_matches, many=True)
                 

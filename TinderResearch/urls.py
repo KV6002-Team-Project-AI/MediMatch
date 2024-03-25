@@ -42,7 +42,7 @@ urlpatterns = [
     path('api/matches/', MatchActionView.as_view(), name='matches'),
     path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
     path('api/recruiter/studies/', RecruiterStudiesView.as_view(), name='recruiter-studies'),
-
+    path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),
 
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),

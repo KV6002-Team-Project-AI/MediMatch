@@ -77,7 +77,7 @@ const RecruiteeProfileCard = () => {
 
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
             {currentMatch && (
-                <div className='bg-white justify-center items-center py-1 px-3 rounded-xl'>
+                <div className='bg-white justify-center items-center py-1 px-3 rounded-xl font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md transform transition-all hover:scale-105'>
                     <p className='text-center'> {`Study ID ${currentMatch.study_id}: ${currentMatch.study_name}`} </p>
                 </div>
             )}
@@ -89,9 +89,15 @@ const RecruiteeProfileCard = () => {
             
             {currentMatch && (
               <div className="flex justify-between items-center">
-                  <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-                  <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
-                  <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+                <button>
+                    <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+                </button>
+                <button>
+                <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
+                </button>
+                <button>
+                <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+                </button>
               </div>
             )}
         {currentMatch ? (
@@ -99,6 +105,12 @@ const RecruiteeProfileCard = () => {
           <div className="text-center mt-4">
             <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
               {`${currentMatch.recruitee.full_name}, ${currentMatch.recruitee.age}`}
+            </p>
+          </div>
+
+          <div className="text-center mt-3">
+            <p className=" sm:text-md md:xl xl:md text-gray-800">
+              {`${currentMatch.recruitee.bio}`}
             </p>
           </div>
 
@@ -136,7 +148,7 @@ const RecruiteeProfileCard = () => {
               <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                 Reject
               </button>
-              <button className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
+              <button   onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
                 Refresh
               </button>
               <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
@@ -146,7 +158,7 @@ const RecruiteeProfileCard = () => {
           )}
         </>
         ) : (
-          <div className="text-center mt-4">
+          <div className="text-center">
             <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
               No pending matches.
             </p>

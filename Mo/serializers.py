@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import Matches
 from ResearchSwipe.serializers import RecruiteeSerializer
-
+from Syed.serializers import StudySerializer
 
 class CustomRecruiteeSerializer(RecruiteeSerializer):
     class Meta(RecruiteeSerializer.Meta):
@@ -26,6 +26,29 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'bio'
         )
 
+class CustomStudySerializer(StudySerializer):
+    class Meta(StudySerializer.Meta):
+        fields = (
+            'user',  
+            'category', 
+            'description', 
+            'start_date',
+            'duration', 
+            'work_preference',
+            'min_age', 
+            'max_age', 
+            'min_height', 
+            'max_height', 
+            'min_weight', 
+            'max_weight', 
+            'biological_sex', 
+            'profession', 
+            'ethnicity',
+            'activity_level', 
+            'socioeconomic_status', 
+            'health_status'
+        )
+
 class ProfileInteractionSerializer(serializers.ModelSerializer):
     study_id = serializers.ReadOnlyField(source='study.study_id')
     study_name = serializers.ReadOnlyField(source='study.name')
@@ -33,10 +56,10 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
-
+    recruiter = CustomStudySerializer(source='study', read_only=True)
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'recruitee_status', 'study_status', 'recruitee')
+        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'recruiter', 'recruitee_status', 'study_status', 'recruitee')
 
 
     def update(self, instance, validated_data):

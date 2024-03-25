@@ -40,7 +40,22 @@ class MatchActionView(APIView):
             return Response({'detail': 'Match not found.'}, status=status.HTTP_404_NOT_FOUND)
         except Recruitee.DoesNotExist:
             return Response({'detail': 'Recruitee not found.'}, status=status.HTTP_404_NOT_FOUND)
-    
+        
+    def get(self, request, *args, **kwargs):
+        try:
+            pending_matches = Matches.objects.filter(
+                recruitee_status='pending',
+                user__user_id=request.user
+            ).select_related('user')
+            
+            serializer = ProfileInteractionSerializer(pending_matches, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Matches.DoesNotExist:
+            return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class RecruiterMatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]

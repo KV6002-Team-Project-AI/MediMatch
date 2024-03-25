@@ -19,18 +19,15 @@ class MatchActionView(APIView):
             return Response({'detail': 'Missing parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            # Ensure the match is associated with the specified study and recruitee
             match = Matches.objects.get(study_id=study_id, user__user_id=user_id)
             
-            # Logic to handle acceptance or rejection based on the role of the authenticated user
             updated_status = 'accepted' if action == 'accepted' else 'rejected' if action == 'rejected' else None
             if updated_status is None:
                 return Response({'detail': 'Invalid status.'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Update match status based on the role of the authenticated user
-            if request.user.recruitee.pk == int(user_id):  # If the user is the recruitee
+            if request.user.recruitee.pk == int(user_id):
                 match.recruitee_status = updated_status
-            elif request.user.recruiter and match.study.user == request.user:  # If the user is the recruiter
+            elif request.user.recruiter and match.study.user == request.user:
                 match.study_status = updated_status
             else:
                 return Response({'detail': 'You do not have permission to update this match.'}, status=status.HTTP_403_FORBIDDEN)
@@ -50,7 +47,7 @@ class RecruiterMatchUpdateView(APIView):
 
     def post(self, request, *args, **kwargs):
         study_id = request.data.get('study_id')
-        user_id = request.data.get('user_id')  # Add this to fetch user_id from request
+        user_id = request.data.get('user_id')
         action = request.data.get('action')
 
         if action not in ['accepted', 'rejected']:
@@ -93,17 +90,22 @@ class RecruiterStudiesView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-            try:
+        try:
+            study_id = request.query_params.get('study_id')
+            if study_id is not None:
                 pending_matches = Matches.objects.filter(
+                    study_id=study_id,
                     study_status='pending',
                     study__user=request.user
                 ).select_related('user')
-                
-                serializer = ProfileInteractionSerializer(pending_matches, many=True)
-                
-                return Response(serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response({'detail': 'Study ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
             
-            except Matches.DoesNotExist:
-                return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
-            except Exception as e:
-                return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            serializer = ProfileInteractionSerializer(pending_matches, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Matches.DoesNotExist:
+            return Response({'detail': 'No pending matches found for the provided study ID.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

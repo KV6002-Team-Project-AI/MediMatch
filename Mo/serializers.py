@@ -66,13 +66,13 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
-    recruiter = CustomStudySerializer(source='study', read_only=True)
+    study_info = CustomStudySerializer(source='study', read_only=True)
     recruiter_info = CustomRecruiterSerializer(source='recruiter', read_only=True)
 
 
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'recruiter', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
+        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
 
 
     def update(self, instance, validated_data):

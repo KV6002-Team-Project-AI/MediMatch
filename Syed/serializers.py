@@ -1,9 +1,6 @@
 from rest_framework import serializers
 from Mo.models import Matches
-from django.db.models import F
-from Mo.serializers import CustomRecruiteeSerializer
 from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
-from ResearchSwipe.models import User, Recruiter
 from .models import Study, MedicalHistory, MedicationHistory, CurrentMedication, FamilyMedicalHistory, Allergy, Lifestyle, BiologicalSex, HairColor, Profession, Ethnicity, Nationality, PregnancyStatus, LanguagePreference, ActivityLevel, SocioeconomicStatus, HealthStatus
 
 class MedicalHistorySerializer(serializers.ModelSerializer):
@@ -212,3 +209,29 @@ class RecruiterWithStudiesSerializer(serializers.Serializer):
         recruiter_info = matches.study.user
         # Serialize the recruiter data
         return RecruiterSerializer(recruiter_info).data
+    
+
+class MatchesSerializer(serializers.ModelSerializer):
+    study = serializers.SerializerMethodField()
+    recruitee = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Matches
+        fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')
+
+    def get_study(self, obj):
+        study = obj.study
+        return {
+            'study_id': study.study_id,
+            'name': study.name,
+            'description': study.description,
+            'start_date': study.start_date,
+            'expiry_date': study.expiry_date,
+            # Add other fields as needed
+        }
+
+    def get_recruitee(self, obj):
+        recruitee = obj.user
+        return {
+            'user_id': recruitee.id,
+        }

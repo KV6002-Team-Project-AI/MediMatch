@@ -127,7 +127,8 @@ const Matches = ({ userRoles }) => {
                             <div className='w-full'>
                                 <div className='flex p-2 w-full m-2'>
                                     <img
-                                        src={match.recruitee.user.profile_image ? match.recruitee.user.profile_image : profilePic}
+                                        src={profilePic} 
+                                        // match.recruitee.user.profile_image ? match.recruitee.user.profile_image : 
                                         alt="Person"
                                         className="w-20 h-20 rounded-full mr-3"
                                     />

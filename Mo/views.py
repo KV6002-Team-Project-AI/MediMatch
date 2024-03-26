@@ -8,6 +8,11 @@ from ResearchSwipe.models import Recruitee
 from Syed.models import Study
 from .serializers import ProfileInteractionSerializer
 
+
+# Recruitees API, POST and GET methods accepted
+# POST method changes current status for recruitee from the default pending state to accepted or rejected depending on user input from frontend
+# GET method retrieves all instances where the users current state is the default state (pending) in order of ranking
+# Rank 1 being the best suited for a specific study and rank 100 being the worst for a speific study
 class MatchActionView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -56,6 +61,10 @@ class MatchActionView(APIView):
         except Exception as e:
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+# Recruiters API, POST and GET methods accepted
+# POST method changes current status for study from the default pending state to accepted or rejected depending on user input from frontend
+# GET method retrieves all instances where the users current state is the default state (pending) in order of ranking
+# Rank 1 being the best suited for a specific study and rank 100 being the worst for a speific study
 class RecruiterMatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -99,27 +108,3 @@ class RecruiterMatchUpdateView(APIView):
                 return Response({'detail': 'No pending matches found.'}, status=status.HTTP_404_NOT_FOUND)
             except Exception as e:
                 return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class RecruiterStudiesView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, *args, **kwargs):
-        try:
-            study_id = request.query_params.get('study_id')
-            if study_id is not None:
-                pending_matches = Matches.objects.filter(
-                    study_id=study_id,
-                    study_status='pending',
-                    study__user=request.user
-                ).select_related('user')
-            else:
-                return Response({'detail': 'Study ID is required.'}, status=status.HTTP_400_BAD_REQUEST)
-            
-            serializer = ProfileInteractionSerializer(pending_matches, many=True)
-            
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        
-        except Matches.DoesNotExist:
-            return Response({'detail': 'No pending matches found for the provided study ID.'}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

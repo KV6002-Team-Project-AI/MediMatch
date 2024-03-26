@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
-import summariseLogo from '../assets/summary.png';
 import withAuthentication from '../HOCauth';
+
 
 const StudyProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
@@ -10,9 +9,12 @@ const StudyProfileCard = () => {
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
 
-
+  /* 
+    1- Gets token from localstorage for authentication which gets sent to the API for authentication
+    2- Filters where the recruitee_status is pending using the GET method
+  */
   const fetchMatches = () => {
-    const token = localStorage.getItem('accessToken'); // Retrieve the JWT token from localStorage
+    const token = localStorage.getItem('accessToken');
     if (token) {
       fetch('http://127.0.0.1:8000/api/recruitee/matches/', {
         headers: {
@@ -29,9 +31,17 @@ const StudyProfileCard = () => {
     }
   };
 
-  // Fetch matches on component mount
+
   useEffect(fetchMatches, []);
 
+  /* 
+    This will respond to actions taken by the user specifically when
+    they click accept or reject as this will be posted in the database
+    as a new status (accepted or rejected)
+
+  
+    POST method will take in user_id, study_id and action to work properly
+  */
   const handleAction = (action) => {
     if (!currentMatch) return;
 
@@ -60,11 +70,14 @@ const StudyProfileCard = () => {
     .catch(error => console.error('Error:', error));
   };
 
-  // These functions will call the handleAction with the correct status
+  /*
+    These functions will call the handleAction with the correct status
+    with a visual background change when user accepts or rejects
+  */
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
     handleAction('accepted', currentMatch.recruitee.user.id, currentMatch.study_id);
-    setTimeout(() => setAcceptColor(''), 750); // Remove the color after some time
+    setTimeout(() => setAcceptColor(''), 750);
   };
   
   const handleRejectClick = () => {
@@ -73,15 +86,14 @@ const StudyProfileCard = () => {
     setTimeout(() => setRejectColor(''), 750);
   };
   
-  return (
+  return ( 
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
-
           <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
                           sm:max-w-md sm:mt-5
                           md:max-w-lg md:mt-10 md:mx-0
                           lg:max-w-xl lg:mt-16 lg:mx-0
                           xl:max-w-2xl xl:py-8 xl:mx-0'>
-            
+            {/* Both must be true to view the information button otherwise not visible */}
             {currentMatch && (
                 <div className="absolute top-0 right-0 m-4">
                     <button>
@@ -89,6 +101,7 @@ const StudyProfileCard = () => {
                     </button>
                 </div>
             )}
+            {/* Takes in all the information from the database that is needed to view studies with relevant information for users */}
         {currentMatch ? (
           <>
           <div className="text-center ">
@@ -149,6 +162,7 @@ const StudyProfileCard = () => {
           </div>
         </div>
       </div>
+      {/* Actions will be recorded using the buttons below, when user accepts or rejects a study the status will change accordingly */}
           {currentMatch && (
             
             <div className="flex justify-between items-center mt-6">
@@ -164,7 +178,11 @@ const StudyProfileCard = () => {
             </div>
           )}
         </>
-        ) : (
+        ) 
+        :
+        {/* If there are no more pending states for the logged in recruitee the message below gets displayed */}
+        (
+          
           <div className="text-center">
             <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
               No pending matches.

@@ -63,13 +63,18 @@ class CustomStudySerializer(StudySerializer):
 
 # Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers
 class ProfileInteractionSerializer(serializers.ModelSerializer):
+    # Specific study information (ID and name)
     study_id = serializers.ReadOnlyField(source='study.study_id')
     study_name = serializers.ReadOnlyField(source='study.name')
+    study_info = CustomStudySerializer(source='study', read_only=True)
+    # Recruitee information (ID)
     user_id = serializers.ReadOnlyField(source='user.user_id')
+    # Statuses of both studies and recruitees
     recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
+    # Recruitee information 
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
-    study_info = CustomStudySerializer(source='study', read_only=True)
+    # Recruiter information 
     recruiter_info = CustomRecruiterSerializer(source='recruiter', read_only=True)
 
 

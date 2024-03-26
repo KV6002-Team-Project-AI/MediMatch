@@ -29,6 +29,7 @@ const StudyProfileCard = () => {
     }
   };
 
+  // Fetch matches on component mount
   useEffect(fetchMatches, []);
 
   const handleAction = (action) => {
@@ -98,7 +99,7 @@ const StudyProfileCard = () => {
 
           <div className="text-center mt-3">
             <p className=" sm:text-md md:xl xl:md text-gray-800">
-              {`${currentMatch.recruiter.description}`}
+              {`${currentMatch.study_info.description}`}
             </p>
           </div>
 
@@ -107,17 +108,17 @@ const StudyProfileCard = () => {
         <div className='flex justify-center'>
           <div className="flex flex-col mt-2 justify-center items-center">
           <h4 className="inline-block bg-red-200 text-red-800 px-2 py-2 rounded-full shadow hover:bg-red-300 transition text-sm leading-none">
-            Category: {currentMatch.recruiter.category}
+            Category: {currentMatch.study_info.category}
           </h4>
           <div className="flex flex-wrap justify-center gap-2 mt-2">
               <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.start_date}
+                  {currentMatch.study_info.start_date}
               </div>
               <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.duration} 
+                  {currentMatch.study_info.duration} 
               </div>
               <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruiter.work_preference} 
+                  {currentMatch.study_info.work_preference} 
               </div>
           </div>
         </div>
@@ -129,22 +130,22 @@ const StudyProfileCard = () => {
         <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Requirements:</h3>
         <div className="flex overflow-x-auto mt-1 gap-2 mx-2" style={{scrollbarWidth: 'none'}}>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.min_age} y.o.
+              {currentMatch.study_info.min_age} y.o.
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.max_age} y.o.
+              {currentMatch.study_info.max_age} y.o.
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.min_height} cm
+              {currentMatch.study_info.min_height} cm
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.max_height} cm
+              {currentMatch.study_info.max_height} cm
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.biological_sex}Male
+              {currentMatch.study_info.biological_sex}Male
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.recruiter.profession}Banker
+              {currentMatch.study_info.profession}Banker
           </div>
         </div>
       </div>

@@ -17,8 +17,9 @@ import json
 from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from Syed.models import Study
+from Aymman.models import Rank
 
-
+                     
 class RecruiteeDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -135,6 +136,27 @@ def get_studies(request):
     
     return HttpResponse(response_data, content_type="application/json")
 
+
+def get_rank_aymane(request):
+    
+    Rank_queryset = Rank.objects.all()
+    Rank_list = []
+
+    for Rankkk in Rank_queryset:
+        
+        fields = [field.name for field in Rankkk._meta.fields if field.get_internal_type() != 'ForeignKey']
+        
+        Rankkk_data = {field: getattr(Rankkk, field) for field in fields}
+   
+        Rankkk_data['user_id'] = Rankkk.user_id
+        Rankkk_data['study_id'] = Rankkk.study_id
+
+        Rank_list.append(Rankkk_data)
+
+    response_data = json.dumps(Rank_list, cls=DjangoJSONEncoder)
+    
+    return HttpResponse(response_data, content_type="application/json")
+
 def get_Recruitees(request):
     recruitee_queryset = Recruitee.objects.all()
     recruitee_list = []
@@ -176,8 +198,6 @@ def get_Recruitees_aymane(request):
         'profession',
         'ethnicity',
         'pregnancy_status',
-        'language_preferences',
-        'duration_of_participation',
         'health_status',
         'work_preference',
      
@@ -189,6 +209,10 @@ def get_Recruitees_aymane(request):
         
         # If you need to include the user ID specifically
         recruitee_data['user_id'] = recruitee.user.id
+        
+        recruitee_data['duration'] = getattr(recruitee, 'duration_of_participation', None)
+        
+        recruitee_data['language_preference'] = getattr(recruitee, 'language_preferences', None)
 
         recruitee_list.append(recruitee_data)
 
@@ -241,10 +265,4 @@ def get_studies_aymane(request):
     
 
     return HttpResponse(response_data, content_type="application/json")
-
-
-
-
-
-
 

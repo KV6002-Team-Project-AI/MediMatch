@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Matches = ({ userRoles }) => {
     const navigate = useNavigate();
@@ -30,7 +34,7 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study.name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
             setUniqueStudyNames(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
@@ -56,7 +60,7 @@ const Matches = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study.name === selectedStudy) : matches;
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -94,7 +98,16 @@ const Matches = ({ userRoles }) => {
             // Handle network errors (optional)
             console.error("Network error:", error);
         });
-    }    
+    }   
+    
+    function truncateString(str) {
+        const x = 33
+        if (str.length > x) {
+          return str.slice(0, x) + '...';
+        } else {
+          return str;
+        }
+    }
     
     return (
         <div className="mx-3 my-20">
@@ -102,18 +115,25 @@ const Matches = ({ userRoles }) => {
             <div className="grid grid-col pb-4">
                 <div className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
                     <div className='w-full px-1'>
-                        <div className='flex p-2 gap-2 justify-center text-sm'>
+                        <div className='flex p-2 gap-2 justify-center text-sm '>
                             {/* Dropdown menu */}
-                            <select 
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                value={selectedStudy}
-                                onChange={(e) => setSelectedStudy(e.target.value)}
-                            >
-                                <option value="">Select Study</option>
-                                {uniqueStudyNames.map((name, index) => (
-                                    <option key={index} value={name}>{name}</option>
-                                ))}
-                            </select>
+                            <div className="w-80">
+                                <FormControl fullWidth>
+                                    <InputLabel id="s elect-study-label">Select Study</InputLabel>
+                                    <Select
+                                        labelId="select-study-label"
+                                        id="select-study"
+                                        value={selectedStudy}
+                                        onChange={(e) => setSelectedStudy(e.target.value)}
+                                        label="Select Study"
+                                    >
+                                        <MenuItem value="">Select Study</MenuItem>
+                                        {uniqueStudyNames.map((name, index) => (
+                                        <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,7 +147,8 @@ const Matches = ({ userRoles }) => {
                             <div className='w-full'>
                                 <div className='flex p-2 w-full m-2'>
                                     <img
-                                        src={match.recruitee.user.profile_image ? match.recruitee.user.profile_image : profilePic}
+                                        src={profilePic} 
+                                        // match.recruitee.user.profile_image ? match.recruitee.user.profile_image : 
                                         alt="Person"
                                         className="w-20 h-20 rounded-full mr-3"
                                     />
@@ -137,7 +158,7 @@ const Matches = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study.name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_name}
                                             </p>
                                         </div>
                                     </div>
@@ -203,7 +224,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                     <div 
                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
                                     >
                                         Unmatch
                                     </div>

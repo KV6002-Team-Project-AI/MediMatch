@@ -3,19 +3,19 @@ from django.core.management.base import BaseCommand
 import pandas as pd
 from Aymman.models import Rank
 from Syed.models import Study
-from ResearchSwipe.models import User, Recruitee, Recruiter
+from Mo.models import Matches
+from ResearchSwipe.models import Recruitee, Recruiter
 
 
 class Command(BaseCommand):
     help = 'Fetches data and ranks volunteers based on study requirements'
 
     def add_arguments(self, parser):
-        # You can add command arguments if needed, for example:
-        # parser.add_argument('--example', type=int, help='An example argument')
+        
         pass
 
     def handle(self, *args, **options):
-        # Function to fetch data from an API
+      
         def fetch_api_data(url):
             response = requests.get(url)
             if response.status_code == 200:
@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
         # Place the logic of fetching data, processing it, and pushing rankings to the database here
         volunteers_url = "http://127.0.0.1:8000/api/get-recruitees-aymane/"
-        studies_url = "http://127.0.0.1:8000/api/get-studies-aymane/"
+        studies_url = "http://127.0.0.1:8000/api/get-studies/"
         volunteers_data = fetch_api_data(volunteers_url)
         studies_data = fetch_api_data(studies_url)
 
@@ -40,16 +40,30 @@ class Command(BaseCommand):
 
         def rank_volunteers(volunteers_df, studies_df):
             categorical_features = [
-                'biological_sex', 'hair_color', 'profession', 'ethnicity', 'pregnancy_status',
-                'language_preferences', 'health_status', 'work_preference'
+                'biological_sex',
+                'hair_color',
+                'profession',
+                'ethnicity',
+                'pregnancy_status',
+                'language_preference',
+                'health_status',
+                'duration',
+                'work_preference'
             ]
 
             numerical_features_study = [
-                'min_age', 'max_age', 'min_height', 'max_height', 'min_weight', 'max_weight'
+                'min_age',
+                'max_age', 
+                'min_height',
+                'max_height', 
+                'min_weight', 
+                'max_weight'
             ]
 
             numerical_features_volunteers = [
-                'age', 'height', 'weight'
+                'age',
+                'height',
+                'weight'
             ]
 
             ranking_results = []
@@ -84,8 +98,8 @@ class Command(BaseCommand):
 
         exclude_columns = [
             'biological_sex_match', 'hair_color_match', 'profession_match', 'ethnicity_match', 
-            'pregnancy_status_match', 'language_preferences_match', 'health_status_match', 
-            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score'
+            'pregnancy_status_match', 'language_preference_match', 'health_status_match', 
+            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score','duration_match',
         ]
 
         final_output_df = ranked_volunteers_df.drop(columns=exclude_columns)
@@ -95,9 +109,11 @@ class Command(BaseCommand):
         for _, row in final_output_df.iterrows():
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
+            Recruiter_instance = Recruiter.objects.get(user=row['user_id'])
 
-            Rank.objects.update_or_create(
+            Matches.objects.update_or_create(
                 study=study_instance,
                 user=user_instance,
+                recruiter=Recruiter_instance,
                 defaults={'ranking': row['ranking_basedon_study']}
             )

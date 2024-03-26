@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const MatchesRecruitee = ({ userRoles }) => {
     const navigate = useNavigate();
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
-    const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
-    const [selectedStudy, setSelectedStudy] = useState('');
+    const [uniqueCategories, setUniqueCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
 
     const fetchMatchesData = () => {
@@ -29,8 +33,8 @@ const MatchesRecruitee = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
-            setUniqueStudyNames(uniqueNames);
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.category)));
+            setUniqueCategories(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
             } else {
@@ -55,7 +59,7 @@ const MatchesRecruitee = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
+    const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -94,6 +98,35 @@ const MatchesRecruitee = ({ userRoles }) => {
             console.error("Network error:", error);
         });
     }    
+
+    // Date Format function
+    function formatDate(inputDate) {
+        const date = new Date(inputDate);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    // Duration fix
+    function durationFix(duration) {
+        if (duration === "Less than 1 week") {
+            return "<1 week"
+        } else if (duration === "More than 4 weeks") {
+            return ">4 weeks"
+        } else {
+            return duration
+        }
+    }
+
+    function truncateString(str) {
+        const x = 33
+        if (str.length > x) {
+          return str.slice(0, x) + '...';
+        } else {
+          return str;
+        }
+    }
     
     return (
         <div className="mx-3 my-20">
@@ -103,16 +136,23 @@ const MatchesRecruitee = ({ userRoles }) => {
                     <div className='w-full px-1'>
                         <div className='flex p-2 gap-2 justify-center'>
                             {/* Dropdown menu */}
-                            <select 
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                value={selectedStudy}
-                                onChange={(e) => setSelectedStudy(e.target.value)}
-                            >
-                                <option value="">Select Study</option>
-                                {uniqueStudyNames.map((name, index) => (
-                                    <option key={index} value={name}>{name}</option>
-                                ))}
-                            </select>
+                            <div className="w-80">
+                                <FormControl fullWidth>
+                                    <InputLabel id="select-study-label">Select Category</InputLabel>
+                                    <Select
+                                        labelId="select-category-label"
+                                        id="select-category"
+                                        value={selectedCategory}
+                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                        label="Select Category"
+                                    >
+                                        <MenuItem value="">Select Category</MenuItem>
+                                        {uniqueCategories.map((name, index) => (
+                                        <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,72 +164,51 @@ const MatchesRecruitee = ({ userRoles }) => {
                         <div key={index} className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
                             {/* Render match details */}
                             <div className='w-full'>
-                                <div className='flex p-2 w-full m-2'>
-                                    <div className='flex-col w-full item-center mt-2'>
+                                <div className="flex text-sm text-center gap-2 px-3 pt-2">
+                                    <div className=" w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                        <span className="font-semibold">Starts: </span>{formatDate(match.study_info.start_date)}
+                                    </div>
+                                    <div className="w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                        <span className="font-semibold">Duration:</span> {durationFix(match.study_info.duration)}
+                                    </div>
+                                </div>
+                                <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
+                                    <div className='flex-col w-full item-center'>
                                         <div className="flex justify-between">
-                                            <h2 className="text-xl font-bold mb-2">{match.study_name}</h2>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study_name}
-                                            </p>
+                                            <h2 className="text-xl font-bold">{match.study_name}</h2>
                                         </div>
                                     </div>
                                     {/* Info button */}
                                     <img
                                         src={infoLogo}
                                         alt="info"
-                                        className="w-6 h-6 mr-3 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+                                        className="w-6 h-6 mr-3 mt-1 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
                                         onClick={() => toggleProfileExpansion(index)}
                                     />
+                                </div>
+                                <div className="mb-2">
+                                    <div className="flex justify-between mx-4">
+                                        <p className="text-sm font-normal">{match.recruiter_info.company_info}</p>
+                                        <p className="text-sm">{match.study_info.category}</p>
+                                        <p className="text-sm">{match.study_info.work_preference}</p>
+                                    </div>
                                 </div>
                                 {/* Render expanded profile if expanded */}
                                 {expandedProfiles[index] && 
                                     <div>
                                         <div>
-                                            <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">User Bio</h1>
+                                            <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">Description</h1>
                                             <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify'>
-                                                <p>{match.recruitee.bio}</p>
+                                                <p>{match.study_info.description}</p>
                                             </div>
                                         </div>
-                                        {/* Features */}
-                                        <h2 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md">Features</h2>
-                                        <div className="flex gap-2 pb-1 text-sm m-3 text-center justify-center flex-wrap">
-                                            <div className="bg-amber-100 text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {match.recruitee.height} cm
-                                            </div>
-                                            <div className="bg-green-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {match.recruitee.weight} kg
-                                            </div>
-                                            <div className="bg-red-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.biological_sex)}
-                                            </div>
-                                            <div className="bg-blue-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.ethnicity)}
-                                            </div>
-                                            <div className="bg-orange-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.socioeconomic_status)} Class
-                                            </div>
-                                            <div className="bg-gray-200  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.work_preference)}
-                                            </div>
-                                        </div>
-                                        {/* Interests */}
-                                        <h1 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md"> Interests</h1>
-                                        <div className="flex gap-2 text-sm m-3 pb-1 text-center justify-center flex-wrap">
-                                            <div className="bg-emerald-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_1)}
-                                            </div>
-                                            <div className="bg-green-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_2)}
-                                            </div>
-                                            <div className="bg-teal-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_3)}
-                                            </div>
-                                            <div className="bg-cyan-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_4)}
-                                            </div>
-                                        </div>
+                                        {/* Requirements */}
+                                        <h2 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md">Requirements</h2>
+
+
+
+                                        
+                                        
                                     </div>
                                 }
 

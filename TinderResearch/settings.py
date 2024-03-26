@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'Mo.apps.MoConfig',
     'Aymman.apps.AymmanConfig',
     'Abdul.apps.AbdulConfig',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -194,3 +195,8 @@ REACT_APP_DIR = os.path.join(BASE_DIR, 'trapp', 'build')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

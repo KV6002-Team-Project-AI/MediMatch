@@ -6,8 +6,8 @@ from Syed.views import StudyCreate, MatchedRecruitees, MatchedRecruiters
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane
-from Mo.views import MatchActionView, RecruiterMatchUpdateView, RecruiterStudiesView
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane
+from Mo.views import MatchActionView, RecruiterMatchUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,18 +30,19 @@ urlpatterns = [
     path('api/get-studies/', get_studies, name='get_studies'),
     path('api/get-recruitees-aymane/', get_Recruitees_aymane, name='get_Recruitees_aymane'),
     path('api/get-studies-aymane/', get_studies_aymane, name='get_studies_aymane'),
+    path('api/get-rank-aymane/', get_rank_aymane, name='get_rank_aymane'),
+
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
     path('api/studydelete/<int:study_id>/', StudyCreate.as_view(), name='study_delete'),
-    
+
     path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched_recruitees'),
     path('api/matchedrecruiters/', MatchedRecruiters.as_view(), name='matched_recruiters'),
+    
 
     #Mo paths
-    path('api/matches/', MatchActionView.as_view(), name='matches'),
     path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
-    path('api/recruiter/studies/', RecruiterStudiesView.as_view(), name='recruiter-studies'),
     path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),
 
     # The catch-all pattern for your React frontend should be the last pattern

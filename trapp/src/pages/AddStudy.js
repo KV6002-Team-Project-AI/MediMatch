@@ -90,40 +90,21 @@ const AddStudy = ({ userRoles }) => {
 
         console.log(formData)
         // 
-        if (showAge) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                min_age: '',
-                max_age: ''
-                
-            }));
-        } else if (!showAge) {
+        if (!showAge) {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_age: 1,
                 max_age: 150
             }));
-        }
-        if (showWeight) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                min_weight: '',
-                max_weight: ''
-            }));
-        } else if (!showWeight) {
+        } 
+        if (!showWeight) {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_weight: 1,
                 max_weight: 400
             }));
         }
-        if (showHeight) {
-            setFormData(prevFormData => ({
-                ...prevFormData,
-                min_height: '',
-                max_height: ''
-            }));
-        } else if (!showHeight) {
+        if (!showHeight) {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_height: 1,

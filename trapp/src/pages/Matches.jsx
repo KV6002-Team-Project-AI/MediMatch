@@ -56,7 +56,7 @@ const Matches = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study.name === selectedStudy) : matches;
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -204,7 +204,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                     <div 
                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
                                     >
                                         Unmatch
                                     </div>

@@ -20,9 +20,8 @@ class Matches(models.Model):
     recruiter = models.ForeignKey(Recruiter, on_delete=models.CASCADE, related_name='recruiter_interactions', null=True)
     # Link to Study class 
     study = models.ForeignKey(Study, on_delete=models.CASCADE, related_name='study_interactions')
-    # Match status from recruitee's view
+    # Match status for recruitee and study
     recruitee_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
-    # Match status from study's view
     study_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
     # Reruitee rank and Study rank
     recruitee_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=0)

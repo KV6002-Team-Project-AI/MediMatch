@@ -3,6 +3,8 @@ from .models import Matches
 from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
 from Syed.serializers import StudySerializer
 
+
+# Recruitee serializer that uses specific data from the Recruitee class
 class CustomRecruiteeSerializer(RecruiteeSerializer):
     class Meta(RecruiteeSerializer.Meta):
         fields = (
@@ -26,7 +28,7 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'bio'
         )
 
-
+# Recruiter serializer that uses specific data from the Recruiter class
 class CustomRecruiterSerializer(RecruiterSerializer):
     class Meta(RecruiterSerializer.Meta):
         fields = (
@@ -35,7 +37,7 @@ class CustomRecruiterSerializer(RecruiterSerializer):
             'company_info'
         )
 
-
+# Study serializer that uses specific data from the Study class
 class CustomStudySerializer(StudySerializer):
     class Meta(StudySerializer.Meta):
         fields = (
@@ -59,6 +61,7 @@ class CustomStudySerializer(StudySerializer):
             'health_status'
         )
 
+# Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers
 class ProfileInteractionSerializer(serializers.ModelSerializer):
     study_id = serializers.ReadOnlyField(source='study.study_id')
     study_name = serializers.ReadOnlyField(source='study.name')
@@ -73,10 +76,3 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Matches
         fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
-
-
-    def update(self, instance, validated_data):
-        instance.recruitee_status = validated_data.get('recruitee_status', instance.recruitee_status)
-        instance.study_status = validated_data.get('study_status', instance.study_status)
-        instance.save()
-        return instance

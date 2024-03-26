@@ -30,7 +30,7 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study.name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
             setUniqueStudyNames(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
@@ -138,7 +138,7 @@ const Matches = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study.name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_name}
                                             </p>
                                         </div>
                                     </div>

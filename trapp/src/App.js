@@ -36,7 +36,7 @@ function App() {
         <Route path='/' element={<LandingPage />}/>
         <Route path='/tinder' element={<Tinder />}/>
         <Route path='/matches' element={<Matches />}/>
-        <Route path='/matchesRecruitee' element={<MatchesRecruitee />}/>
+        <Route path='/matches/recruitee' element={<MatchesRecruitee />}/>
         <Route path='/profile' element={<Profile />}/>
         <Route path='/research' element={<Research />}/>
         <Route path='/signin' element={<SignIn />}/>

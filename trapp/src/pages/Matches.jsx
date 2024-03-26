@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const Matches = ({ userRoles }) => {
     const navigate = useNavigate();
@@ -94,7 +98,16 @@ const Matches = ({ userRoles }) => {
             // Handle network errors (optional)
             console.error("Network error:", error);
         });
-    }    
+    }   
+    
+    function truncateString(str) {
+        const x = 33
+        if (str.length > x) {
+          return str.slice(0, x) + '...';
+        } else {
+          return str;
+        }
+    }
     
     return (
         <div className="mx-3 my-20">
@@ -104,16 +117,23 @@ const Matches = ({ userRoles }) => {
                     <div className='w-full px-1'>
                         <div className='flex p-2 gap-2 justify-center text-sm '>
                             {/* Dropdown menu */}
-                            <select 
-                                className="px-4 py-2  border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                value={selectedStudy}
-                                onChange={(e) => setSelectedStudy(e.target.value)}
-                            >
-                                <option value="">Select Study</option>
-                                {uniqueStudyNames.map((name, index) => (
-                                    <option  key={index} value={name}>{name}</option>
-                                ))}
-                            </select>
+                            <div className="w-80">
+                                <FormControl fullWidth>
+                                    <InputLabel id="s elect-study-label">Select Study</InputLabel>
+                                    <Select
+                                        labelId="select-study-label"
+                                        id="select-study"
+                                        value={selectedStudy}
+                                        onChange={(e) => setSelectedStudy(e.target.value)}
+                                        label="Select Study"
+                                    >
+                                        <MenuItem value="">Select Study</MenuItem>
+                                        {uniqueStudyNames.map((name, index) => (
+                                        <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
                     </div>
                 </div>

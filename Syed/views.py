@@ -93,7 +93,6 @@ class MatchedRecruiters(views.APIView):
 
             # Serialize the matched recruiter information along with study details
             serializer = ProfileInteractionSerializer(accepted_matches, many=True)
-            print('*', serializer)
 
             # Return the serialized data as a response
             return Response(serializer.data, status=status.HTTP_200_OK)

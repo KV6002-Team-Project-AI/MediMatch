@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 const MatchesRecruitee = ({ userRoles }) => {
     const navigate = useNavigate();
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
-    const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
-    const [selectedStudy, setSelectedStudy] = useState('');
+    const [uniqueCategories, setUniqueCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
 
     const fetchMatchesData = () => {
@@ -29,8 +33,8 @@ const MatchesRecruitee = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
-            setUniqueStudyNames(uniqueNames);
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.category)));
+            setUniqueCategories(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
             } else {
@@ -55,7 +59,7 @@ const MatchesRecruitee = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
+    const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -114,6 +118,15 @@ const MatchesRecruitee = ({ userRoles }) => {
             return duration
         }
     }
+
+    function truncateString(str) {
+        const x = 33
+        if (str.length > x) {
+          return str.slice(0, x) + '...';
+        } else {
+          return str;
+        }
+    }
     
     return (
         <div className="mx-3 my-20">
@@ -123,16 +136,23 @@ const MatchesRecruitee = ({ userRoles }) => {
                     <div className='w-full px-1'>
                         <div className='flex p-2 gap-2 justify-center'>
                             {/* Dropdown menu */}
-                            <select 
-                                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                                value={selectedStudy}
-                                onChange={(e) => setSelectedStudy(e.target.value)}
-                            >
-                                <option value="">Select Study</option>
-                                {uniqueStudyNames.map((name, index) => (
-                                    <option key={index} value={name}>{name}</option>
-                                ))}
-                            </select>
+                            <div className="w-80">
+                                <FormControl fullWidth>
+                                    <InputLabel id="select-study-label">Select Category</InputLabel>
+                                    <Select
+                                        labelId="select-category-label"
+                                        id="select-category"
+                                        value={selectedCategory}
+                                        onChange={(e) => setSelectedCategory(e.target.value)}
+                                        label="Select Category"
+                                    >
+                                        <MenuItem value="">Select Category</MenuItem>
+                                        {uniqueCategories.map((name, index) => (
+                                        <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
                         </div>
                     </div>
                 </div>

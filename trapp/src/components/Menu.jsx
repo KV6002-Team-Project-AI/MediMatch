@@ -23,7 +23,7 @@ const Menu = ({ userRoles }) => {
     menuItems.splice(1, 0, { name: 'Research', icon: <InsightsIcon />, path: '/research' });
     menuItems.splice(2, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches' });
   } else if (userRoles.is_recruitee) {
-    menuItems.splice(1, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matchesRecruitee' });
+    menuItems.splice(1, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches/recruitee' });
   }
 
   return (

@@ -50,7 +50,7 @@ class MatchActionView(APIView):
             pending_matches = Matches.objects.filter(
                 recruitee_status='pending',
                 user__user_id=request.user
-            ).select_related('user').order_by(F('study_rank').asc(nulls_last=True))
+            ).select_related('user').order_by(F('ranking').asc(nulls_last=True))
             
             serializer = ProfileInteractionSerializer(pending_matches, many=True)
             
@@ -98,7 +98,7 @@ class RecruiterMatchUpdateView(APIView):
                 pending_matches = Matches.objects.filter(
                     study_status='pending',
                     study__user=request.user
-                ).select_related('user').order_by(F('recruitee_rank').asc(nulls_last=True))
+                ).select_related('user').order_by(F('ranking').asc(nulls_last=True))
                 
                 serializer = ProfileInteractionSerializer(pending_matches, many=True)
                 

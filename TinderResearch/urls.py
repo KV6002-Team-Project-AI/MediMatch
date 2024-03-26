@@ -6,7 +6,7 @@ from Syed.views import StudyCreate, MatchedRecruitees, MatchedRecruiters
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane
 from Mo.views import MatchActionView, RecruiterMatchUpdateView
 
 urlpatterns = [
@@ -30,6 +30,8 @@ urlpatterns = [
     path('api/get-studies/', get_studies, name='get_studies'),
     path('api/get-recruitees-aymane/', get_Recruitees_aymane, name='get_Recruitees_aymane'),
     path('api/get-studies-aymane/', get_studies_aymane, name='get_studies_aymane'),
+    path('api/get-rank-aymane/', get_rank_aymane, name='get_rank_aymane'),
+
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),

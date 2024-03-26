@@ -4,7 +4,7 @@ import pandas as pd
 from Aymman.models import Rank
 from Syed.models import Study
 from Mo.models import Matches
-from ResearchSwipe.models import User, Recruitee, Recruiter
+from ResearchSwipe.models import Recruitee, Recruiter
 
 
 class Command(BaseCommand):
@@ -109,9 +109,11 @@ class Command(BaseCommand):
         for _, row in final_output_df.iterrows():
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
+            Recruiter_instance = Recruiter.objects.get(user=row['user_id'])
 
             Matches.objects.update_or_create(
                 study=study_instance,
                 user=user_instance,
+                recruiter=Recruiter_instance,
                 defaults={'ranking': row['ranking_basedon_study']}
             )

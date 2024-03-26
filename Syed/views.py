@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from .models import Study
 from .serializers import RecruiteeWithStudySerializer, RecruiterWithStudySerializer
 from Mo.models import Matches
+from Mo.serializers import ProfileInteractionSerializer
 from ResearchSwipe.models import User, Recruiter
 from .serializers import StudySerializer
 
@@ -63,7 +64,7 @@ class MatchedRecruitees(views.APIView):
             )
 
             # Serialize the matches data with study and recruitee information
-            serializer = RecruiteeWithStudySerializer(matches, many=True)
+            serializer = ProfileInteractionSerializer(matches, many=True)
             
             # Return the serialized data as a response
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -91,7 +92,7 @@ class MatchedRecruiters(views.APIView):
             )
 
             # Serialize the matched recruiter information along with study details
-            serializer = RecruiterWithStudySerializer(accepted_matches, many=True)
+            serializer = ProfileInteractionSerializer(accepted_matches, many=True)
             print('*', serializer)
 
             # Return the serialized data as a response

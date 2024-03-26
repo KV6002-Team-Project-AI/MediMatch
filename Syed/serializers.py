@@ -167,7 +167,6 @@ class StudySerializer(serializers.ModelSerializer):
 
 # For recruiters to retrieve recruitees and studies
 class RecruiteeWithStudySerializer(serializers.ModelSerializer):
-    study = StudySerializer(read_only=True)
     recruitee = RecruiteeSerializer(source='user', read_only=True)  # Include recruitee information
 
     class Meta:
@@ -178,8 +177,8 @@ class RecruiteeWithStudySerializer(serializers.ModelSerializer):
 # For recruitees to retrieve recruiters and studies
 class RecruiterWithStudySerializer(serializers.ModelSerializer):
     study = StudySerializer(read_only=True) 
-    # recruiter = RecruiterSerializer(source='study.user', read_only=True)  # Serialize recruiter information
+    recruiter = RecruiterSerializer(source='user', read_only=True)  # Serialize recruiter information
 
     class Meta:
         model = Matches
-        fields = ('match_id', 'study', 'recruitee_status', 'study_status') 
+        fields = ('match_id', 'recruiter', 'study', 'recruitee_status', 'study_status') 

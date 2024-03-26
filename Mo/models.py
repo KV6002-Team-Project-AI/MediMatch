@@ -24,6 +24,6 @@ class Matches(models.Model):
     recruitee_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
     # Match status from study's view
     study_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
-    # Get reruitee rank 
+    # Reruitee rank and Study rank
     recruitee_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=0)
     study_rank = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=0)

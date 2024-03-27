@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Preferences from '../components/Preferences';
+import MinMaxTable from '../components/MinMaxTable';
 
 const MatchesRecruitee = ({ userRoles }) => {
     const navigate = useNavigate();
@@ -176,7 +177,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                 <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
                                     <div className='flex-col w-full item-center'>
                                         <div className="flex justify-between">
-                                            <h2 className="text-xl font-bold">{match.study_name}</h2>
+                                            <h2 className="text-xl font-bold">{match.study_info.name}</h2>
                                         </div>
                                     </div>
                                     {/* Info button */}
@@ -202,6 +203,18 @@ const MatchesRecruitee = ({ userRoles }) => {
                                             <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify'>
                                                 <p>{match.study_info.description}</p>
                                             </div>
+                                        </div>
+                                        {/* REQUIREMENTS */}
+                                        <h1 className='text-center text-lg font-bold border-t-2 border-gray-300 py-2 mt-2 '>Requirements</h1>
+                                        <div className='flex px-2 pb-4 justify-between'>
+                                            <MinMaxTable
+                                                minAge={match.study_info.min_age}
+                                                minWeight={match.study_info.min_weight}
+                                                minHeight={match.study_info.min_height}
+                                                maxAge={match.study_info.max_age}
+                                                maxWeight={match.study_info.max_weight}
+                                                maxHeight={match.study_info.max_height}
+                                            />
                                         </div>
                                         {/* Requirements */}
                                         <h2 className="border-t-2 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Requirements</h2>

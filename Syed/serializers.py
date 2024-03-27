@@ -135,7 +135,7 @@ class StudySerializer(serializers.ModelSerializer):
             'current_medication', 
             'family_medication_history',
             'allergies', 
-            'lifestyle', 
+            'lifestyle',             
         ]
 
     def create(self, validated_data):

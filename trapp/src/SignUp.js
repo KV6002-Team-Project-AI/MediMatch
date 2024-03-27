@@ -82,6 +82,7 @@ export default function SignUp() {
       // Redirect based on the role
       if (data.user.is_recruitee) {
         window.location.href = '/signup/recruitee';
+        
       } else if (data.user.is_recruiter) {
         window.location.href = '/signup/recruiter';
       }

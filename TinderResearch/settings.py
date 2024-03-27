@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+from dotenv import load_dotenv
+
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -245,3 +249,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Celery Configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'optional_default_value')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'  # Correctly handle Boolean value
+DATABASE_URL = os.getenv('DATABASE_URL')

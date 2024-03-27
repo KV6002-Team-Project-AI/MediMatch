@@ -25,7 +25,7 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'interest_2',
             'interest_3',
             'interest_4',
-            'bio'
+            'bio',
         )
 
 # Recruiter serializer that uses specific data from the Recruiter class
@@ -58,7 +58,7 @@ class CustomStudySerializer(StudySerializer):
             'ethnicity',
             'activity_level', 
             'socioeconomic_status', 
-            'health_status'
+            'health_status',
         )
 
 # Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers

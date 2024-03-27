@@ -6,6 +6,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Preferences from '../components/Preferences';
 
 const MatchesRecruitee = ({ userRoles }) => {
     const navigate = useNavigate();
@@ -203,12 +204,28 @@ const MatchesRecruitee = ({ userRoles }) => {
                                             </div>
                                         </div>
                                         {/* Requirements */}
-                                        <h2 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md">Requirements</h2>
+                                        <h2 className="border-t-2 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Requirements</h2>
+                                        <div className='flex px-2 pb-4 justify-between'>
+                                            <Preferences
+                                                sex={match.study_info.biological_sex}
+                                                hair={match.study_info.hair_color}
+                                                profession={match.study_info.profession}
+                                                ethnicity={match.study_info.ethnicity}
+                                                nationality={match.study_info.nationality}
+                                                pregnancy={match.study_info.pregnancy_status}
+                                                language={match.study_info.language_preferences}
+                                                activity={match.study_info.activity_level}
+                                                socioeconomic={match.study_info.socioeconomic_status}
+                                                health={match.study_info.health_status}
+                                                medical_history={match.study_info.medical_history}
+                                                medication_history={match.study_info.medication_history}
+                                                current_medication={match.study_info.current_medication}
+                                                family_medication_history={match.study_info.family_medication_history}
+                                                allergies={match.study_info.allergies}
+                                                lifestyle={match.study_info.lifestyle}
+                                            />
+                                        </div>
 
-
-
-                                        
-                                        
                                     </div>
                                 }
 

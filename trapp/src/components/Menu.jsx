@@ -26,7 +26,7 @@ function Menu({ userRoles }) {
     menuItems.splice(1, 0, { name: 'Research', icon: <InsightsIcon />, path: '/research' });
     menuItems.splice(2, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches' });
   } 
-  if (userRoles.is_recruitee || userRoles.is_superuser) {
+  else if (userRoles.is_recruitee || userRoles.is_superuser) {
     menuItems.splice(1, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches/recruitee' });
   }
 

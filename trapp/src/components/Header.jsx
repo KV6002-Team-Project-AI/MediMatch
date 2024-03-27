@@ -76,7 +76,7 @@ function Header() {
                                 <MenuItem onClick={handleClose} component={Link} to="/update/recruitee">Recruitee Profile Edit</MenuItem>
                             )}
                             {userRoles.isRecruiter && (
-                                <MenuItem onClick={handleClose} component={Link} to="/recruiter-profile-edit">Recruiter Profile Edit</MenuItem>
+                                <MenuItem onClick={handleClose} component={Link} to="/update/recruiter">Recruiter Profile Edit</MenuItem>
                             )}
                             <MenuItem onClick={handleLogout}>Log Out</MenuItem>
                         </Menu>

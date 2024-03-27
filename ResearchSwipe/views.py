@@ -1,14 +1,36 @@
 from rest_framework import status, views, permissions, generics
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
-from .models import User, Recruitee, Recruiter
-from .serializers import UserSerializer, RecruiteeSerializer, RecruiterSerializer, MyAuthTokenSerializer, UserRoleSerializer
+from .models import *
+from .serializers import *
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import logging
 from .datavalidation import *
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.http import HttpResponse
+from django.views.decorators.cache import never_cache
+from .token import email_verification_token_generator  # Make sure to import your custom token generator
+from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from django.views.decorators.csrf import csrf_exempt
+from .email_service import * 
+from google.analytics.data_v1beta import BetaAnalyticsDataClient
+from google.analytics.data_v1beta.types import RunReportRequest
+from google.oauth2 import service_account 
+from google.protobuf.json_format import MessageToDict
+from .google_analytics import GoogleAnalyticsReporter
+from .permissions import IsSuperUser 
+
+# Path to service account key file
+KEY_FILE_LOCATION = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
+# GA4 Property ID 
+PROPERTY_ID = '433240422'
+
 
 class UserSignup(views.APIView):
     permission_classes = [permissions.AllowAny]
@@ -16,7 +38,7 @@ class UserSignup(views.APIView):
     def post(self, request, *args, **kwargs):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            user = serializer.save()  # User creation now properly handles email and username
+            user = serializer.save()
             return Response(
                 {
                     "id": user.id,
@@ -24,11 +46,88 @@ class UserSignup(views.APIView):
                     "first_name": user.first_name,
                     "last_name": user.last_name,
                     "is_recruitee": user.is_recruitee,
-                    "is_recruiter": user.is_recruiter
+                    "is_recruiter": user.is_recruiter,
+                    "is_superuser": user.is_superuser,
+                    "message": "User created successfully. Please check your email to verify your account.",
                 }, 
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['POST'])
+@permission_classes([IsSuperUser])  # custom permission 
+def admin_signup(request):
+    try:
+        data = request.data
+        # Create new user with is_superuser set to True
+        user = User.objects.create(
+            username=data['username'],
+            email=data['email'],
+            password=make_password(data['password']),  
+            is_superuser=True  
+        )
+        user.save()
+        return Response({'message': 'Admin created successfully'}, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+def get_ga_data(request):
+    key_file_location = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
+    property_id = '433240422'  # your GA4 property ID
+
+    try:
+        reporter = GoogleAnalyticsReporter(key_file_location, property_id)
+        city_report_response = reporter.run_report()
+        daily_views_response = reporter.get_daily_views()
+
+        # Convert the Google Analytics API responses to dicts
+        city_report_dict = MessageToDict(city_report_response._pb)
+        daily_views_dict = MessageToDict(daily_views_response._pb)
+        
+        return JsonResponse({
+            'cityData': city_report_dict,
+            'dailyViewsData': daily_views_dict
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@never_cache
+def VerifyEmailView(request, uidb64, token):
+    try:
+        # Decoding the user's primary key
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and email_verification_token_generator.check_token(user, token):
+        user.is_verified = True
+        user.save()
+        # Redirect to success page, or inform user of success
+        return HttpResponse('Email verified successfully')
+    else:
+        # Inform user of failure
+        return HttpResponse('Verification link is invalid or expired')
+
+
+
+
+class ResendVerificationEmailView(views.APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        if user.is_verified:
+            return Response({'error': 'User already verified.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            EmailService.send_verification_email(user)
+            return Response({'message': 'Verification email resent successfully.'})
+        except Exception as e:
+            # Log the exception here
+            return Response({'error': 'An error occurred while sending the verification email.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
 class UserLoginView(views.APIView):
     permission_classes = (permissions.AllowAny,)  # Allow any user to attempt login
@@ -129,17 +228,42 @@ class RecruiteeDetail(views.APIView):
 
 
 class RecruiterDetail(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]  # Ensure user is authenticated
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self, user, pk=None):
+        try:
+            if user.is_superuser and pk:
+                return Recruiter.objects.get(pk=pk)
+            return user.recruiter
+        except Recruiter.DoesNotExist:
+            return None
+
+    def get(self, request, pk=None, *args, **kwargs):
+        recruiter = self.get_object(request.user, pk)
+        if recruiter is None:
+            return Response({"error": "Recruiter not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RecruiterSerializer(recruiter, context={'request': request})
+        return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        if not request.user.is_recruiter:
-            return Response({"error": "User is not a recruiter"}, status=status.HTTP_400_BAD_REQUEST)
-        
         serializer = RecruiterSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(user=request.user)  # Associate the recruiter profile with the authenticated user
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        recruiter = self.get_object(request.user)
+        if recruiter is None:
+            return Response({"error": "Recruiter not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RecruiterSerializer(recruiter, data=request.data, partial=True, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
 class UserRolesView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -192,3 +316,47 @@ class DropdownChoicesAPIView(views.APIView):
         # Converts each choice tuple into a dictionary format that is easy to handle in the frontend
         formatted_choices = {key: [{'key': choice[0], 'value': choice[1]} for choice in value] for key, value in choices.items()}
         return Response(formatted_choices)
+
+
+class ReportUserView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        serializer = ReportSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(reporter=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AdminReportView(views.APIView):
+    permission_classes = [permissions.IsAdminUser]
+
+    def get(self, request, format=None):
+        reports = Report.objects.all()
+        serializer = ReportSerializer(reports, many=True)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        report = Report.objects.get(pk=pk)
+        serializer = ReportSerializer(report, data=request.data)
+        if serializer.is_valid():
+            action_taken = request.data.get('status')
+            if action_taken in ['resolved', 'ban', 'warn']:  # Adjust as per your actual status options
+                serializer.save()
+                # Prepare and send the notification email based on the action
+                if action_taken == 'ban':
+                    message = f"You have been banned for the following reason: {report.reason}"
+                    subject = "Account Ban Notification"
+                elif action_taken == 'warn':
+                    message = f"You have been warned for the following reason: {report.reason}"
+                    subject = "Account Warning Notification"
+                else:
+                    message = f"Your report has been resolved. Reason: {report.reason}"
+                    subject = "Report Resolved"
+
+                send_notification_email(report.reported_user, message, subject)
+                return Response(serializer.data)
+            
+            return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

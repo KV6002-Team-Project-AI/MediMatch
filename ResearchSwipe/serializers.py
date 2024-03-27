@@ -1,10 +1,19 @@
 from rest_framework import serializers
-from .models import User, Recruitee, Recruiter
+from .models import *
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import update_last_login
-
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
+from django.conf import settings
+from .token import email_verification_token_generator
+from .email_service import EmailService
+from django.core.exceptions import ValidationError
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,7 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         email = validated_data.get('email')
         
-        # Check if a user with this username (email) already exists
+        # Check if a user with this email (as username) already exists
         if User.objects.filter(username=email).exists():
             raise serializers.ValidationError({'email': 'This email is already in use.'})
         
@@ -26,7 +35,32 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data['username'] = email
 
         # Create the new user
-        return super().create(validated_data)
+        user = super().create(validated_data)
+
+        # Send verification email after creating the user
+        EmailService.send_verification_email(user)
+
+        return user
+
+
+
+class AdminUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'password', 'first_name', 'last_name', 'is_recruitee', 'is_recruiter', 'is_superuser', 'profile_image')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        email = validated_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError({'email': 'This email is already in use.'})
+
+        password = validated_data.pop('password')
+        user = User.objects.create_superuser(email=email, password=password, **validated_data)
+
+        EmailService.send_verification_email(user)
+
+        return user
 
 
 class MyAuthTokenSerializer(serializers.Serializer):
@@ -141,23 +175,53 @@ class RecruiteeSerializer(serializers.ModelSerializer):
     
 
 class RecruiterSerializer(serializers.ModelSerializer):
-    user = UserSerializer(required=True)
+    user = UserSerializer(read_only=True)
+    full_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+    profile_image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Recruiter
-        fields = ('user', 'research_area', 'company_info')
+        fields = ('user', 
+                  'full_name',
+                  'email',
+                  'profile_image_url',
+                  'research_area', 
+                  'company_info')
+
+    def get_full_name(self, obj):
+            return obj.user.get_full_name()
+
+    def get_email(self, obj):
+            return obj.user.email
+
+    def get_profile_image_url(self, obj):
+        request = self.context.get('request')
+        if obj.user.profile_image and hasattr(obj.user.profile_image, 'url'):
+            return request.build_absolute_uri(obj.user.profile_image.url)
+        return None
 
     def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        # The 'create' method will save the User.
-        user = UserSerializer.create(UserSerializer(), validated_data=user_data)
-        
-        profile = self.Meta.model.objects.create(user=user, **validated_data)
-        return profile
+    # Access the current authenticated user from the request context
+        user = self.context['request'].user
+
+        # Check if the user already exists in validated_data and remove it
+        validated_data.pop('user', None)  # Remove 'user' if it exists to prevent conflict
+
+        # Now proceed with creating the Recruiter object
+        recruiter = Recruiter.objects.create(user=user, **validated_data)
+        return recruiter
+
 
 class UserRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('is_recruitee', 'is_recruiter', 'is_superuser')
+        fields = ('is_recruitee', 'is_recruiter', 'is_superuser', 'is_verified')
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = '__all__'
+        read_only_fields = ('reporter',)
 
 

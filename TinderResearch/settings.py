@@ -17,6 +17,30 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': 'DEBUG',
+        },
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'level': 'DEBUG',
+        },
+    },
+    'loggers': {
+        '': {  # Root logger
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -25,9 +49,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'django-insecure-%17xdo4$j21)e@3uu#h+dkwr)v#xippiv2^*e5=++3q-po_i6x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['medimatch-solutions-9a4b38cd0846.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['medimatch-solutions-9a4b38cd0846.herokuapp.com', 'localhost', '127.0.0.1', 'localhost:3000']
 
 
 # Application definition
@@ -49,14 +73,14 @@ INSTALLED_APPS = [
     'Abdul.apps.AbdulConfig',
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE = [    
+    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'ResearchSwipe.middleware.JWTAuthenticationMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -64,10 +88,22 @@ MIDDLEWARE = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+
+
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = False 
+
+CSFR_TRUSTED_ORGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://medimatch-solutions-9a4b38cd0846.herokuapp.com'
+]
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://localhost:3000',
+
     'http://medimatch-solutions-9a4b38cd0846.herokuapp.com'
     # Add other origins as needed
 ]
@@ -105,6 +141,16 @@ SIMPLE_JWT = {
 }
 
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'  # This is literally the string 'apikey'
+EMAIL_HOST_PASSWORD = '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'
+
+# The email you'll be sending emails from
+DEFAULT_FROM_EMAIL = 'bywaterjed@gmail.com'
 
 ROOT_URLCONF = 'TinderResearch.urls'
 

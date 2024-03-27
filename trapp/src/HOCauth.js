@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const withAuthentication = WrappedComponent => {
+const withAuthentication = (WrappedComponent, { checkVerification = true } = {}) => {
   return props => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userRoles, setUserRoles] = useState({ is_recruitee: false, is_recruiter: false, is_superuser: false });
+    const [userRoles, setUserRoles] = useState({ is_recruitee: false, is_recruiter: false, is_superuser: false, is_verified: false });
     const [isChecking, setIsChecking] = useState(true);
     const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ const withAuthentication = WrappedComponent => {
           console.log('Validation response status:', response.status);
           if (response.ok) {
             setIsAuthenticated(true);
-            // Optionally fetch additional user role data if needed
+            // Fetch additional user role and verification status data
             return fetch('http://localhost:8000/api/user', {
               headers: {
                 'Authorization': `Bearer ${jwtToken}`
@@ -39,8 +39,14 @@ const withAuthentication = WrappedComponent => {
           setUserRoles({
             is_recruitee: data.is_recruitee,
             is_recruiter: data.is_recruiter,
-            is_superuser: data.is_superuser
+            is_superuser: data.is_superuser,
+            is_verified: data.is_verified
           });
+
+          // Redirect based on verification and superuser status, controlled by checkVerification flag
+          if (checkVerification && !data.is_verified && !data.is_superuser) {
+            navigate('/resend-verification-email');
+          }
         })
         .catch(error => {
           console.error('Error:', error);
@@ -53,7 +59,7 @@ const withAuthentication = WrappedComponent => {
       }
 
       setIsChecking(false);
-    }, [navigate]);
+    }, [navigate, checkVerification]);
 
     if (isChecking) {
       return <div>Loading...</div>;
@@ -68,4 +74,3 @@ const withAuthentication = WrappedComponent => {
 };
 
 export default withAuthentication;
-

@@ -1,5 +1,6 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+// App.js
+import React, { useEffect } from 'react';
+import {BrowserRouter as Router,Routes,Route,useLocation,Navigate} from 'react-router-dom';
 import Menu from './components/Menu';
 import Header from './components/Header';
 import Tinder from './pages/Tinder';
@@ -11,47 +12,74 @@ import RecruiteeSignup from './RecruiteeSignup';
 import RecruiterSignup from './RecruiterSignup';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
-import LandingPage from './LandingPage'
+import LandingPage from './LandingPage';
 import UserStatus from './test';
+import VerifyEmail from './components/VerifyEmail';
+import ResendVerificationEmail from './components/ResendVerificationEmail';
+import AnalyticsData from './charts';
+import CreateUserForm from './admincreate';
+import ReportUserForm from './report';
+import AdminDashboard from './madash';
 import './App.css';
 
-function AppWrapper() {
-  return (
-    <Router>
-      <App />
-    </Router>
-  );
+function usePageTracking() {
+    const location = useLocation();
+    useEffect(() => {
+        const currentPath = location.pathname + location.search;
+        const userId = localStorage.getItem('userInfo').id;// Retrieve the user ID from local storage
+
+        window.gtag('config', 'G-BQGVC0WJND', {
+            page_path: currentPath,
+            user_id: userId, // Send the user ID to Google Analytics
+        });
+    }, [location]);
 }
 
 function App() {
-  const location = useLocation();
-  const excludedPaths = ['/signin', '/signup', '/signup/recruitee', '/signup/recruiter', '/landingpage', '/'];
+    usePageTracking(); // Call this in your App component
 
-  return (
-    <div className="App">
-      {!excludedPaths.includes(location.pathname) && <Header />}
-      {!excludedPaths.includes(location.pathname) && <Menu />}
-      <Routes>
-        <Route path='/' element={<LandingPage />}/>
-        <Route path='/tinder' element={<Tinder />}/>
-        <Route path='/matches' element={<Matches />}/>
-        <Route path='/profile' element={<Profile />}/>
-        <Route path='/research' element={<Research />}/>
-        <Route path='/signin' element={<SignIn />}/>
-        <Route path='/signup' element={<SignUp />}/>
-        <Route path='/test' element={<UserStatus />}/>
-        <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
-        <Route path="/update/recruitee" element={<RecruiteeSignup />} />
-        <Route path="/signup/recruiter" element={<RecruiterSignup />} />
-        <Route path="/addstudy" element={<AddStudy />} />
-        <Route path='/landingpage' element={<LandingPage />}/>
+    const location = useLocation();
+    const excludedPaths = ['/signin', '/signup', '/signup/recruitee', '/signup/recruiter', '/landingpage', '/verify-email/:uidb64/:token', '/'];
 
+    return (
+        <div className="App">
+            {!excludedPaths.includes(location.pathname) && <Header />}
+            {!excludedPaths.includes(location.pathname) && <Menu />}
+            <Routes>
+                <Route path='/' element={<LandingPage />}/>
+                <Route path='/tinder' element={<Tinder />}/>
+                <Route path='/matches' element={<Matches />}/>
+                <Route path='/profile' element={<Profile />}/>
+                <Route path='/research' element={<Research />}/>
+                <Route path='/signin' element={<SignIn />}/>
+                <Route path='/signup' element={<SignUp />}/>
+                <Route path='/verify-email/:uidb64/:token' element={<VerifyEmail />} />
+                <Route path="/resend-verification-email" element={<ResendVerificationEmail />} />
+                <Route path='/charts' element={<AnalyticsData />}/>
+                <Route path='/admin/create' element={<CreateUserForm />}/>
+                <Route path='/report' element={<ReportUserForm />}/>
+                <Route path='/dashboard' element={<AdminDashboard />}/>
+                <Route path='/test' element={<UserStatus />}/>
+                <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
+                <Route path="/update/recruitee" element={<RecruiteeSignup />} />
+                <Route path="/update/recruiter" element={<RecruiterSignup />} />
+                <Route path="/signup/recruiter" element={<RecruiterSignup />} />
+                <Route path="/addstudy" element={<AddStudy />} />
+                <Route path='/landingpage' element={<LandingPage />}/>
 
-        {/* Catch-all route */}
-        <Route path='*' element={<Navigate to='/profile' replace />} />
-      </Routes>
-    </div>
-  );
+                {/* Catch-all route */}
+                <Route path='*' element={<Navigate to='/profile' replace />} />
+            </Routes>
+        </div>
+    );
+}
+
+function AppWrapper() {
+    return (
+        <Router>
+            <App />
+        </Router>
+    );
 }
 
 export default AppWrapper;

@@ -2,41 +2,50 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from .datavalidation import *
 from django.utils import timezone
+from django.conf import settings
+
 
 
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
-
     def create_user(self, email, password=None, **extra_fields):
-        """
-        Create and save a regular User with the given email and password.
-        """
         if not email:
-            raise ValueError('Users must have an email address')
-
+            raise ValueError('The given email must be set')
         email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
-        user.username = email  # Assuming you want to keep username same as email
         user.set_password(password)
         user.save(using=self._db)
         return user
 
     def create_superuser(self, email, password=None, **extra_fields):
-        """
-        Create and save a Superuser with the given email and password.
-        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(email=email, password=password, **extra_fields)
 
+
+
+
+class Report(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Pending'),
+        ('resolved', 'Resolved'),
+    )
+
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reported', on_delete=models.CASCADE)
+    reported_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='reports', on_delete=models.CASCADE)
+    reason = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class User(AbstractUser):
     # Your existing fields...
     is_recruitee = models.BooleanField(default=False)
     is_recruiter = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
+    is_verified = models.BooleanField(default=False)
 
     # New field for profile image
     profile_image = models.ImageField(upload_to='profile_images/',null=True, blank=True,)

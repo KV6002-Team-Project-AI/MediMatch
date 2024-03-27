@@ -5,20 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import { useState, useEffect } from 'react';
 
-function Preferences(props) {
-
-    // const [objectHeight, setObjectHeight] = useState()
-
-    // useEffect(() => {
-    //     //  Check object height
-    //     if (props.objectHeight) {
-    //         setObjectHeight(props.objectHeight);
-    //     } else {
-    //         setObjectHeight(200)
-    //     }
-    // }, [setObjectHeight]);
-
-    
+function Preferences(props) {   
 
     const mapDictionary = (dictionary) => {
         if (!dictionary || dictionary.length === 0) {

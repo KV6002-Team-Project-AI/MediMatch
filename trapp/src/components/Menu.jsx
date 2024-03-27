@@ -19,8 +19,6 @@ function Menu({ userRoles }) {
   // Regular menu items
   const menuItems = [
     { name: 'Tinder', icon: <HomeIcon />, path: '/tinder' },
-    { name: 'Research', icon: <InsightsIcon />, path: '/research' },
-    { name: 'Matches', icon: <FavoriteIcon />, path: '/matches', badge: true },
     { name: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
   ];
 

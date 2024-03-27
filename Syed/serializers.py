@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from django.db import transaction
+from Mo.models import Matches
+from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
+from ResearchSwipe.models import User
 from .models import Study, MedicalHistory, MedicationHistory, CurrentMedication, FamilyMedicalHistory, Allergy, Lifestyle, BiologicalSex, HairColor, Profession, Ethnicity, Nationality, PregnancyStatus, LanguagePreference, ActivityLevel, SocioeconomicStatus, HealthStatus
 
 class MedicalHistorySerializer(serializers.ModelSerializer):
@@ -133,7 +135,7 @@ class StudySerializer(serializers.ModelSerializer):
             'current_medication', 
             'family_medication_history',
             'allergies', 
-            'lifestyle', 
+            'lifestyle',             
         ]
 
     def create(self, validated_data):
@@ -161,3 +163,22 @@ class StudySerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         # Update many-to-many fields similar to create method, and handle other updates as needed
         return super().update(instance, validated_data)
+    
+
+# For recruiters to retrieve recruitees and studies
+class RecruiteeWithStudySerializer(serializers.ModelSerializer):
+    recruitee = RecruiteeSerializer(source='user', read_only=True)  # Include recruitee information
+
+    class Meta:
+        model = Matches
+        fields = ('match_id', 'study', 'recruitee', 'recruitee_status', 'study_status')
+        
+
+# For recruitees to retrieve recruiters and studies
+class RecruiterWithStudySerializer(serializers.ModelSerializer):
+    study = StudySerializer(read_only=True) 
+    recruiter = RecruiterSerializer(source='user', read_only=True)  # Serialize recruiter information
+
+    class Meta:
+        model = Matches
+        fields = ('match_id', 'recruiter', 'study', 'recruitee_status', 'study_status') 

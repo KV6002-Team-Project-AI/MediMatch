@@ -117,17 +117,13 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'bio'
         )
 
-    def create(self, validated_data):
-    # Get the authenticated user from the request context
-        user = self.context['request'].user
+    def get_full_name(self, obj):
+            return obj.user.get_full_name()
 
-    # Check if a Recruitee profile already exists for the user
-        if Recruitee.objects.filter(user=user).exists():
-            raise serializers.ValidationError('Recruitee profile already exists for this user.')
-
-    # Now create a new Recruitee instance linked to the authenticated user
-        recruitee = Recruitee.objects.create(user=user, **validated_data)
-        return recruitee
+    def get_email(self, obj):
+            return obj.user.email
+        
+        
     
 
 class RecruiterSerializer(serializers.ModelSerializer):

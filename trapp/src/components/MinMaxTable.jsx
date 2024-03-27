@@ -62,31 +62,31 @@ function MinMaxTable(props) {
 
   return (
     <>
-    {/* MIN MAX TABLE */}
-    <TableContainer component={Paper}>
-        <Table sx={{  }} size="small" aria-label="a dense table">
-            <TableHead>
-                <TableRow>
-                    <StyledTableCell><p className='font-semibold'>Attributes</p></StyledTableCell>
-                    <StyledTableCell align="right"><p className='font-semibold'>Min</p></StyledTableCell>
-                    <StyledTableCell align="right"><p className='font-semibold'>Max</p></StyledTableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-            {rows.map((row) => (
-                <StyledTableRow 
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                    <StyledTableCell  component="th" scope="row">
-                        <p className='font-semibold'>{row.name}</p>
-                    </StyledTableCell >
-                    <StyledTableCell  align="right">{row.min}</StyledTableCell >
-                    <StyledTableCell  align="right">{row.max}</StyledTableCell >
-                </StyledTableRow>
-            ))}
-            </TableBody>
-        </Table>
+        {/* MIN MAX TABLE */}
+        <TableContainer component={Paper}>
+            <Table sx={{  }} size="small" aria-label="a dense table">
+                <TableHead>
+                    <TableRow>
+                        <StyledTableCell><p className='font-semibold'>Attributes</p></StyledTableCell>
+                        <StyledTableCell align="right"><p className='font-semibold'>Min</p></StyledTableCell>
+                        <StyledTableCell align="right"><p className='font-semibold'>Max</p></StyledTableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                {rows.map((row) => (
+                    <StyledTableRow 
+                    key={row.name}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                        <StyledTableCell  component="th" scope="row">
+                            <p className='font-semibold'>{row.name}</p>
+                        </StyledTableCell >
+                        <StyledTableCell  align="right">{row.min}</StyledTableCell >
+                        <StyledTableCell  align="right">{row.max}</StyledTableCell >
+                    </StyledTableRow>
+                ))}
+                </TableBody>
+            </Table>
         </TableContainer>
     </>
   );

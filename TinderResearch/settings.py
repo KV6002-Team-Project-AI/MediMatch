@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'Mo.apps.MoConfig',
     'Aymman.apps.AymmanConfig',
     'Abdul.apps.AbdulConfig',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [    
@@ -103,9 +104,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://localhost:3000',
-
-    'http://medimatch-solutions-9a4b38cd0846.herokuapp.com'
+    'http://medimatch-solutions-9a4b38cd0846.herokuapp.com',
     # Add other origins as needed
+
 ]
 
 REST_FRAMEWORK = {
@@ -117,7 +118,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -239,3 +240,8 @@ REACT_APP_DIR = os.path.join(BASE_DIR, 'trapp', 'build')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Celery Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

@@ -2,11 +2,12 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 from ResearchSwipe.views import *
-from Syed.views import StudyCreate
+from Syed.views import StudyCreate, MatchedRecruitees, MatchedRecruiters
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Aymman.views import get_Recruitee, get_Recruitees, get_studies, get_study
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane
+from Mo.views import MatchActionView, RecruiterMatchUpdateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,9 +35,24 @@ urlpatterns = [
     path('api/get-recruitee/<int:pk>/', get_Recruitee, name='get_single_recruitee'),
     path('api/get-study/<int:pk>/', get_study, name='get_single_study'),
     path('api/get-studies/', get_studies, name='get_studies'),
-   
+    path('api/get-recruitees-aymane/', get_Recruitees_aymane, name='get_Recruitees_aymane'),
+    path('api/get-studies-aymane/', get_studies_aymane, name='get_studies_aymane'),
+    path('api/get-rank-aymane/', get_rank_aymane, name='get_rank_aymane'),
+
+
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
+    path('api/studydelete/<int:study_id>/', StudyCreate.as_view(), name='study_delete'),
+
+    path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched_recruitees'),
+    path('api/matchedrecruiters/', MatchedRecruiters.as_view(), name='matched_recruiters'),
+
+    # path('api/studyrecruiters/', StudyRecruiters.as_view(), name='study_recruiters'),
+    
+
+    #Mo paths
+    path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
+    path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),
 
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),

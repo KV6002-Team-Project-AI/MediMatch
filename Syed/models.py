@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from ResearchSwipe.datavalidation import *
+from ResearchSwipe.models import Recruiter
 
 class Study(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -91,4 +92,5 @@ class Allergy(models.Model):
 
 class Lifestyle(models.Model):
     name = models.CharField(max_length=100)
+
 

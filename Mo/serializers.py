@@ -41,7 +41,9 @@ class CustomRecruiterSerializer(RecruiterSerializer):
 class CustomStudySerializer(StudySerializer):
     class Meta(StudySerializer.Meta):
         fields = (
-            'user',  
+            'user',
+            'name',
+            'study_id',
             'category', 
             'description', 
             'start_date',
@@ -64,8 +66,6 @@ class CustomStudySerializer(StudySerializer):
 # Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers
 class ProfileInteractionSerializer(serializers.ModelSerializer):
     # Specific study information (ID and name)
-    study_id = serializers.ReadOnlyField(source='study.study_id')
-    study_name = serializers.ReadOnlyField(source='study.name')
     study_info = CustomStudySerializer(source='study', read_only=True)
     # Recruitee information (ID)
     user_id = serializers.ReadOnlyField(source='user.user_id')
@@ -80,4 +80,4 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
+        fields = ('match_id', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')

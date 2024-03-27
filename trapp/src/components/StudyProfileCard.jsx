@@ -86,6 +86,12 @@ const StudyProfileCard = () => {
     setTimeout(() => setRejectColor(''), 750);
   };
   
+        /*  Actions will be recorded using the buttons below, when user accepts or rejects a study the status will change accordingly
+            Both must be true to view the information button otherwise not visible 
+            Takes in all the information from the database that is needed to view studies with relevant information for users
+            If there are no more pending states for the logged in recruitee the message below gets displayed 
+        */
+
   return ( 
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
           <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
@@ -93,7 +99,6 @@ const StudyProfileCard = () => {
                           md:max-w-lg md:mt-10 md:mx-0
                           lg:max-w-xl lg:mt-16 lg:mx-0
                           xl:max-w-2xl xl:py-8 xl:mx-0'>
-            {/* Both must be true to view the information button otherwise not visible */}
             {currentMatch && (
                 <div className="absolute top-0 right-0 m-4">
                     <button>
@@ -101,7 +106,6 @@ const StudyProfileCard = () => {
                     </button>
                 </div>
             )}
-            {/* Takes in all the information from the database that is needed to view studies with relevant information for users */}
         {currentMatch ? (
           <>
           <div className="text-center ">
@@ -162,7 +166,6 @@ const StudyProfileCard = () => {
           </div>
         </div>
       </div>
-      {/* Actions will be recorded using the buttons below, when user accepts or rejects a study the status will change accordingly */}
           {currentMatch && (
             
             <div className="flex justify-between items-center mt-6">
@@ -180,7 +183,6 @@ const StudyProfileCard = () => {
         </>
         ) 
         :
-        {/* If there are no more pending states for the logged in recruitee the message below gets displayed */}
         (
           
           <div className="text-center">

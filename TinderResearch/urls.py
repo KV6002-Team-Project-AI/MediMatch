@@ -39,6 +39,8 @@ urlpatterns = [
 
     path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched_recruitees'),
     path('api/matchedrecruiters/', MatchedRecruiters.as_view(), name='matched_recruiters'),
+
+    # path('api/studyrecruiters/', StudyRecruiters.as_view(), name='study_recruiters'),
     
 
     #Mo paths

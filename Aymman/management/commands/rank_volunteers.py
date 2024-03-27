@@ -85,7 +85,11 @@ class Command(BaseCommand):
 
                     match_details['study_id'] = study['study_id']
                     match_details['user_id'] = volunteer['user_id']
-                    match_details['total_match_score'] = sum(match_details.values()) - match_details['study_id'] - match_details['user_id']
+                    match_details['user'] = study['user']
+
+                    total_numeric_values = sum(value for value in match_details.values() if isinstance(value, (int, float)))
+
+                    match_details['total_match_score'] = total_numeric_values - match_details.get('study_id', 0) - match_details.get('user_id', 0)
 
                     ranking_results.append(match_details)
 
@@ -109,11 +113,11 @@ class Command(BaseCommand):
         for _, row in final_output_df.iterrows():
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
-            #Recruiter_instance = Recruiter.objects.get(user=row['user_id'])
+            Recruiter_instance = Recruiter.objects.get(user=row['user'])
 
             Matches.objects.update_or_create(
                 study=study_instance,
                 user=user_instance,
-                #recruiter=Recruiter_instance,
+                recruiter=Recruiter_instance,
                 defaults={'ranking': row['ranking_basedon_study']}
             )

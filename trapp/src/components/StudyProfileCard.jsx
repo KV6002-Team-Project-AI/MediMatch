@@ -86,12 +86,6 @@ const StudyProfileCard = () => {
     setTimeout(() => setRejectColor(''), 750);
   };
   
-        /*  Actions will be recorded using the buttons below, when user accepts or rejects a study the status will change accordingly
-            Both must be true to view the information button otherwise not visible 
-            Takes in all the information from the database that is needed to view studies with relevant information for users
-            If there are no more pending states for the logged in recruitee the message below gets displayed 
-        */
-
   return ( 
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
           <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 

@@ -4,14 +4,12 @@ import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import withAuthentication from '../HOCauth';
 
-/** This code will show you how a recruiter will be able to see recruiters for their studies depending on the recruitees rank */
-
-
 const RecruiteeProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
   const [matches, setMatches] = useState([]);
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
+  const [showSummary, setShowSummary] = useState(false);
 
   /* 
     1- Gets token from localstorage for authentication which gets sent to the API for authentication
@@ -42,7 +40,8 @@ const RecruiteeProfileCard = () => {
     they click accept or reject as this will be posted in the database
     as a new status (accepted or rejected)
 
-    POST method will take in user_id, study_id and action to upadte the correct study_status
+
+    POST method will take in user_id, study_id and action to work properly
 
   */
   const handleAction = (action) => {
@@ -88,15 +87,12 @@ const RecruiteeProfileCard = () => {
     handleAction('rejected', currentMatch.recruitee.user.id, currentMatch.study_id);
     setTimeout(() => setRejectColor(''), 750);
   };
-    /*  currentMatch must be true to view the information button otherwise not visible 
-        Takes in all the information from the database that is needed to view recruitees with relevant information for users 
-        If there are no more pending states for the logged in recruitee the message "no pending matches" gets displayed
-     */
-
+// TODO: SETUP summary button
+// TODO: SETUP INFO button
+  
   return (
-
+    <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
-
             {currentMatch && (
                 <div className='bg-white justify-center items-center py-1 px-3 rounded-xl font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md transform transition-all hover:scale-105'>
                     <p className='text-center'> {`Study ID ${currentMatch.study_id}: ${currentMatch.study_name}`} </p>
@@ -164,7 +160,6 @@ const RecruiteeProfileCard = () => {
               </div>
           </div>
         </div>
-          {/* Actions will be recorded using the buttons below, when user accepts or rejects a recruitee the status will change accordingly */}
           {currentMatch && (
             <div className="flex justify-between items-center mt-6">
               <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
@@ -190,6 +185,7 @@ const RecruiteeProfileCard = () => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

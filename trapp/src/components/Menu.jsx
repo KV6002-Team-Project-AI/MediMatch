@@ -22,6 +22,13 @@ function Menu({ userRoles }) {
     { name: 'Profile', icon: <AccountCircleIcon />, path: '/profile' },
   ];
 
+  if (userRoles.is_recruiter) {
+    menuItems.splice(1, 0, { name: 'Research', icon: <InsightsIcon />, path: '/research' });
+    menuItems.splice(2, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches' });
+  } else if (userRoles.is_recruitee) {
+    menuItems.splice(1, 0, { name: 'Matches', icon: <FavoriteIcon />, path: '/matches/recruitee' });
+  }
+  
   // Admin menu items
   const adminItems = [
     { name: 'Data', icon: <InsightsIcon />, path: '/charts' },

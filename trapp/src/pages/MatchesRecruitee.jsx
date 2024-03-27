@@ -16,6 +16,8 @@ const MatchesRecruitee = ({ userRoles }) => {
     const [uniqueCategories, setUniqueCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
+    const [isMdScreen, setIsMdScreen] = useState(false);
+
 
     const fetchMatchesData = () => {
         fetch('http://localhost:8000/api/matchedrecruiters/', {
@@ -47,6 +49,8 @@ const MatchesRecruitee = ({ userRoles }) => {
             console.error('Error:', error);
         });
     }
+
+    const mdScreen = window.innerWidth >= 768;
 
     useEffect(() => {
         fetchMatchesData();
@@ -129,7 +133,7 @@ const MatchesRecruitee = ({ userRoles }) => {
           return str;
         }
     }
-    
+
     return (
         <div className="mx-3 my-20">
             {/* DROP DOWN STUDIES */}
@@ -160,99 +164,127 @@ const MatchesRecruitee = ({ userRoles }) => {
                 </div>
             </div>
             {!noMatch && 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
+                <div className="grid grid-cols-1 gap-4"> 
                     {/* MATCHES DISPLAY */}
                     {filteredMatches.map((match, index) => (
                         <div key={index} className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
                             {/* Render match details */}
-                            <div className='w-full'>
-                                <div className="flex text-sm text-center gap-2 px-3 pt-2">
-                                    <div className=" w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                        <span className="font-semibold">Starts: </span>{formatDate(match.study_info.start_date)}
-                                    </div>
-                                    <div className="w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                        <span className="font-semibold">Duration:</span> {durationFix(match.study_info.duration)}
-                                    </div>
-                                </div>
-                                <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
-                                    <div className='flex-col w-full item-center'>
-                                        <div className="flex justify-between">
-                                            <h2 className="text-xl font-bold">{match.study_info.name}</h2>
+                            <div className='w-full grid grid-cols-1 md:grid-cols-2'>
+                                <div>
+                                    <div className="flex text-sm text-center gap-2 px-3 pt-2">
+                                        <div className=" w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                            <span className="font-semibold">Starts: </span>{formatDate(match.study_info.start_date)}
+                                        </div>
+                                        <div className="w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                            <span className="font-semibold">Duration:</span> {durationFix(match.study_info.duration)}
                                         </div>
                                     </div>
-                                    {/* Info button */}
-                                    <img
-                                        src={infoLogo}
-                                        alt="info"
-                                        className="w-6 h-6 mr-3 mt-1 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
-                                        onClick={() => toggleProfileExpansion(index)}
-                                    />
-                                </div>
-                                <div className="mb-2">
-                                    <div className="flex justify-between mx-4">
-                                        <p className="text-sm font-normal">{match.recruiter_info.company_info}</p>
-                                        <p className="text-sm">{match.study_info.category}</p>
-                                        <p className="text-sm">{match.study_info.work_preference}</p>
+                                    <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
+                                        <div className='flex-col w-full item-center'>
+                                            <div className="flex justify-between">
+                                                <h2 className="text-xl font-bold">{match.study_info.name}</h2>
+                                            </div>
+                                        </div>
+                                        {/* Info button */}
+                                        <div>
+                                            <img
+                                                src={infoLogo}
+                                                alt="info"
+                                                className="w-6 h-6 mx-3 mt-1 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+                                                onClick={() => toggleProfileExpansion(index)}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                {/* Render expanded profile if expanded */}
-                                {expandedProfiles[index] && 
-                                    <div>
+                                    <div className="flex-col mb-2">
+                                        <div className="flex justify-between mx-4 mt-4">
+                                            <p className="text-sm font-normal">{match.recruiter_info.company_info}</p>
+                                            <p className="text-sm">{match.study_info.category}</p>
+                                            <p className="text-sm">{match.study_info.work_preference}</p>
+                                        </div>
                                         <div>
                                             <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">Description</h1>
                                             <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify'>
                                                 <p>{match.study_info.description}</p>
                                             </div>
                                         </div>
-                                        {/* REQUIREMENTS */}
-                                        <h1 className='text-center text-lg font-bold border-t-2 border-gray-300 py-2 mt-2 '>Requirements</h1>
-                                        <div className='flex px-2 pb-4 justify-between'>
-                                            <MinMaxTable
-                                                minAge={match.study_info.min_age}
-                                                minWeight={match.study_info.min_weight}
-                                                minHeight={match.study_info.min_height}
-                                                maxAge={match.study_info.max_age}
-                                                maxWeight={match.study_info.max_weight}
-                                                maxHeight={match.study_info.max_height}
-                                            />
+                                        {expandedProfiles[index] &&  
+                                            <div>
+                                                {/* REQUIREMENTS */}
+                                                <h1 className='text-center text-md font-semibold border-t-2  border-gray-300 py-2 mt-2 '>Requirements</h1>
+                                                <div className='flex px-4 pb-4 justify-between'>
+                                                    <MinMaxTable
+                                                        minAge={match.study_info.min_age}
+                                                        minWeight={match.study_info.min_weight}
+                                                        minHeight={match.study_info.min_height}
+                                                        maxAge={match.study_info.max_age}
+                                                        maxWeight={match.study_info.max_weight}
+                                                        maxHeight={match.study_info.max_height}
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+                                        {!expandedProfiles[index] &&  
+                                            <div>
+                                                {/* SMALL BUTTONS */}
+                                                <div className='flex mx-2 mb-2 pt-2 text-white gap-2 text-center '>
+                                                    <div 
+                                                        className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
+                                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                                    >
+                                                        Unmatch
+                                                    </div>
+                                                    <div className='w-full bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5'>
+                                                        Contact
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }   
+                                    </div>
+                                </div>
+                                <div className="md:border-l-2">
+                                    {/* Render expanded profile if expanded */}
+                                    {expandedProfiles[index] && 
+                                        <div>
+                                            {/* Requirements */}
+                                            <h2 className="border-t-2  md:border-t-0 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Preferences</h2>
+                                            <div className='flex px-4 pb-4 justify-between h-72 md:h-auto'>
+                                                <Preferences
+                                                    sex={match.study_info.biological_sex}
+                                                    hair={match.study_info.hair_color}
+                                                    profession={match.study_info.profession}
+                                                    ethnicity={match.study_info.ethnicity}
+                                                    nationality={match.study_info.nationality}
+                                                    pregnancy={match.study_info.pregnancy_status}
+                                                    language={match.study_info.language_preferences}
+                                                    activity={match.study_info.activity_level}
+                                                    socioeconomic={match.study_info.socioeconomic_status}
+                                                    health={match.study_info.health_status}
+                                                    medical_history={match.study_info.medical_history}
+                                                    medication_history={match.study_info.medication_history}
+                                                    current_medication={match.study_info.current_medication}
+                                                    family_medication_history={match.study_info.family_medication_history}
+                                                    allergies={match.study_info.allergies}
+                                                    lifestyle={match.study_info.lifestyle}
+                                                />
+                                            </div>
+                                            {/* BUTTONS */}
+                                            {expandedProfiles[index] && 
+                                                <div> 
+                                                    <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
+                                                        <div 
+                                                            className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
+                                                            onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                                        >
+                                                            Unmatch
+                                                        </div>
+                                                        <div className='w-full bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5'>
+                                                            Contact
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
                                         </div>
-                                        {/* Requirements */}
-                                        <h2 className="border-t-2 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Requirements</h2>
-                                        <div className='flex px-2 pb-4 justify-between'>
-                                            <Preferences
-                                                sex={match.study_info.biological_sex}
-                                                hair={match.study_info.hair_color}
-                                                profession={match.study_info.profession}
-                                                ethnicity={match.study_info.ethnicity}
-                                                nationality={match.study_info.nationality}
-                                                pregnancy={match.study_info.pregnancy_status}
-                                                language={match.study_info.language_preferences}
-                                                activity={match.study_info.activity_level}
-                                                socioeconomic={match.study_info.socioeconomic_status}
-                                                health={match.study_info.health_status}
-                                                medical_history={match.study_info.medical_history}
-                                                medication_history={match.study_info.medication_history}
-                                                current_medication={match.study_info.current_medication}
-                                                family_medication_history={match.study_info.family_medication_history}
-                                                allergies={match.study_info.allergies}
-                                                lifestyle={match.study_info.lifestyle}
-                                            />
-                                        </div>
-
-                                    </div>
-                                }
-
-                                {/* BUTTONS */}
-                                <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
-                                    <div 
-                                        className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
-                                    >
-                                        Unmatch
-                                    </div>
-                                    <div className='w-full bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5'>
-                                        Contact
-                                    </div>
+                                    }
                                 </div>
                             </div>
                         </div>

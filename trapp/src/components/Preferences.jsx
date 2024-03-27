@@ -3,8 +3,23 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
+import { useState, useEffect } from 'react';
 
 function Preferences(props) {
+
+    // const [objectHeight, setObjectHeight] = useState()
+
+    // useEffect(() => {
+    //     //  Check object height
+    //     if (props.objectHeight) {
+    //         setObjectHeight(props.objectHeight);
+    //     } else {
+    //         setObjectHeight(200)
+    //     }
+    // }, [setObjectHeight]);
+
+    
+
     const mapDictionary = (dictionary) => {
         if (!dictionary || dictionary.length === 0) {
             return ['none'];
@@ -77,7 +92,7 @@ function Preferences(props) {
                     bgcolor: 'background.paper',
                     position: 'relative',
                     overflow: 'auto',
-                    maxHeight: 200,
+                    maxHeight: 500,
                     '& ul': { 
                         padding: 0,
                         marginY: 0,

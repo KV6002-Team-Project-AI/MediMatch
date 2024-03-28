@@ -3,6 +3,11 @@ import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import report from '../assets/report.png';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import withAuthentication from '../HOCauth';
 // Start of Jed's report functionality
 import ReportUserForm from '../report';
@@ -12,43 +17,47 @@ import axios from 'axios';
 const RecruiteeProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
   const [matches, setMatches] = useState([]);
+  const [uniqueStudyNames, setUniqueStudyNames] = useState([]);// State to store unique study names
+  const [selectedStudy, setSelectedStudy] = useState('Select a Study');
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
   const [showSummary, setShowSummary] = useState(true);
 
-  /* 
-    1- Gets token from localstorage for authentication which gets sent to the API for authentication
-    2- Filters where the study_status is pending using the GET method
-  */
   const fetchMatches = () => {
     const token = localStorage.getItem('accessToken');
     if (token) {
-      fetch('http://127.0.0.1:8000/api/recruiter/matches/', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(response => response.json())
-      .then(data => {
-        const pendingMatches = data.filter(match => match.study_status === 'pending');
-        setMatches(pendingMatches);
-        setCurrentMatch(pendingMatches.length > 0 ? pendingMatches[0] : null);
-      })
-      .catch(error => console.error('Error:', error));
+        fetch('http://127.0.0.1:8000/api/recruiter/matches/', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const pendingMatches = data.filter(match => match.study_status === 'pending');
+            setMatches(pendingMatches);
+            // Extract unique study names and set state
+            const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_name)));
+            setUniqueStudyNames(uniqueNames);
+            
+            // Automatically select the first study if no study is selected
+            if (selectedStudy === 'Select a Study' || selectedStudy === '') {
+                const firstStudyName = uniqueNames[0] || 'Select a Study'; // Default to 'Select a Study' if no matches
+                setSelectedStudy(firstStudyName);
+                // Filter the matches for the first study and set currentMatch
+                const filteredMatches = pendingMatches.filter(match => match.study_name === firstStudyName);
+                setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+            } else {
+                // Filter the matches for the selected study and set currentMatch
+                const filteredMatches = pendingMatches.filter(match => match.study_name === selectedStudy);
+                setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
-  };
+};
 
   useEffect(fetchMatches, []);
 
-  /* 
-    This will respond to actions taken by the user specifically when
-    they click accept or reject as this will be posted in the database
-    as a new status (accepted or rejected)
-
-
-    POST method will take in user_id, study_id and action to work properly
-
-  */
   const handleAction = (action) => {
     if (!currentMatch) return;
 
@@ -72,7 +81,7 @@ const RecruiteeProfileCard = () => {
       return response.json();
     })
     .then(() => {
-      fetchMatches(); // Refetch the matches after the action is completed
+      fetchMatches(); // Re-fetch the matches after the action is completed
     })
     .catch(error => console.error('Error:', error));
   };
@@ -98,6 +107,13 @@ const RecruiteeProfileCard = () => {
     setShowSummary(!showSummary)
   }
 
+  const handleStudySelection = (event) => {
+    const selected = event.target.value;
+    setSelectedStudy(selected);
+    const filteredMatches = matches.filter(match => match.study_name === selected);
+    setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+  };
+
   // Jed's report functionality
   const [showReportForm, setShowReportForm] = useState(false);
 
@@ -107,16 +123,35 @@ const RecruiteeProfileCard = () => {
   //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
-// TODO: DROPDOWN MENU FOR STUDY_ID
   
 return (
   <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
-      {currentMatch && (
-        <div className='bg-white justify-center items-center px-3 rounded-xl font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md transform transition-all hover:scale-105'>
-          <p className='text-center'> {`Study ID ${currentMatch.study_id}: ${currentMatch.study_name}`} </p>
-        </div>
-      )}
+      <div>
+        <FormControl variant="outlined" className="w-full" style={{ minWidth: 120 }}>
+          <InputLabel id="select-study-label">Select Study</InputLabel>
+          <Select
+            labelId="select-study-label"
+            id="select-study"
+            value={selectedStudy}
+            onChange={handleStudySelection}
+            label="Select Study"
+            // Applying minimal custom styling for demonstration
+            sx={{
+              height: 40, // Adjust the height as needed
+              '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 }, // Reduce padding to make the Select shorter
+              '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' } // Adjust select padding for height
+            }}
+          >
+            <MenuItem disabled value="Select a Study">
+              <em>Select a Study</em>
+            </MenuItem>
+            {uniqueStudyNames.map((name, index) => (
+              <MenuItem key={index} value={name}>{name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
       <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
                         sm:max-w-md sm:mt-5
                         md:max-w-lg md:mt-10 md:mx-0

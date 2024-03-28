@@ -114,12 +114,15 @@ class StudySerializer(serializers.ModelSerializer):
             'duration', 
             'expiry_date', 
             'work_preference',
+            'isExpired',
+
             'min_age', 
             'max_age', 
             'min_height', 
             'max_height', 
             'min_weight', 
             'max_weight', 
+            
             'biological_sex', 
             'hair_color', 
             'profession', 
@@ -130,6 +133,7 @@ class StudySerializer(serializers.ModelSerializer):
             'activity_level', 
             'socioeconomic_status', 
             'health_status', 
+            
             'medical_history', 
             'medication_history', 
             'current_medication', 

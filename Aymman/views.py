@@ -18,7 +18,8 @@ from django.http import HttpResponse
 from django.core.serializers.json import DjangoJSONEncoder
 from Syed.models import Study
 from Aymman.models import Rank
-
+from Mo.models import Matches
+from django.core.management import call_command
                      
 class RecruiteeDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -139,7 +140,7 @@ def get_studies(request):
 
 def get_rank_aymane(request):
     
-    Rank_queryset = Rank.objects.all()
+    Rank_queryset = Matches.objects.all()
     Rank_list = []
 
     for Rankkk in Rank_queryset:
@@ -176,6 +177,33 @@ def get_Recruitees(request):
     
     return HttpResponse(response_data, content_type="application/json")
 
+
+
+def get_bio_aymane(request):
+    recruitee_queryset = Recruitee.objects.all()
+    recruitee_list = []
+    
+    # List of specific fields you want to include
+    fields_to_include = [
+        
+    
+        'bio',
+        
+     
+    ]
+
+    for recruitee in recruitee_queryset:
+        # Fetch only specified fields
+        recruitee_data = {field: getattr(recruitee, field) for field in fields_to_include}
+        
+        # If you need to include the user ID specifically
+        recruitee_data['user_id'] = recruitee.user.id
+        
+        recruitee_list.append(recruitee_data)
+
+    response_data = json.dumps(recruitee_list, cls=DjangoJSONEncoder)
+    
+    return HttpResponse(response_data, content_type="application/json")
 
 
 
@@ -266,3 +294,11 @@ def get_studies_aymane(request):
 
     return HttpResponse(response_data, content_type="application/json")
 
+class RunCommandAPIView(APIView):
+    def get(self, request):
+       
+        try:
+            call_command('rank_volunteers')
+            return Response({'message': 'Command executed successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

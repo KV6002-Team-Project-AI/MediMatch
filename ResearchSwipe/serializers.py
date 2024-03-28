@@ -151,7 +151,8 @@ class RecruiteeSerializer(serializers.ModelSerializer):
             'interest_2',
             'interest_3',
             'interest_4',
-            'bio'
+            'bio',
+            'summary'
         )
 
     def get_full_name(self, obj):

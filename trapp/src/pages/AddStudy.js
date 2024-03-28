@@ -95,7 +95,7 @@ const AddStudy = ({ userRoles }) => {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_age: 1,
-                max_age: 150
+                max_age: 120
             }));
         } 
         if (!showWeight) {
@@ -646,7 +646,7 @@ const AddStudy = ({ userRoles }) => {
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 placeholder="Maximum age"
                                 min={parseInt(formData.min_age) + 1}
-                                max="99"
+                                max="120"
                                 required={showAge} 
                             />
                         </div>

@@ -7,6 +7,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import DisplayFeatures from "../components/DisplayFeatures";
+import DisplayInterests from "../components/DisplayInterests";
 
 const Matches = ({ userRoles }) => {
     const navigate = useNavigate();
@@ -53,10 +55,6 @@ const Matches = ({ userRoles }) => {
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
-    }
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
     // Filter matches based on selected study
@@ -139,7 +137,7 @@ const Matches = ({ userRoles }) => {
                 </div>
             </div>
             {!noMatch && 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4"> 
                     {/* MATCHES DISPLAY */}
                     {filteredMatches.map((match, index) => (
                         <div key={index} className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
@@ -174,7 +172,7 @@ const Matches = ({ userRoles }) => {
                                 {expandedProfiles[index] && 
                                     <div>
                                         <div>
-                                            <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">User Bio</h1>
+                                            <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">Bio</h1>
                                             <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify'>
                                                 <p>{match.recruitee.bio}</p>
                                             </div>
@@ -182,40 +180,34 @@ const Matches = ({ userRoles }) => {
                                         {/* Features */}
                                         <h2 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md">Features</h2>
                                         <div className="flex gap-2 pb-1 text-sm m-3 text-center justify-center flex-wrap">
-                                            <div className="bg-amber-100 text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {match.recruitee.height} cm
-                                            </div>
-                                            <div className="bg-green-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {match.recruitee.weight} kg
-                                            </div>
-                                            <div className="bg-red-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.biological_sex)}
-                                            </div>
-                                            <div className="bg-blue-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.ethnicity)}
-                                            </div>
-                                            <div className="bg-orange-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.socioeconomic_status)} Class
-                                            </div>
-                                            <div className="bg-gray-200  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.work_preference)}
-                                            </div>
+                                            <DisplayFeatures
+                                                sex={match.recruitee.biological_sex}
+                                                hair={match.recruitee.hair_color}
+                                                profession={match.recruitee.profession}
+                                                ethnicity={match.recruitee.ethnicity}
+                                                nationality={match.recruitee.nationality}
+                                                pregnancy={match.recruitee.pregnancy_status}
+                                                language={match.recruitee.language_preferences}
+                                                activity={match.recruitee.activity_level}
+                                                socioeconomic={match.recruitee.socioeconomic_status}
+                                                health={match.recruitee.health_status}
+                                                medical_history={match.recruitee.medical_history}
+                                                medication_history={match.recruitee.medication_history}
+                                                current_medication={match.recruitee.current_medication}
+                                                family_medication_history={match.recruitee.family_medication_history}
+                                                allergies={match.recruitee.allergies}
+                                                lifestyle={match.recruitee.lifestyle}
+                                            />
                                         </div>
                                         {/* Interests */}
                                         <h1 className="border-t-2 border-gray-300 pt-2 mt-2 text-center font-semibold text-md"> Interests</h1>
                                         <div className="flex gap-2 text-sm m-3 pb-1 text-center justify-center flex-wrap">
-                                            <div className="bg-emerald-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_1)}
-                                            </div>
-                                            <div className="bg-green-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_2)}
-                                            </div>
-                                            <div className="bg-teal-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_3)}
-                                            </div>
-                                            <div className="bg-cyan-100  text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                                                {capitalizeFirstLetter(match.recruitee.interest_4)}
-                                            </div>
+                                            <DisplayInterests
+                                                interest_1={match.recruitee.interest_1}
+                                                interest_2={match.recruitee.interest_2}
+                                                interest_3={match.recruitee.interest_3}
+                                                interest_4={match.recruitee.interest_4}
+                                            />
                                         </div>
                                     </div>
                                 }

@@ -4,6 +4,10 @@ import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import report from '../assets/report.png';
 import withAuthentication from '../HOCauth';
+// Start of Jed's report functionality
+import ReportUserForm from '../report';
+import axios from 'axios';
+// End of Jed's report functionality
 
 const RecruiteeProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
@@ -93,6 +97,14 @@ const RecruiteeProfileCard = () => {
   const handleSummaryClick = () => {
     setShowSummary(!showSummary)
   }
+
+  // Jed's report functionality
+  const [showReportForm, setShowReportForm] = useState(false);
+
+    const handleReportClick = () => {
+        setShowReportForm(true);
+    };
+  //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
 // TODO: DROPDOWN MENU FOR STUDY_ID
@@ -201,15 +213,17 @@ return (
                     </button>
                   </div>
                   <div className="flex flex-row justify-center mt-2">
-                    {/* TODO: JED REPORT FUNCTIONALITY */}
-                    <button>
-                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
+                    {/*Start of Jed's report functionality*/}
+                    <button onClick={handleReportClick}>
+                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
+                    {/*End of Jed's report functionality*/}
                   </div>
               </div>
             )}
 
           </div>
+          
           )
             
         )
@@ -223,6 +237,14 @@ return (
         )}
       </div>
     </div>
+     {/*Start of Jed's report functionality*/}
+    {showReportForm && currentMatch && (
+                <ReportUserForm
+                    selectedUser={currentMatch.recruitee.user}
+                    onClose={() => setShowReportForm(false)}
+                />
+            )}
+    {/*End of Jed's report functionality*/}
   </>
  );
 };

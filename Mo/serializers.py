@@ -25,7 +25,8 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'interest_2',
             'interest_3',
             'interest_4',
-            'bio'
+            'bio',
+            'summary'
         )
 
 # Recruiter serializer that uses specific data from the Recruiter class
@@ -76,8 +77,7 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
     # Recruiter information 
     recruiter_info = CustomRecruiterSerializer(source='recruiter', read_only=True)
-    recruitee_summary = serializers.ReadOnlyField(source='summary')
-
+    
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info','recruitee_summary')
+        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')

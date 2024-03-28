@@ -127,7 +127,7 @@ return (
         {currentMatch && !showSummary && (
           <>
               <p className='text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-center border-t-2 my-2 py-2'>
-                {currentMatch.recruitee_summary}
+                {currentMatch.recruitee.summary}
               </p>
               <div className="flex justify-between items-center mt-6">
                 <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">

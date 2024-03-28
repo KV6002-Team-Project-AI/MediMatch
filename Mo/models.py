@@ -25,4 +25,3 @@ class Matches(models.Model):
     study_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
     # Reruitee rank and Study rank
     ranking = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=0)
-    summary = models.TextField(max_length=300, default='none')

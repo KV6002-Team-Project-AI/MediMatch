@@ -247,6 +247,10 @@ class RecruiterDetail(views.APIView):
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
+        # Check if the user is already a recruiter to prevent creating multiple profiles
+        if hasattr(request.user, 'recruiter'):
+            return Response({"error": "User is already a recruiter"}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = RecruiterSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save(user=request.user)
@@ -261,8 +265,15 @@ class RecruiterDetail(views.APIView):
         serializer = RecruiterSerializer(recruiter, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
+
+            # Check if there is a file in the request to update the recruiter's profile image
+            if 'profile_image' in request.FILES:
+                recruiter.profile_image = request.FILES['profile_image']
+                recruiter.save()
+
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     
 class UserRolesView(views.APIView):

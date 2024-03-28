@@ -19,37 +19,38 @@ const RecruiterSignup = ({ userRoles }) => {
             })
             .then(response => response.json())
             .then(data => {
-                // Assuming the response contains the recruiter data in the expected format
-                setFormData({
-                    research_area: data.research_area || '',
-                    company_info: data.company_info || '',
-                    termsOfService: false // Assuming you want to reset or handle termsOfService separately
-                });
+                if (data) { // If the data exists, assume it includes an identifier like `id`
+                    setFormData(currentData => ({
+                        ...currentData,
+                        ...data, // Ensure this includes the `id` or similar identifier
+                        termsOfService: currentData.termsOfService // Preserve existing termsOfService state or reset as needed
+                    }));
+                }
             })
             .catch(error => console.error('Error:', error));
         }
-    }, [userRoles]);
-
+    }, [userRoles]); 
+    
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData(prevFormData => ({
+            ...prevFormData,
             [name]: type === 'checkbox' ? checked : value,
-        });
+        }));
     };
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-
+    
         if (!formData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }
-
-        const url = 'http://localhost:8000/api/recruiter/';
-        const method = 'PUT';  // Assuming you want to update existing profile
-
-        fetch(url, {
+    
+        // Use `id` or the relevant field as your record identifier
+        const method = formData.user ? 'PUT' : 'POST';
+    
+        fetch('http://localhost:8000/api/recruiter/', {
             method: method,
             headers: {
                 'Content-Type': 'application/json',
@@ -65,12 +66,15 @@ const RecruiterSignup = ({ userRoles }) => {
         })
         .then(data => {
             console.log('Success:', data);
-            navigate('/profile'); // Navigate to profile or confirmation page
+            navigate('/profile'); // Navigate to the profile or another appropriate page
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
+    
+    
+
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div>You do not have permission to view this page.</div>;
@@ -119,18 +123,13 @@ const RecruiterSignup = ({ userRoles }) => {
                         I agree to the terms of service
                     </label>
                 </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
-
-                </div>
+                <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                    Submit
+                </button>
             </form>
         </div>
     );
 };
+
 
 export default withAuthentication(RecruiterSignup);

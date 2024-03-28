@@ -30,4 +30,5 @@ TinderResearch/__pycache__/*
 # Database
 db.sqlite3
 
-media/*
+
+debug.log

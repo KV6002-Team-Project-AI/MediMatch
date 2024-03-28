@@ -222,7 +222,7 @@ const Research = ({ userRoles }) => {
                                             </div>
                                             {/* PREFERENCES */}
                                             <h1 className='text-center text-lg font-bold mb-2 '>Preferences</h1>
-                                            <div className='flex px-2 pb-4 justify-between'>
+                                            <div className='flex px-2 pb-4 justify-between h-64'>
                                                 <Preferences
                                                     sex={study.biological_sex}
                                                     hair={study.hair_color}

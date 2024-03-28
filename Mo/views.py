@@ -8,7 +8,6 @@ from ResearchSwipe.models import Recruitee
 from Syed.models import Study
 from .serializers import ProfileInteractionSerializer
 
-
 # Recruitees API, POST and GET methods accepted
 # POST method changes current status for recruitee from the default pending state to accepted or rejected depending on user input from frontend
 # GET method retrieves all instances where the users current state is the default state (pending) in order of ranking

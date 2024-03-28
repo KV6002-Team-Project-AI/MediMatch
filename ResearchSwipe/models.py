@@ -108,6 +108,7 @@ class Recruitee(models.Model):
     participation_history = models.IntegerField(default=0, null=True, blank=True)
 
     # Add other recruitee-specific fields if needed
+    summary = models.TextField(max_length=200, blank=True, null=True)
 
 class Recruiter(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)

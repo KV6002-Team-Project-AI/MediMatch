@@ -4905,3 +4905,650 @@ C:\Users\Moham\Documents\GitHub\MediMatch\Mo\views.py changed, reloading.
 Watching for file changes with StatReloader
 C:\Users\Moham\Documents\GitHub\MediMatch\Mo\views.py changed, reloading.
 Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /api/recruiter/
+Not Found: /api/recruiter/
+Internal Server Error: /api/recruiter/matches/
+Internal Server Error: /api/recruiter/matches/
+Internal Server Error: /api/matchedrecruitees/
+Internal Server Error: /api/matchedrecruitees/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studydelete/
+Internal Server Error: /api/matchedrecruitees/
+Internal Server Error: /api/matchedrecruitees/
+Starting new HTTP connection (1): 127.0.0.1:8000
+Watching for file changes with StatReloader
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-recruitees-aymane/ HTTP/1.1" 200 324
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-studies/ HTTP/1.1" 200 300
+Watching for file changes with StatReloader
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-recruitees-aymane/ HTTP/1.1" 200 324
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-studies/ HTTP/1.1" 200 300
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /api/recruiter/
+Not Found: /api/recruiter/
+Not Found: /api/recruiter/
+Not Found: /api/recruiter/
+Internal Server Error: /api/recruitee/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 191, in get
+    recruitee = self.get_object(request.user, pk)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 185, in get_object
+    return user.recruitee
+           ^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 492, in __get__
+    raise self.RelatedObjectDoesNotExist(
+ResearchSwipe.models.User.recruitee.RelatedObjectDoesNotExist: User has no recruitee.
+Internal Server Error: /api/recruitee/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 191, in get
+    recruitee = self.get_object(request.user, pk)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 185, in get_object
+    return user.recruitee
+           ^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 492, in __get__
+    raise self.RelatedObjectDoesNotExist(
+ResearchSwipe.models.User.recruitee.RelatedObjectDoesNotExist: User has no recruitee.
+Internal Server Error: /api/recruitee/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 191, in get
+    recruitee = self.get_object(request.user, pk)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 185, in get_object
+    return user.recruitee
+           ^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 492, in __get__
+    raise self.RelatedObjectDoesNotExist(
+ResearchSwipe.models.User.recruitee.RelatedObjectDoesNotExist: User has no recruitee.
+Internal Server Error: /api/recruitee/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 191, in get
+    recruitee = self.get_object(request.user, pk)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\views.py", line 185, in get_object
+    return user.recruitee
+           ^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 492, in __get__
+    raise self.RelatedObjectDoesNotExist(
+ResearchSwipe.models.User.recruitee.RelatedObjectDoesNotExist: User has no recruitee.
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studydelete/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studydelete/
+Watching for file changes with StatReloader
+Internal Server Error: /api/studycreate/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py", line 25, in get
+    return Response(serializer.data)  # Return serialized data as response
+                    ^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 713, in to_representation
+    return [
+           ^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 714, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 523, in to_representation
+    for field in fields:
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1103, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1249, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1367, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `isExpiredmin_age` is not valid for model `Study` in `Syed.serializers.StudySerializer`.
+Internal Server Error: /api/studycreate/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py", line 25, in get
+    return Response(serializer.data)  # Return serialized data as response
+                    ^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 713, in to_representation
+    return [
+           ^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 714, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 523, in to_representation
+    for field in fields:
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1103, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1249, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1367, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `isExpiredmin_age` is not valid for model `Study` in `Syed.serializers.StudySerializer`.
+Internal Server Error: /api/studycreate/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py", line 25, in get
+    return Response(serializer.data)  # Return serialized data as response
+                    ^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 713, in to_representation
+    return [
+           ^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 714, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 523, in to_representation
+    for field in fields:
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1103, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1249, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1367, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `isExpiredmin_age` is not valid for model `Study` in `Syed.serializers.StudySerializer`.
+Internal Server Error: /api/studycreate/
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\decorators\csrf.py", line 56, in wrapper_view
+    return view_func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py", line 25, in get
+    return Response(serializer.data)  # Return serialized data as response
+                    ^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 795, in data
+    ret = super().data
+          ^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 249, in data
+    self._data = self.to_representation(self.instance)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 713, in to_representation
+    return [
+           ^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 714, in <listcomp>
+    self.child.to_representation(item) for item in iterable
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 523, in to_representation
+    for field in fields:
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 384, in _readable_fields
+    for field in self.fields.values():
+                 ^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\utils\functional.py", line 57, in __get__
+    res = instance.__dict__[self.name] = self.func(instance)
+                                         ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 372, in fields
+    for key, value in self.get_fields().items():
+                      ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1103, in get_fields
+    field_class, field_kwargs = self.build_field(
+                                ^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1249, in build_field
+    return self.build_unknown_field(field_name, model_class)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework\serializers.py", line 1367, in build_unknown_field
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Field name `isExpiredmin_age` is not valid for model `Study` in `Syed.serializers.StudySerializer`.
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studydelete/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Mo\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (CSRF cookie not set.): /api/studyexpired/
+Forbidden (CSRF cookie not set.): /api/studyexpired/
+Forbidden (CSRF cookie not set.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/user
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 9, in __call__
+    user = self.get_user_from_jwt(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 21, in get_user_from_jwt
+    validated_token = jwt_auth.get_validated_token(raw_token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework_simplejwt\authentication.py", line 113, in get_validated_token
+    raise InvalidToken(
+rest_framework_simplejwt.exceptions.InvalidToken: {'detail': ErrorDetail(string='Given token not valid for any token type', code='token_not_valid'), 'code': ErrorDetail(string='token_not_valid', code='token_not_valid'), 'messages': [{'token_class': ErrorDetail(string='AccessToken', code='token_not_valid'), 'token_type': ErrorDetail(string='access', code='token_not_valid'), 'message': ErrorDetail(string='Token is invalid or expired', code='token_not_valid')}]}
+Internal Server Error: /api/user
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 9, in __call__
+    user = self.get_user_from_jwt(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 21, in get_user_from_jwt
+    validated_token = jwt_auth.get_validated_token(raw_token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework_simplejwt\authentication.py", line 113, in get_validated_token
+    raise InvalidToken(
+rest_framework_simplejwt.exceptions.InvalidToken: {'detail': ErrorDetail(string='Given token not valid for any token type', code='token_not_valid'), 'code': ErrorDetail(string='token_not_valid', code='token_not_valid'), 'messages': [{'token_class': ErrorDetail(string='AccessToken', code='token_not_valid'), 'token_type': ErrorDetail(string='access', code='token_not_valid'), 'message': ErrorDetail(string='Token is invalid or expired', code='token_not_valid')}]}
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\views.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\Syed\models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Watching for file changes with StatReloader
+Bad Request: /api/login/
+Bad Request: /api/login/
+Watching for file changes with StatReloader
+Bad Request: /api/login/
+Internal Server Error: /api/user
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 9, in __call__
+    user = self.get_user_from_jwt(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 21, in get_user_from_jwt
+    validated_token = jwt_auth.get_validated_token(raw_token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework_simplejwt\authentication.py", line 113, in get_validated_token
+    raise InvalidToken(
+rest_framework_simplejwt.exceptions.InvalidToken: {'detail': ErrorDetail(string='Given token not valid for any token type', code='token_not_valid'), 'code': ErrorDetail(string='token_not_valid', code='token_not_valid'), 'messages': [{'token_class': ErrorDetail(string='AccessToken', code='token_not_valid'), 'token_type': ErrorDetail(string='access', code='token_not_valid'), 'message': ErrorDetail(string='Token is invalid or expired', code='token_not_valid')}]}
+Internal Server Error: /api/user
+Traceback (most recent call last):
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 9, in __call__
+    user = self.get_user_from_jwt(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\ResearchSwipe\middleware.py", line 21, in get_user_from_jwt
+    validated_token = jwt_auth.get_validated_token(raw_token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\wajah\AppData\Local\Programs\Python\Python311\Lib\site-packages\rest_framework_simplejwt\authentication.py", line 113, in get_validated_token
+    raise InvalidToken(
+rest_framework_simplejwt.exceptions.InvalidToken: {'detail': ErrorDetail(string='Given token not valid for any token type', code='token_not_valid'), 'code': ErrorDetail(string='token_not_valid', code='token_not_valid'), 'messages': [{'token_class': ErrorDetail(string='AccessToken', code='token_not_valid'), 'token_type': ErrorDetail(string='access', code='token_not_valid'), 'message': ErrorDetail(string='Token is invalid or expired', code='token_not_valid')}]}
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+Forbidden (Origin checking failed - http://localhost:3000 does not match any trusted origins.): /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Method Not Allowed (POST): /api/studyexpired/
+Method Not Allowed: /api/studyexpired/
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\settings.py changed, reloading.
+Watching for file changes with StatReloader

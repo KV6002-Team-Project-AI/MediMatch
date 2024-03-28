@@ -7,6 +7,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
+import ZoomIn from '@mui/material/Zoom';
+
 
 import withAuthentication from '../HOCauth';
 // Start of Jed's report functionality
@@ -123,7 +126,7 @@ const RecruiteeProfileCard = () => {
   //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
-  
+
 return (
   <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
@@ -160,15 +163,61 @@ return (
         
         {currentMatch && (
           <div className="flex justify-between items-center">
-            <button onClick={handleSummaryClick}>
-              <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-            </button>
+            <Tooltip
+                key='0'
+                title='Summary'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -6],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
+              <button onClick={handleSummaryClick}>
+                <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+              </button>
+            </Tooltip>
             <button>
               <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
             </button>
+            <Tooltip
+                key='0'
+                title='More Info'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -6],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
             <button>
               <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
             </button>
+            </Tooltip>
           </div>
         )}
         
@@ -249,9 +298,32 @@ return (
                   </div>
                   <div className="flex flex-row justify-center mt-2">
                     {/*Start of Jed's report functionality*/}
+                    <Tooltip
+                        key='0'
+                        title='Report'
+                        placement="bottom"
+                        TransitionComponent={ZoomIn}
+                        slotProps={{
+                            popper: {
+                                modifiers: [
+                                    {
+                                        name: 'offset',
+                                        options: {
+                                            offset: [0, -4],
+                                        },
+                                    },
+                                ],
+                            },
+                        }}
+                        arrow
+                        disableInteractive
+                        enterDelay={100}
+                        leaveDelay={100}
+                    >
                     <button onClick={handleReportClick}>
                         <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
+                    </Tooltip>
                     {/*End of Jed's report functionality*/}
                   </div>
               </div>

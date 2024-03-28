@@ -252,6 +252,4 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 load_dotenv()
 
-SECRET_KEY = os.getenv('SECRET_KEY', 'optional_default_value')
-DEBUG = os.getenv('DEBUG', 'False') == 'True'  # Correctly handle Boolean value
-DATABASE_URL = os.getenv('DATABASE_URL')
+

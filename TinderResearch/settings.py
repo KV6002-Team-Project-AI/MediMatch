@@ -79,8 +79,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [    
-    'django.middleware.csrf.CsrfViewMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -105,9 +105,9 @@ CSFR_TRUSTED_ORGINS = [
     'http://medimatch-solutions-9a4b38cd0846.herokuapp.com'
 ]
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'http://localhost:3000',
     'http://medimatch-solutions-9a4b38cd0846.herokuapp.com',
     # Add other origins as needed
 

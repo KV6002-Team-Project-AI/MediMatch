@@ -11,6 +11,7 @@ from ResearchSwipe.models import User, Recruiter
 from .serializers import StudySerializer
 
 
+
 class StudyCreate(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -20,7 +21,7 @@ class StudyCreate(views.APIView):
         user = request.user
         
         # Filter studies based on the user's ID
-        studies = Study.objects.filter(user=user)
+        studies = Study.objects.filter(user=user, isExpired=False)
         serializer = StudySerializer(studies, many=True)  # Serialize the filtered queryset
         return Response(serializer.data)  # Return serialized data as response
 
@@ -31,21 +32,35 @@ class StudyCreate(views.APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def delete(self, request, study_id, *args, **kwargs):
+
+
+class StudyExpire(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Retrieve data from the request
+        study_id = request.data.get('study_id')
+        is_expired = request.data.get('isExpired')
+
+        # Check if is_expired is explicitly set to True
+        if is_expired is not True:
+            return Response({'detail': 'Invalid action. isExpired must be set to True.'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
-            # Get the study instance
-            study = Study.objects.get(pk=study_id)
+            # Retrieve the study object based on study_id and user
+            study = Study.objects.get(pk=study_id, user=request.user)
 
-            # Delete the study along with related information
-            study.delete()
+            # Update the isExpired field
+            study.isExpired = is_expired
+            study.save()
 
-            return Response({'detail': 'Study and related information deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
-        
+            # Serialize and return the updated study object
+            serializer = StudySerializer(study)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Study.DoesNotExist:
-            return Response({'detail': 'Study not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail': 'Study not found or you do not have permission to access it.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
-            # Optionally, log the exception here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
@@ -101,3 +116,19 @@ class MatchedRecruiters(views.APIView):
             # Handle exceptions here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+
+# def delete(self, request, study_id, *args, **kwargs):
+#         try:
+#             # Get the study instance
+#             study = Study.objects.get(pk=study_id)
+
+#             # Delete the study along with related information
+#             study.delete()
+
+#             return Response({'detail': 'Study and related information deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
+        
+#         except Study.DoesNotExist:
+#             return Response({'detail': 'Study not found.'}, status=status.HTTP_404_NOT_FOUND)
+#         except Exception as e:
+#             # Optionally, log the exception here
+#             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

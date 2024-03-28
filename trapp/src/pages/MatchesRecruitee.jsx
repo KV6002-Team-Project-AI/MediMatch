@@ -182,7 +182,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                     <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
                                         <div className='flex-col w-full item-center'>
                                             <div className="flex justify-between">
-                                                <h2 className="text-xl font-bold">{match.study_info.name}</h2>
+                                                <h2 className="text-xl font-bold">{match.study_name}</h2>
                                             </div>
                                         </div>
                                         {/* Info button */}
@@ -203,7 +203,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">Description</h1>
-                                            <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify'>
+                                            <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify min-h-28'>
                                                 <p>{match.study_info.description}</p>
                                             </div>
                                         </div>

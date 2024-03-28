@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
+import report from '../assets/report.png';
 import withAuthentication from '../HOCauth';
 
 const RecruiteeProfileCard = () => {
@@ -100,7 +101,7 @@ return (
   <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
       {currentMatch && (
-        <div className='bg-white justify-center items-center py-1 px-3 rounded-xl font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md transform transition-all hover:scale-105'>
+        <div className='bg-white justify-center items-center px-3 rounded-xl font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md transform transition-all hover:scale-105'>
           <p className='text-center'> {`Study ID ${currentMatch.study_id}: ${currentMatch.study_name}`} </p>
         </div>
       )}
@@ -145,13 +146,13 @@ return (
         {currentMatch ? (
           showSummary && (
           <div>
-            <div className="text-center mt-4">
+            <div className="text-center mt-2">
               <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
                 {`${currentMatch.recruitee.full_name}, ${currentMatch.recruitee.age}`}
               </p>
             </div>
  
-            <div className="text-center mt-3">
+            <div className="text-center mt-2">
               <p className=" sm:text-md md:xl xl:md text-gray-800">
                 {`${currentMatch.recruitee.bio}`}
               </p>
@@ -160,13 +161,13 @@ return (
             <div className="mt-4">
               <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Features:</h3>
               <div className="flex flex-wrap justify-center gap-2 mt-2">
-                <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
+                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.age} y.o.
                 </div>
-                <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
+                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.height} cm
                 </div>
-                <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
+                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.weight} kg
                 </div>
               </div>
@@ -174,31 +175,40 @@ return (
  
             <div className="mt-4">
               <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Interests:</h3>
-              <div className="flex flex-wrap justify-center gap-2 mt-2">
-                <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
+              <div className="flex flex-wrap justify-center gap-2 mt-3">
+                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.interest_1}
                 </div>
-                <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
+                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.interest_2}
                 </div>
-                <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
+                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.interest_3}
                 </div>
               </div>
             </div>
             {currentMatch && (
-              <div className="flex justify-between items-center mt-6">
-                <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Reject
-                </button>
-                <button   onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Refresh
-                </button>
-                <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Accept
-                </button>
+              <div className='flex flex-col justify-center'>
+                  <div className="flex justify-between items-center mt-3">
+                    <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Reject
+                    </button>
+                    <button onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Refresh
+                    </button>
+                    <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Accept
+                    </button>
+                  </div>
+                  <div className="flex justify-center mt-2">
+                    {/* TODO: JED REPORT FUNCTIONALITY */}
+                    <button>
+                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-300 rounded-md hover:bg-amber-200 transition" />
+                    </button>
+                  </div>
               </div>
             )}
+
           </div>
           )
             

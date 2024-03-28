@@ -10,6 +10,7 @@ class Study(models.Model):
     description = models.TextField(null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     expiry_date = models.DateField(null=True, blank=True)
+    isExpired = models.BooleanField(default=False)  
     
     #DropDown Specific
     category = models.TextField(null=True, blank=True)

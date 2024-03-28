@@ -34,7 +34,7 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
             setUniqueStudyNames(uniqueNames);
             if (data.length === 0) {
                 setNoMatch(true);
@@ -60,7 +60,7 @@ const Matches = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study_info.name === selectedStudy) : matches;
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -158,7 +158,7 @@ const Matches = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study_info.name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_name}
                                             </p>
                                         </div>
                                     </div>

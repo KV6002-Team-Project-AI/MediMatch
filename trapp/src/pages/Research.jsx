@@ -39,21 +39,21 @@ const Research = ({ userRoles }) => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:8000/api/studycreate/', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            }
-        })
-            .then(response => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch('http://localhost:8000/api/studycreate/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    }
+                });
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                return response.json();
-            })
-            .then(data => {
+                const data = await response.json();
                 setStudies(data);
+                console.log(data);
                 if (data.length === 0) {
                     setNoStudy(true);
                 } else {
@@ -61,43 +61,53 @@ const Research = ({ userRoles }) => {
                     // Initialize expandedStudies state based on the number of studies
                     setExpandedStudies(new Array(data.length).fill(false));
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 console.error('Error:', error);
-            });
+            }
+        };
+    
+        fetchData();
     }, []);
-
-    // function getCsrfToken() {
-    //     const csrfToken = document.cookie.match(/csrftoken=([^ ;]+)/)[1];
-    //     return csrfToken;
-    // }
-
-    // const csrfToken = getCsrfToken();
-
-    const handleDelete = (studyId) => {
-        const url = `http://localhost:8000/api/studydelete/`;
-        const method = 'DELETE';
-
-        fetch(url, {
-            method: method,
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Success:', data);
-                navigate('/research'); // or another appropriate action
-            })
-            .catch(error => {
-                console.error('Error:', error);
+    
+    const fetchDataAfterDelete = async (studyId) => {
+        try {
+            const url = `http://localhost:8000/api/studyexpire/`;
+            const method = 'POST';
+    
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+                },
+                body: JSON.stringify({
+                    study_id: studyId,
+                    isExpired: true,
+                }), 
             });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const data = await response.json();
+            console.log('Success:', data);
+    
+            // Update studies state by removing the deleted study
+            setStudies(prevStudies => prevStudies.filter(study => study.study_id !== studyId));
+    
+            // Recheck noStudy state after deletion
+            if (studies.length === 1) {
+                setNoStudy(true);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    // Function to handle delete
+    const handleDelete = (studyId) => {
+        fetchDataAfterDelete(studyId);
     };
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {

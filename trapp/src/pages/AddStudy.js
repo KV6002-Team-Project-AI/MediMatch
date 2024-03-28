@@ -14,6 +14,7 @@ const AddStudy = ({ userRoles }) => {
         duration: '',
         start_date: '',
         expiry_date: '',
+        isExpired: false,
 
         // min max numericals
         min_age: 1,

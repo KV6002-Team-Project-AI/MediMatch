@@ -25,6 +25,10 @@ from google.oauth2 import service_account
 from google.protobuf.json_format import MessageToDict
 from .google_analytics import GoogleAnalyticsReporter
 from .permissions import IsSuperUser 
+import base64
+import json
+import os
+import tempfile
 
 # Path to service account key file
 KEY_FILE_LOCATION = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
@@ -73,24 +77,46 @@ def admin_signup(request):
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 def get_ga_data(request):
-    key_file_location = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
-    property_id = '433240422'  # your GA4 property ID
+    encoded_credentials = os.getenv('GOOGLE_CREDENTIALS_BASE64')
+    if not encoded_credentials:
+        return JsonResponse({'error': 'Google credentials are not set in environment variables'}, status=500)
 
+    credentials_dict = json.loads(base64.b64decode(encoded_credentials).decode('utf-8'))
+
+    # Write the credentials to a temporary file
+    with tempfile.NamedTemporaryFile(delete=False, mode='w') as temp:
+        json.dump(credentials_dict, temp)
+        temp_file_name = temp.name
     try:
-        reporter = GoogleAnalyticsReporter(key_file_location, property_id)
+        credentials_json = json.loads(base64.b64decode(encoded_credentials).decode('utf-8'))
+        # Debugging: Print to check part of the decoded credentials
+        print("Decoded credentials loaded successfully.")
+        
+        property_id = '433240422'  # your GA4 property ID
+
+        # Initialize your analytics reporter with the decoded JSON credentials
+        reporter = GoogleAnalyticsReporter(temp_file_name, property_id)
+        # your existing logic...
+
+        # Your existing logic to run reports
         city_report_response = reporter.run_report()
         daily_views_response = reporter.get_daily_views()
 
         # Convert the Google Analytics API responses to dicts
         city_report_dict = MessageToDict(city_report_response._pb)
         daily_views_dict = MessageToDict(daily_views_response._pb)
-        
+
         return JsonResponse({
             'cityData': city_report_dict,
             'dailyViewsData': daily_views_dict
         })
+    
     except Exception as e:
+        # Debugging: Print the exception
+        print(f"Error occurred: {e}")
         return JsonResponse({'error': str(e)}, status=500)
+    finally:
+        os.remove(temp_file_name) 
 
 
 @never_cache

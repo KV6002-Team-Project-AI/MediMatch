@@ -2,11 +2,11 @@ from django.contrib import admin
 from django.urls import path, re_path
 from django.views.generic import TemplateView
 from ResearchSwipe.views import *
-from Syed.views import StudyCreate, MatchedRecruitees, MatchedRecruiters
+from Syed.views import StudyCreate, StudyExpire, MatchedRecruitees, MatchedRecruiters
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane
+from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane, RunCommandAPIView, get_bio_aymane
 from Mo.views import MatchActionView, RecruiterMatchUpdateView
 
 urlpatterns = [
@@ -38,16 +38,16 @@ urlpatterns = [
     path('api/get-recruitees-aymane/', get_Recruitees_aymane, name='get_Recruitees_aymane'),
     path('api/get-studies-aymane/', get_studies_aymane, name='get_studies_aymane'),
     path('api/get-rank-aymane/', get_rank_aymane, name='get_rank_aymane'),
+    path('api/run-command/', RunCommandAPIView.as_view(), name='run_command'),
+    path('api/get-bio-aymane/', get_bio_aymane, name='get_bio_aymane'),
 
 
     # Syed Paths
     path('api/studycreate/', StudyCreate.as_view(), name='study-create'),
+    path('api/studyexpire/', StudyExpire.as_view(), name='study-expire'),
     path('api/studydelete/<int:study_id>/', StudyCreate.as_view(), name='study_delete'),
-
     path('api/matchedrecruitees/', MatchedRecruitees.as_view(), name='matched_recruitees'),
     path('api/matchedrecruiters/', MatchedRecruiters.as_view(), name='matched_recruiters'),
-
-    # path('api/studyrecruiters/', StudyRecruiters.as_view(), name='study_recruiters'),
     
 
     #Mo paths

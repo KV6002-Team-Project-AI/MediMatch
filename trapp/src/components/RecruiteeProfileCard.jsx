@@ -94,8 +94,8 @@ const RecruiteeProfileCard = () => {
     setShowSummary(!showSummary)
   }
 
-// TODO: SETUP summary button
-// TODO: SETUP INFO button
+// TODO: SETUP INFO BUTTON
+// TODO: DROPDOWN MENU FOR STUDY_ID
   
 return (
   <>
@@ -200,10 +200,10 @@ return (
                       Accept
                     </button>
                   </div>
-                  <div className="flex justify-center mt-2">
+                  <div className="flex flex-row justify-center mt-2">
                     {/* TODO: JED REPORT FUNCTIONALITY */}
                     <button>
-                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-300 rounded-md hover:bg-amber-200 transition" />
+                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
                   </div>
               </div>

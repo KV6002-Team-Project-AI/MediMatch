@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import infoLogo from '../assets/info.png';
+import report from '../assets/report.png';
 import withAuthentication from '../HOCauth';
 
 
@@ -160,20 +161,27 @@ const StudyProfileCard = () => {
           </div>
         </div>
       </div>
-          {currentMatch && (
-            
-            <div className="flex justify-between items-center mt-6">
-              <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                Reject
-              </button>
-              <button   onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                Refresh
-              </button>
-              <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                Accept
-              </button>
-            </div>
-          )}
+      {currentMatch && (
+              <div className='flex flex-col justify-center'>
+                  <div className="flex justify-between items-center mt-3">
+                    <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Reject
+                    </button>
+                    <button onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Refresh
+                    </button>
+                    <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                      Accept
+                    </button>
+                  </div>
+                  <div className="flex flex-row justify-center mt-2">
+                    {/* TODO: JED REPORT FUNCTIONALITY */}
+                    <button>
+                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
+                    </button>
+                  </div>
+              </div>
+            )}
         </>
         ) 
         :

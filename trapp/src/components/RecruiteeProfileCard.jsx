@@ -123,7 +123,6 @@ const RecruiteeProfileCard = () => {
   //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
-// TODO: DROPDOWN MENU FOR STUDY_ID
   
 return (
   <>

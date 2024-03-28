@@ -4,7 +4,7 @@ from django.db import models
 from ResearchSwipe.models import Recruitee  # Adjust if your import path is different
 
 class RecruiteeSummary(models.Model):
-    recruitee = models.OneToOneField(Recruitee, on_delete=models.CASCADE, related_name='summary')
+    user = models.OneToOneField(Recruitee, on_delete=models.CASCADE, primary_key=True)
     summary = models.TextField()
 
     def __str__(self):

@@ -355,19 +355,12 @@ const AddStudy = ({ userRoles }) => {
             // Calculate the difference in days between start and expiry dates
             const timeDiff =  startDate.getTime() - expiryDate.getTime();
             const daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    
-            // Check if the expiry date is prior to start date
-            if (expiryDate > startDate) {
-                alert('Study should expire before the start date.');
-                setFormData({
-                    ...formData,
-                    expiry_date: '' // Reset the expiry date
-                });
-                return;
-            }
+
+            const timeDiff2 =  expiryDate.getTime() - startDate.getTime();
+            const daysDiff2 = Math.ceil(timeDiff2 / (1000 * 3600 * 24));
     
             // Check if the difference between dates is not more than 1 year
-            if (daysDiff > 365) {
+            if (daysDiff > 365 || daysDiff2 > 365) {
                 alert('The maximum difference between the dates can only amount to 1 year.');
                 setFormData({
                     ...formData,
@@ -599,6 +592,8 @@ const AddStudy = ({ userRoles }) => {
                     {/* Duration */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2">Study Duration *</label>
+                        <p className='text-xs mb-2'>How long will this study last?</p>
+
                         <select
                             id="duration"
                             name="duration"
@@ -621,6 +616,7 @@ const AddStudy = ({ userRoles }) => {
                         <label htmlFor="start_date" className="block text-gray-700 text-sm font-bold mb-2">
                             Start Date *
                         </label>
+                        <p className='text-xs mb-2'>When will this study commence?</p>
                         <input
                             id="start_date"
                             name="start_date"
@@ -636,6 +632,7 @@ const AddStudy = ({ userRoles }) => {
                         <label htmlFor="expiry_date" className="block text-gray-700 text-sm font-bold mb-2">
                             Expiry Date *
                         </label>
+                        <p className='text-xs mb-2'>When is the deadline of the study application?</p>
                         <input
                             id="expiry_date"
                             name="expiry_date"

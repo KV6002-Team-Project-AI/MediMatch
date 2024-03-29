@@ -51,6 +51,7 @@ const Matches = ({ userRoles }) => {
 
     useEffect(() => {
         fetchMatchesData();
+        
     }, []);
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
@@ -60,6 +61,7 @@ const Matches = ({ userRoles }) => {
     // Filter matches based on selected study
     const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
 
+
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
         setExpandedProfiles(prevState => ({
@@ -68,10 +70,8 @@ const Matches = ({ userRoles }) => {
         }));
     };
 
-    const handleUnmatch = (user_id, study_id) => {
-        console.log(study_id); // Log the match_id to the console (optional)
-    
-        // Make a DELETE request using fetch
+    const handleUnmatch = (user_id, study_id) => {    
+        
         fetch(`http://localhost:8000/api/recruiter/matches/`, {
             method: 'POST',
             headers: {
@@ -146,7 +146,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex p-2 w-full m-2'>
                                     <img
                                         src={profilePic} 
-                                        // match.recruitee.user.profile_image ? match.recruitee.user.profile_image : 
+                                        // match.recruitee.user.profile_image ? match.recruitee.user.profile_image : profilePic
                                         alt="Person"
                                         className="w-20 h-20 rounded-full mr-3"
                                     />
@@ -216,7 +216,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                     <div 
                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
+                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
                                     >
                                         Unmatch
                                     </div>

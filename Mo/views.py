@@ -20,6 +20,7 @@ class MatchActionView(APIView):
         user_id = request.data.get('user_id')
         study_id = request.data.get('study_id')
 
+
         if not all([action, user_id, study_id]):
             return Response({'detail': 'Missing parameters.'}, status=status.HTTP_400_BAD_REQUEST)
 

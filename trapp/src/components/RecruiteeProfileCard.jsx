@@ -3,10 +3,14 @@ import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import report from '../assets/report.png';
+import refresh from '../assets/refresh.png';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
+import ZoomIn from '@mui/material/Zoom';
+
 
 import withAuthentication from '../HOCauth';
 // Start of Jed's report functionality
@@ -114,6 +118,25 @@ const RecruiteeProfileCard = () => {
     setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
   };
 
+  const handleRefreshClick = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('API call failed with status: ' + response.status);
+      }
+  
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to execute command:', error);
+    }
+  };
+
   // Jed's report functionality
   const [showReportForm, setShowReportForm] = useState(false);
 
@@ -123,11 +146,11 @@ const RecruiteeProfileCard = () => {
   //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
-  
+
 return (
   <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
-      <div>
+      <div className='flex gap-2'>
         <FormControl variant="outlined" className="w-full" style={{ minWidth: 120 }}>
           <InputLabel id="select-study-label">Select Study</InputLabel>
           <Select
@@ -139,8 +162,8 @@ return (
             // Applying minimal custom styling for demonstration
             sx={{
               height: 40, // Adjust the height as needed
-              '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 }, // Reduce padding to make the Select shorter
-              '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' } // Adjust select padding for height
+              '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 },
+              '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' }
             }}
           >
             <MenuItem disabled value="Select a Study">
@@ -151,6 +174,32 @@ return (
             ))}
           </Select>
         </FormControl>
+        <Tooltip
+                key='0'
+                title='Refresh'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -14],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
+              <button onClick={handleRefreshClick}>
+                  <img src={refresh} alt="refresh" className="w-8 h-6 p-1 bg-gray-300 rounded-md hover:bg-gray-100 transition" />
+              </button>
+          </Tooltip>
       </div>
       <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
                         sm:max-w-md sm:mt-5
@@ -160,15 +209,61 @@ return (
         
         {currentMatch && (
           <div className="flex justify-between items-center">
-            <button onClick={handleSummaryClick}>
-              <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-            </button>
+            <Tooltip
+                key='0'
+                title='Summary'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -6],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
+              <button onClick={handleSummaryClick}>
+                <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+              </button>
+            </Tooltip>
             <button>
               <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
             </button>
+            <Tooltip
+                key='0'
+                title='More Info'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -6],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
             <button>
               <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
             </button>
+            </Tooltip>
           </div>
         )}
         
@@ -181,9 +276,34 @@ return (
                 <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                   Reject
                 </button>
-                <button   onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Refresh
-                </button>
+                {/*Start of Jed's report functionality*/}
+                <Tooltip
+                        key='0'
+                        title='Report'
+                        placement="top"
+                        TransitionComponent={ZoomIn}
+                        slotProps={{
+                            popper: {
+                                modifiers: [
+                                    {
+                                        name: 'offset',
+                                        options: {
+                                            offset: [0, -8],
+                                        },
+                                    },
+                                ],
+                            },
+                        }}
+                        arrow
+                        disableInteractive
+                        enterDelay={100}
+                        leaveDelay={100}
+                    >
+                    <button onClick={handleReportClick}>
+                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
+                    </button>
+                    </Tooltip>
+                    {/*End of Jed's report functionality*/}
                 <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                   Accept
                 </button>
@@ -240,27 +360,43 @@ return (
                     <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Reject
                     </button>
-                    <button onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                      Refresh
+                    {/*Start of Jed's report functionality*/}
+                    <Tooltip
+                        key='0'
+                        title='Report'
+                        placement="top"
+                        TransitionComponent={ZoomIn}
+                        slotProps={{
+                            popper: {
+                                modifiers: [
+                                    {
+                                        name: 'offset',
+                                        options: {
+                                            offset: [0, -4],
+                                        },
+                                    },
+                                ],
+                            },
+                        }}
+                        arrow
+                        disableInteractive
+                        enterDelay={100}
+                        leaveDelay={100}
+                    >
+                    <button onClick={handleReportClick}>
+                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
+                    </Tooltip>
+                    {/*End of Jed's report functionality*/}
                     <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Accept
                     </button>
                   </div>
-                  <div className="flex flex-row justify-center mt-2">
-                    {/*Start of Jed's report functionality*/}
-                    <button onClick={handleReportClick}>
-                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
-                    </button>
-                    {/*End of Jed's report functionality*/}
-                  </div>
               </div>
             )}
-
           </div>
           
           )
-            
         )
         :  
         (

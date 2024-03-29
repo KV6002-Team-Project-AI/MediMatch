@@ -17,6 +17,7 @@ const MatchesRecruitee = ({ userRoles }) => {
     const [selectedCategory, setSelectedCategory] = useState('');
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
     const [isMdScreen, setIsMdScreen] = useState(false);
+    const [hideInfoButton, setHideInfoButton] = useState(false);
 
 
     const fetchMatchesData = () => {
@@ -50,15 +51,46 @@ const MatchesRecruitee = ({ userRoles }) => {
         });
     }
 
-    const mdScreen = window.innerWidth >= 768;
-
     useEffect(() => {
         fetchMatchesData();
     }, []);
 
-    if (!userRoles.is_recruitee && !userRoles.is_superuser) {
-        // return <div className='mt-20'>You do not have permission to view this page.</div>;
-    }
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMdScreen(window.innerWidth >= 768);
+        };
+
+        handleResize(); // Call initially to set the state
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    useEffect(() => {
+        // If the screen width is medium, expand all profiles
+        if (isMdScreen) {
+            const newExpandedProfiles = {};
+            matches.forEach((match, index) => {
+                newExpandedProfiles[index] = true;
+            });
+            setExpandedProfiles(newExpandedProfiles);
+        } else {
+            // If the screen width is not medium, collapse all profiles
+            setExpandedProfiles({});
+        }
+    }, [isMdScreen, matches]);
+
+    useEffect(() => {
+        // If the screen width is medium, hide the info button
+        if (isMdScreen) {
+            setHideInfoButton(true);
+        } else {
+            // If the screen width is not medium, show the info button
+            setHideInfoButton(false);
+        }
+    }, [isMdScreen]);
 
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
@@ -172,7 +204,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                             <div className='w-full grid grid-cols-1 md:grid-cols-2'>
                                 <div>
                                     <div className="flex text-sm text-center gap-2 px-3 pt-2">
-                                        <div className=" w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                                        <div className="w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
                                             <span className="font-semibold">Starts: </span>{formatDate(match.study_info.start_date)}
                                         </div>
                                         <div className="w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
@@ -186,14 +218,16 @@ const MatchesRecruitee = ({ userRoles }) => {
                                             </div>
                                         </div>
                                         {/* Info button */}
-                                        <div>
-                                            <img
-                                                src={infoLogo}
-                                                alt="info"
-                                                className="w-6 h-6 mx-3 mt-1 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
-                                                onClick={() => toggleProfileExpansion(index)}
-                                            />
-                                        </div>
+                                        {!hideInfoButton && 
+                                            <div>
+                                                <img
+                                                    src={infoLogo}
+                                                    alt="info"
+                                                    className="w-6 h-6 mx-3 mt-1 hover:bg-gray-200 rounded-xl transition duration-300 ease-in-out transform hover:-translate-y-0.5"
+                                                    onClick={() => toggleProfileExpansion(index)}
+                                                />
+                                            </div>
+                                        }
                                     </div>
                                     <div className="flex-col mb-2">
                                         <div className="flex justify-between mx-4 mt-4">
@@ -203,7 +237,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <h1 className="border-t-2 border-gray-300 py-2 mt-2 text-center font-semibold text-md">Description</h1>
-                                            <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify min-h-28'>
+                                            <div className='flex-col mx-4 pb-1 mb-2 text-black gap-2 text-justify '>
                                                 <p>{match.study_info.description}</p>
                                             </div>
                                         </div>
@@ -246,8 +280,8 @@ const MatchesRecruitee = ({ userRoles }) => {
                                     {expandedProfiles[index] && 
                                         <div>
                                             {/* Requirements */}
-                                            <h2 className="border-t-2  md:border-t-0 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Preferences</h2>
-                                            <div className='flex px-4 pb-4 justify-between h-72 md:h-auto'>
+                                            <h2 className="border-t-2  md:border-t-0 md:mt-0 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Preferences</h2>
+                                            <div className='flex px-4 pb-4 justify-between h-72 md:h-auto '>
                                                 <Preferences
                                                     sex={match.study_info.biological_sex}
                                                     hair={match.study_info.hair_color}

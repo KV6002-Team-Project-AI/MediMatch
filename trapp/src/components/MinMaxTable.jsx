@@ -20,7 +20,7 @@ function MinMaxTable(props) {
 
     // Max processing
     function maxCheck(maxVal){
-        if (maxVal === 1 ||  maxVal === 150 || maxVal === 400) {
+        if (maxVal === 1 ||  maxVal === 120 || maxVal === 300) {
             return "none";
         } else {
             return maxVal;

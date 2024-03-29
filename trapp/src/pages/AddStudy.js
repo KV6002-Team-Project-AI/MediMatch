@@ -1,8 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 
 const AddStudy = ({ userRoles }) => {
+
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const studyId = queryParams.get('study_id');
+
     const navigate = useNavigate();
     const [dropdownChoices, setDropdownChoices] = useState({});
     const [formData, setFormData] = useState({
@@ -47,7 +52,7 @@ const AddStudy = ({ userRoles }) => {
     });
 
     // State variables for toggling display of components
-    const [showAge, setShowAge] = useState(false);
+    const [showAge, setShowAge] = useState(formData.biological_sex && formData.biological_sex.length > 0);
     const [showHeight, setShowHeight] = useState(false);
     const [showWeight, setShowWeight] = useState(false);
     const [showSex, setShowSex] = useState(false);
@@ -72,30 +77,70 @@ const AddStudy = ({ userRoles }) => {
             .then(response => response.json())
             .then(data => setDropdownChoices(data))
             .catch(error => console.error('Error fetching dropdown choices:', error));
-        // Load existing recruitee data if editing
-        fetch('http://localhost:8000/api/studycreate/', {
+    
+        // Check if study_id is present in the URL query parameters
+        fetch(`http://localhost:8000/api/studyupdate/${studyId}/`, { 
+            method: 'GET',
             headers: {
+                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.user) { // Check if user data exists in the response
-                setFormData({
-                    ...data, // Populate form data with existing details
-                    informedConsentStatus: false, // Reset certain flags as needed
-                });
             }
         })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("STUDY DATA FOUND:", data);
+            setFormData({
+                ...data,
+                description: data.description,
+                category: data.category,
+                work_preference: data.work_preference,
+                informedConsentStatus: false,
+            });
+            
+            if (data.min_age === 1 && data.max_age === 120) {
+                setShowAge(false)
+            } else {setShowAge(true)}
+            if (data.min_height === 1 && data.max_height === 300) {
+                setShowHeight(false)
+            } else {setShowHeight(true)}
+            if (data.min_weight === 1 && data.max_weight === 300) {
+                setShowWeight(false)
+            } else {setShowWeight(true)}
+
+            setShowSex(data.biological_sex && data.biological_sex.length > 0);
+            setShowHairColor(data.hair_color && data.hair_color.length > 0);
+            setShowProfession(data.profession && data.profession.length > 0);
+            setShowEthnicity(data.ethnicity && data.ethnicity.length > 0);
+            setShowNationality(data.nationality && data.nationality.length > 0);
+            setShowPregnancyStatus(data.pregnancy_status && data.pregnancy_status.length > 0);
+            setShowLanguagePreference(data.language_preference && data.language_preference.length > 0);
+            setShowActivity(data.activity_level && data.activity_level.length > 0);
+            setShowSocioeconomic(data.socioeconomic_status && data.socioeconomic_status.length > 0);
+            setShowHealth(data.health_status && data.health_status.length > 0);
+            
+            setShowMedicalHistory(data.medical_history && data.medical_history.length > 0);
+            setShowMedicationHistory(data.medication_history && data.medication_history.length > 0);
+            setShowCurrentMedication(data.current_medication && data.current_medication.length > 0);
+            setShowFamilyMedicationHistory(data.family_medication_history && data.family_medication_history.length > 0);
+            setShowAllergies(data.allergies && data.allergies.length > 0);
+            setShowLifestyle(data.lifestyle && data.lifestyle.length > 0);
+            
+        })
         .catch(error => console.error('Error fetching study details:', error));
+    
 
         console.log(formData)
-        // 
+
         if (!showAge) {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_age: 1,
-                max_age: 150
+                max_age: 120
             }));
         } 
         if (!showWeight) {
@@ -229,7 +274,8 @@ const AddStudy = ({ userRoles }) => {
         showCurrentMedication,
         showFamilyMedicationHistory,
         showAllergies,
-        showLifestyle
+        showLifestyle,
+        studyId,
     ]);
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
@@ -468,7 +514,18 @@ const AddStudy = ({ userRoles }) => {
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col my-14 justify-center p-6">
             <div className="max-w-4xl w-full mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4 text-gray-700">Add New Study</h2>
+                
+                {studyId && 
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4 text-gray-700">Edit Study</h2>
+                    </div>
+                }
+                {!studyId && 
+                    <div>
+                        <h2 className="text-2xl font-bold mb-4 text-gray-700">Add New Study</h2>
+                    </div>
+                }
+                
                 <h3 className="text-lg font-bold mb-4 text-gray-700">General Information</h3>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     {/* Study name */}
@@ -495,7 +552,7 @@ const AddStudy = ({ userRoles }) => {
                         <textarea
                             id="description"
                             name="description"
-                            value={formData.bio}
+                            value={formData.description}
                             onChange={handleChange}
                             className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                             placeholder="Add Description"
@@ -512,7 +569,7 @@ const AddStudy = ({ userRoles }) => {
                         <select
                             id="category"
                             name="category"
-                            value={formData.interest_4}
+                            value={formData.category}
                             onChange={handleChange}
                             className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                             required
@@ -532,7 +589,7 @@ const AddStudy = ({ userRoles }) => {
                         <select
                             id="work_preference"
                             name="work_preference"
-                            value={formData.work}
+                            value={formData.work_preference}
                             onChange={handleChange}
                             className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
                             required
@@ -646,7 +703,7 @@ const AddStudy = ({ userRoles }) => {
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                 placeholder="Maximum age"
                                 min={parseInt(formData.min_age) + 1}
-                                max="99"
+                                max="120"
                                 required={showAge} 
                             />
                         </div>

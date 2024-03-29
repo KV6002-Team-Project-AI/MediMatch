@@ -110,6 +110,11 @@ const Research = ({ userRoles }) => {
         fetchDataAfterDelete(studyId);
     };
 
+    // HANDLE EDIT
+    function handleEdit(studyId) {
+        navigate(`/addstudy?study_id=${studyId}`);
+    }
+
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
@@ -188,13 +193,13 @@ const Research = ({ userRoles }) => {
 
                                     {/* DATES */}
                                     <div className='flex px-1 pb-2 mx-1 justify-center gap-2 pt-2 text-center items-center'>
-                                        <p className='w-full text-sm text-black rounded-md bg-emerald-200 py-0.5'>
+                                        <p className='text-sm w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
                                             <span className='font-semibold'>Starts:</span> {formatDate(study.start_date)}
                                         </p>
-                                        <p className='w-full text-sm text-black rounded-md bg-blue-200 py-0.5'>
+                                        <p className='text-sm w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
                                             <span className='font-semibold'>Duration:</span> {durationFix(study.duration)}
                                         </p>
-                                        <p className='w-full text-sm text-black rounded-md bg-red-200 py-0.5'>
+                                        <p className='text-sm w-full py-0.5 bg-red-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
                                             <span className='font-semibold'>Expires:</span> {formatDate(study.expiry_date)}
                                         </p>
                                     </div>
@@ -314,6 +319,7 @@ const Research = ({ userRoles }) => {
                                         >
                                             <div
                                                 className={`w-full bg-gray-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-gray-600 transform hover:-translate-y-0.5`}
+                                                onClick={() => handleEdit(study.study_id)}
                                             >
                                                 <EditNoteIcon />
                                             </div>

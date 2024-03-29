@@ -8,7 +8,7 @@ from Syed.serializers import StudySerializer
 class CustomRecruiteeSerializer(RecruiteeSerializer):
     class Meta(RecruiteeSerializer.Meta):
         fields = (
-            'user',
+            'user_id',
             'full_name',
             'age',
             'biological_sex',

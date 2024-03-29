@@ -73,7 +73,7 @@ const RecruiteeProfileCard = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user_id: currentMatch.recruitee.user.id,
+        user_id: currentMatch.recruitee.user_id,
         study_id: currentMatch.study_id,
         action: action,
       }),
@@ -96,13 +96,13 @@ const RecruiteeProfileCard = () => {
   */
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
-    handleAction('accepted', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('accepted', currentMatch.recruitee.user_id, currentMatch.study_id);
     setTimeout(() => setAcceptColor(''), 750);
   };
   
   const handleRejectClick = () => {
     setRejectColor('bg-red-500');
-    handleAction('rejected', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('rejected', currentMatch.recruitee.user_id, currentMatch.study_id);
     setTimeout(() => setRejectColor(''), 750);
   };
 
@@ -159,9 +159,8 @@ return (
             value={selectedStudy}
             onChange={handleStudySelection}
             label="Select Study"
-            // Applying minimal custom styling for demonstration
             sx={{
-              height: 40, // Adjust the height as needed
+              height: 40,
               '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 },
               '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' }
             }}

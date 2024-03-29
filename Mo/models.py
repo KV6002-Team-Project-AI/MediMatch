@@ -10,6 +10,7 @@ class Matches(models.Model):
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
+        ('expired', 'Expired'),
     ]
 
 
@@ -21,7 +22,7 @@ class Matches(models.Model):
     # Link to Study class 
     study = models.ForeignKey(Study, on_delete=models.CASCADE, related_name='study_interactions')
     # Match status for recruitee and study
-    recruitee_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
-    study_status = models.CharField(max_length=8, choices=STATUS_CHOICES, default='pending')
+    recruitee_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    study_status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
     # Reruitee rank and Study rank
     ranking = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=0)

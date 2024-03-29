@@ -18,54 +18,39 @@ const StudyProfileCard = () => {
   const [selectedStudy, setSelectedStudy] = useState('Select a Category');
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
+  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
+  const [showReportForm, setShowReportForm] = useState(false);
 
-  /* 
-    1- Gets token from localstorage for authentication which gets sent to the API for authentication
-    2- Filters where the recruitee_status is pending using the GET method
-  */
-    const fetchMatches = () => {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-          fetch('http://127.0.0.1:8000/api/recruitee/matches/', {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-          })
-          .then(response => response.json())
-          .then(data => {
-              const pendingMatches = data.filter(match => match.recruitee_status === 'pending');
-              setMatches(pendingMatches);
-              // Extract unique study names and set state
-              const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_info.category)));
-              setUniqueStudyNames(uniqueNames);
-              
-              // Automatically select the first study if no study is selected
-              if (selectedStudy === 'Select a Category' || selectedStudy === '') {
-                  const firstStudyName = uniqueNames[0] || 'Select a Category'; // Default to 'Select a Study' if no matches
-                  setSelectedStudy(firstStudyName);
-                  // Filter the matches for the first study and set currentMatch
-                  const filteredMatches = pendingMatches.filter(match => match.study_info.category === firstStudyName);
-                  setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
-              } else {
-                  // Filter the matches for the selected study and set currentMatch
-                  const filteredMatches = pendingMatches.filter(match => match.study_info.category === selectedStudy);
-                  setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
-              }
-          })
-          .catch(error => console.error('Error:', error));
-      }
-  };
-  
-    useEffect(fetchMatches, []);
+  const fetchMatches = () => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+        fetch('http://127.0.0.1:8000/api/recruitee/matches/', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            const pendingMatches = data.filter(match => match.recruitee_status === 'pending');
+            setMatches(pendingMatches);
+            const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_info.category)));
+            setUniqueStudyNames(uniqueNames);
+            if (selectedStudy === 'Select a Category' || selectedStudy === '') {
+                const firstStudyName = uniqueNames[0] || 'Select a Category';
+                setSelectedStudy(firstStudyName);
+                const filteredMatches = pendingMatches.filter(match => match.study_info.category === firstStudyName);
+                setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+            } else {
+                const filteredMatches = pendingMatches.filter(match => match.study_info.category === selectedStudy);
+                setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+};
 
-  /* 
-    This will respond to actions taken by the user specifically when
-    they click accept or reject as this will be posted in the database
-    as a new status (accepted or rejected)
+  useEffect(fetchMatches, []);
 
-  
-    POST method will take in user_id, study_id and action to work properly
-  */
   const handleAction = (action) => {
     if (!currentMatch) return;
 
@@ -77,7 +62,7 @@ const StudyProfileCard = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user_id: currentMatch.recruitee.user.id,
+        user_id: currentMatch.recruitee.user_id,
         study_id: currentMatch.study_id,
         action: action,
       }),
@@ -94,22 +79,17 @@ const StudyProfileCard = () => {
     .catch(error => console.error('Error:', error));
   };
 
-  /*
-    These functions will call the handleAction with the correct status
-    with a visual background change when user accepts or rejects
-  */
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
-    handleAction('accepted', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('accepted');
     setTimeout(() => setAcceptColor(''), 750);
   };
   
   const handleRejectClick = () => {
     setRejectColor('bg-red-500');
-    handleAction('rejected', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('rejected');
     setTimeout(() => setRejectColor(''), 750);
   };
-  
   
   const handleStudySelection = (event) => {
     const selected = event.target.value;
@@ -118,12 +98,13 @@ const StudyProfileCard = () => {
     setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
   };
 
-  const [showReportForm, setShowReportForm] = useState(false);
+  const toggleAdditionalInfo = () => {
+    setShowAdditionalInfo(!showAdditionalInfo);
+  };
 
-    const handleReportClick = () => {
-        setShowReportForm(true);
-    };
-
+  const handleReportClick = () => {
+    setShowReportForm(true);
+  };
 
   const handleRefreshClick = async () => {
     try {
@@ -203,49 +184,40 @@ const StudyProfileCard = () => {
                           md:max-w-lg md:mt-10 md:mx-0
                           lg:max-w-xl lg:mt-16 lg:mx-0
                           xl:max-w-2xl xl:py-8 xl:mx-0'>
-            {currentMatch && (
-                <div className="absolute top-0 right-0 m-4">
-                    <button>
-                      <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-                    </button>
-                </div>
-            )}
+            
         {currentMatch ? (
           <>
-          <div className="text-center ">
+          <div className="flex justify-between items-center ">
+            <div className="bg-green-200 text-green-800  rounded-full shadow hover:bg-green-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+              {currentMatch.study_info.start_date}
+            </div>
+            <div className="bg-yellow-200 text-yellow-800  rounded-full shadow hover:bg-yellow-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+              {currentMatch.study_info.duration}
+            </div>
+            <div className="bg-orange-200 text-orange-800  rounded-full shadow hover:bg-orange-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+              {currentMatch.study_info.work_preference}
+            </div>
+          </div>
+
+          <div className="text-center mt-3">
             <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
-              {`${currentMatch.study_name}`}
+              {currentMatch.study_name}
             </p>
           </div>
 
           <div className="text-center mt-3">
             <p className=" sm:text-md md:xl xl:md text-gray-800">
-              {`${currentMatch.study_info.description}`}
+              {currentMatch.study_info.description}
             </p>
           </div>
 
-          <div className="border-t-2 border-gray-200 mt-2"></div>
 
-        <div className='flex justify-center'>
           <div className="flex flex-col mt-2 justify-center items-center">
-          <h4 className="inline-block bg-red-200 text-red-800 px-2 py-2 rounded-full shadow hover:bg-red-300 transition text-sm leading-none">
-            Category: {currentMatch.study_info.category}
-          </h4>
-          <div className="flex flex-wrap justify-center gap-2 mt-2">
-              <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.study_info.start_date}
-              </div>
-              <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.study_info.duration} 
-              </div>
-              <div className="bg-blue-200 text-blue-800 px-4 py-2 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.study_info.work_preference} 
-              </div>
+            <h4 className="inline-block bg-red-200 text-red-800 px-2 py-2 rounded-full shadow hover:bg-red-300 transition text-sm leading-none">
+              Category: {currentMatch.study_info.category}
+            </h4>
           </div>
-        </div>
-        </div>
 
-        <div className="border-t-2 border-gray-200 mt-2"></div>
 
         <div className="mt-4">
         <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Requirements:</h3>

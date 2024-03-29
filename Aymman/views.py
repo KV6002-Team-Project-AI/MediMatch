@@ -118,23 +118,46 @@ def get_study(request, pk):
     
     return HttpResponse(response_data, content_type="application/json")
 
+
 def get_studies(request):
-    Study_queryset = Study.objects.all()
+    Study_queryset = Study.objects.prefetch_related(
+        'biological_sex',
+        'hair_color',
+        'profession',
+        'ethnicity', 
+        'nationality',
+        'pregnancy_status',
+        'language_preference', 
+        'health_status', 
+    ).all()
+    
     Study_list = []
 
     for Studies in Study_queryset:
-         
-        fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey']
+        fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
         
         Study_data = {field: getattr(Studies, field) for field in fields}
-   
-        Study_data['user'] = str(Studies.user.id)  
-        
+        Study_data['user'] = str(Studies.user.id)
+
+        # Handling Many-to-Many Fields
+        m2m_fields = ['biological_sex',
+                      'hair_color',
+                      'profession',
+                      'ethnicity', 
+                      'nationality',
+                      'pregnancy_status',
+                      'language_preference',
+                      'activity_level', 
+                      'health_status'
+                      ]
+
+        for m2m_field in m2m_fields:
+            related_objects = getattr(Studies, m2m_field).all()
+            Study_data[m2m_field] = list(related_objects.values_list('id', flat=True))  # You can adjust 'id' to any attribute
 
         Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
-    
     return HttpResponse(response_data, content_type="application/json")
 
 
@@ -189,7 +212,6 @@ def get_bio_aymane(request):
     
         'bio',
         
-     
     ]
 
     for recruitee in recruitee_queryset:

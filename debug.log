@@ -5568,6 +5568,7 @@ Watching for file changes with StatReloader
 C:\Users\wajah\OneDrive\Documents\GitHub\MediMatch\TinderResearch\urls.py changed, reloading.
 Watching for file changes with StatReloader
 Watching for file changes with StatReloader
+<<<<<<< HEAD
 Starting new HTTP connection (1): 127.0.0.1:8000
 http://127.0.0.1:8000 "GET /api/get-recruitees-aymane/ HTTP/1.1" 200 285
 Starting new HTTP connection (1): 127.0.0.1:8000
@@ -6175,3 +6176,5 @@ C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Doc
 Watching for file changes with StatReloader
 C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\Aymman\views.py changed, reloading.
 Watching for file changes with StatReloader
+=======
+>>>>>>> 65622090ad1d08e1bf7b672b0d3fc322a3f8b25c

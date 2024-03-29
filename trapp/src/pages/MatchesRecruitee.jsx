@@ -10,7 +10,6 @@ import Preferences from '../components/Preferences';
 import MinMaxTable from '../components/MinMaxTable';
 
 const MatchesRecruitee = ({ userRoles }) => {
-    const navigate = useNavigate();
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
     const [uniqueCategories, setUniqueCategories] = useState([]);
@@ -91,10 +90,6 @@ const MatchesRecruitee = ({ userRoles }) => {
             setHideInfoButton(false);
         }
     }, [isMdScreen]);
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
 
     // Filter matches based on selected study
     const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;

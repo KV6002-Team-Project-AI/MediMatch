@@ -25,9 +25,9 @@ const AddStudy = ({ userRoles }) => {
         min_age: 1,
         max_age: 120,
         min_height: 1,
-        max_height: 400,
+        max_height: 300,
         min_weight: 1,
-        max_weight: 400,
+        max_weight: 300,
 
         // Select box specific
         biological_sex: [],
@@ -96,12 +96,9 @@ const AddStudy = ({ userRoles }) => {
             console.log("STUDY DATA FOUND:", data);
             setFormData({
                 ...data,
-                description: data.description,
-                category: data.category,
-                work_preference: data.work_preference,
                 informedConsentStatus: false,
-            });
-            
+            });   
+            // THIS PART OF CODE SHOULD ONLY RUN ONCE
             if (data.min_age === 1 && data.max_age === 120) {
                 setShowAge(false)
             } else {setShowAge(true)}
@@ -111,7 +108,6 @@ const AddStudy = ({ userRoles }) => {
             if (data.min_weight === 1 && data.max_weight === 300) {
                 setShowWeight(false)
             } else {setShowWeight(true)}
-
             setShowSex(data.biological_sex && data.biological_sex.length > 0);
             setShowHairColor(data.hair_color && data.hair_color.length > 0);
             setShowProfession(data.profession && data.profession.length > 0);
@@ -129,13 +125,14 @@ const AddStudy = ({ userRoles }) => {
             setShowFamilyMedicationHistory(data.family_medication_history && data.family_medication_history.length > 0);
             setShowAllergies(data.allergies && data.allergies.length > 0);
             setShowLifestyle(data.lifestyle && data.lifestyle.length > 0);
-            
         })
         .catch(error => console.error('Error fetching study details:', error));
-    
 
         console.log(formData)
 
+    }, [studyId]);
+
+    useEffect(() => {
         if (!showAge) {
             setFormData(prevFormData => ({
                 ...prevFormData,
@@ -147,14 +144,14 @@ const AddStudy = ({ userRoles }) => {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_weight: 1,
-                max_weight: 400
+                max_weight: 300
             }));
         }
         if (!showHeight) {
             setFormData(prevFormData => ({
                 ...prevFormData,
                 min_height: 1,
-                max_height: 400
+                max_height: 300
             }));
         }
 
@@ -254,7 +251,6 @@ const AddStudy = ({ userRoles }) => {
                 lifestyle: []
             }));
         }
-
     }, [
         showAge,
         showWeight,
@@ -275,8 +271,8 @@ const AddStudy = ({ userRoles }) => {
         showFamilyMedicationHistory,
         showAllergies,
         showLifestyle,
-        studyId,
     ]);
+
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
@@ -476,17 +472,14 @@ const AddStudy = ({ userRoles }) => {
         // Submit the updated formData
         console.log(updatedFormData);
 
-        const url = 'http://localhost:8000/api/studycreate/';
-        const method = 'POST';
-        // formData.user ? 'PUT' : 
+        const url = studyId ? `http://localhost:8000/api/studyupdate/${studyId}/` : 'http://localhost:8000/api/studycreate/';
+        const method = studyId ? 'PUT' : 'POST';
         
         if (!updatedFormData.termsOfService) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
-        
-        const jwtToken = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
-        
+                
         fetch(url, {
             method: method,
             headers: {

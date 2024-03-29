@@ -7,82 +7,82 @@ from .models import Study, MedicalHistory, MedicationHistory, CurrentMedication,
 class MedicalHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalHistory
-        fields = ['name']
+        fields = ['name', 'id']
 
 class MedicationHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicationHistory
-        fields = ['name']
+        fields = ['name', 'id']
 
 class CurrentMedicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CurrentMedication
-        fields = ['name']
+        fields = ['name', 'id']
 
 class FamilyMedicalHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = FamilyMedicalHistory
-        fields = ['name']
+        fields = ['name', 'id']
 
 class AllergySerializer(serializers.ModelSerializer):
     class Meta:
         model = Allergy
-        fields = ['name']
+        fields = ['name', 'id']
 
 class LifestyleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lifestyle
-        fields = ['name']
+        fields = ['name', 'id']
 
 class BiologicalSexSerializer(serializers.ModelSerializer):
     class Meta:
         model = BiologicalSex
-        fields = ['name']
+        fields = ['name', 'id']
 
 class HairColorSerializer(serializers.ModelSerializer):
     class Meta:
         model = HairColor
-        fields = ['name']
+        fields = ['name', 'id']
 
 class ProfessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profession
-        fields = ['name']
+        fields = ['name', 'id']
 
 class EthnicitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Ethnicity
-        fields = ['name']
+        fields = ['name', 'id']
 
 class NationalitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Nationality
-        fields = ['name']
+        fields = ['name', 'id']
 
 class PregnancyStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = PregnancyStatus
-        fields = ['name']
+        fields = ['name', 'id']
 
 class LanguagePreferenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = LanguagePreference
-        fields = ['name']
+        fields = ['name', 'id']
 
 class ActivityLevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActivityLevel
-        fields = ['name']
+        fields = ['name', 'id']
 
 class SocioeconomicStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocioeconomicStatus
-        fields = ['name']
+        fields = ['name', 'id']
 
 class HealthStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = HealthStatus
-        fields = ['name']
+        fields = ['name', 'id']
 
 class StudySerializer(serializers.ModelSerializer):
     medical_history = MedicalHistorySerializer(many=True, required=False)
@@ -165,9 +165,40 @@ class StudySerializer(serializers.ModelSerializer):
         return study
 
     def update(self, instance, validated_data):
-        # Update many-to-many fields similar to create method, and handle other updates as needed
-        return super().update(instance, validated_data)
-    
+            # Handle many-to-many relationships
+            for field_name in ['medical_history', 'medication_history', 'current_medication',
+                'family_medication_history', 'allergies', 'lifestyle',
+                'biological_sex', 'hair_color', 'profession', 'ethnicity', 
+                'nationality', 'pregnancy_status', 'language_preference',
+                'activity_level', 'socioeconomic_status', 'health_status']:
+                if field_name in validated_data:
+                    # Get the many-to-many field instance
+                    field_instance = getattr(instance, field_name)
+                    # Clear existing relationships
+                    field_instance.clear()
+                    # Add new relationships
+                    items_data = validated_data.pop(field_name)
+                    for item_data in items_data:
+                        # Assuming item_data contains the id of the item
+                        item_id = item_data.get('id', None)
+                        if item_id:
+                            # Try to get the instance
+                            try:
+                                item_instance = field_instance.model.objects.get(id=item_id)
+                            except field_instance.model.DoesNotExist:
+                                # If instance does not exist, raise an error or handle it appropriately
+                                raise ValueError(f"{field_name} with id {item_id} does not exist.")
+                            field_instance.add(item_instance)
+
+            # Update other fields
+            for attr, value in validated_data.items():
+                setattr(instance, attr, value)
+
+            # Save the updated instance
+            instance.save()
+
+            return instance
+
 
 # For recruiters to retrieve recruitees and studies
 class RecruiteeWithStudySerializer(serializers.ModelSerializer):

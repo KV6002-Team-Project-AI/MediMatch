@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import infoLogo from '../assets/info.png';
 import report from '../assets/report.png';
+import refresh from '../assets/refresh.png';
 import withAuthentication from '../HOCauth';
-
+import ReportUserForm from '../report';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
+import ZoomIn from '@mui/material/Zoom';
 
 const StudyProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
   const [matches, setMatches] = useState([]);
+  const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
+  const [selectedStudy, setSelectedStudy] = useState('Select a Category');
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
 
@@ -14,26 +23,40 @@ const StudyProfileCard = () => {
     1- Gets token from localstorage for authentication which gets sent to the API for authentication
     2- Filters where the recruitee_status is pending using the GET method
   */
-  const fetchMatches = () => {
-    const token = localStorage.getItem('accessToken');
-    if (token) {
-      fetch('http://127.0.0.1:8000/api/recruitee/matches/', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(response => response.json())
-      .then(data => {
-        const pendingMatches = data.filter(match => match.recruitee_status === 'pending');
-        setMatches(pendingMatches);
-        setCurrentMatch(pendingMatches.length > 0 ? pendingMatches[0] : null);
-      })
-      .catch(error => console.error('Error:', error));
-    }
+    const fetchMatches = () => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+          fetch('http://127.0.0.1:8000/api/recruitee/matches/', {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+          })
+          .then(response => response.json())
+          .then(data => {
+              const pendingMatches = data.filter(match => match.recruitee_status === 'pending');
+              setMatches(pendingMatches);
+              // Extract unique study names and set state
+              const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_info.category)));
+              setUniqueStudyNames(uniqueNames);
+              
+              // Automatically select the first study if no study is selected
+              if (selectedStudy === 'Select a Category' || selectedStudy === '') {
+                  const firstStudyName = uniqueNames[0] || 'Select a Category'; // Default to 'Select a Study' if no matches
+                  setSelectedStudy(firstStudyName);
+                  // Filter the matches for the first study and set currentMatch
+                  const filteredMatches = pendingMatches.filter(match => match.study_info.category === firstStudyName);
+                  setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+              } else {
+                  // Filter the matches for the selected study and set currentMatch
+                  const filteredMatches = pendingMatches.filter(match => match.study_info.category === selectedStudy);
+                  setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+              }
+          })
+          .catch(error => console.error('Error:', error));
+      }
   };
-
-
-  useEffect(fetchMatches, []);
+  
+    useEffect(fetchMatches, []);
 
   /* 
     This will respond to actions taken by the user specifically when
@@ -87,8 +110,94 @@ const StudyProfileCard = () => {
     setTimeout(() => setRejectColor(''), 750);
   };
   
+  
+  const handleStudySelection = (event) => {
+    const selected = event.target.value;
+    setSelectedStudy(selected);
+    const filteredMatches = matches.filter(match => match.study_info.category === selected);
+    setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
+  };
+
+  const [showReportForm, setShowReportForm] = useState(false);
+
+    const handleReportClick = () => {
+        setShowReportForm(true);
+    };
+
+
+  const handleRefreshClick = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('API call failed with status: ' + response.status);
+      }
+  
+      window.location.reload();
+    } catch (error) {
+      console.error('Failed to execute command:', error);
+    }
+  };
+  
   return ( 
+    <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
+          <div className='flex gap-2'>
+        <FormControl variant="outlined" className="w-full" style={{ minWidth: 120 }}>
+          <InputLabel id="select-study-label">Select Category</InputLabel>
+          <Select
+            labelId="select-study-label"
+            id="select-study"
+            value={selectedStudy}
+            onChange={handleStudySelection}
+            label="Select Category"
+            // Applying minimal custom styling for demonstration
+            sx={{
+              height: 40, // Adjust the height as needed
+              '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 },
+              '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' }
+            }}
+          >
+            <MenuItem disabled value="Select a Study">
+              <em>Select a Category</em>
+            </MenuItem>
+            {uniqueStudyNames.map((name, index) => (
+              <MenuItem key={index} value={name}>{name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Tooltip
+                key='0'
+                title='Refresh'
+                placement="top"
+                TransitionComponent={ZoomIn}
+                slotProps={{
+                    popper: {
+                        modifiers: [
+                            {
+                                name: 'offset',
+                                options: {
+                                    offset: [0, -14],
+                                },
+                            },
+                        ],
+                    },
+                }}
+                arrow
+                disableInteractive
+                enterDelay={100}
+                leaveDelay={100}
+            >
+              <button onClick={handleRefreshClick}>
+                  <img src={refresh} alt="refresh" className="w-8 h-6 p-1 bg-gray-300 rounded-md hover:bg-gray-100 transition" />
+              </button>
+          </Tooltip>
+      </div>
           <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
                           sm:max-w-md sm:mt-5
                           md:max-w-lg md:mt-10 md:mx-0
@@ -154,10 +263,10 @@ const StudyProfileCard = () => {
               {currentMatch.study_info.max_height} cm
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.biological_sex}Male
+              {currentMatch.study_info.biological_sex.name}
           </div>
           <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.profession}Banker
+              {currentMatch.study_info.profession.name}
           </div>
         </div>
       </div>
@@ -167,17 +276,34 @@ const StudyProfileCard = () => {
                     <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Reject
                     </button>
-                    <button onClick={() => window.location.reload()} className="flex-1 bg-gray-600 text-white px-3 py-2 rounded-lg shadow hover:bg-gray-700 transition transform hover:-translate-y-1 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                      Refresh
+                    <Tooltip
+                        key='0'
+                        title='Report'
+                        placement="top"
+                        TransitionComponent={ZoomIn}
+                        slotProps={{
+                            popper: {
+                                modifiers: [
+                                    {
+                                        name: 'offset',
+                                        options: {
+                                            offset: [0, -4],
+                                        },
+                                    },
+                                ],
+                            },
+                        }}
+                        arrow
+                        disableInteractive
+                        enterDelay={100}
+                        leaveDelay={100}
+                    >
+                    <button onClick={handleReportClick}>
+                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
+                    </Tooltip>
                     <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Accept
-                    </button>
-                  </div>
-                  <div className="flex flex-row justify-center mt-2">
-                    {/* TODO: JED REPORT FUNCTIONALITY */}
-                    <button>
-                      <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
                     </button>
                   </div>
               </div>
@@ -195,6 +321,15 @@ const StudyProfileCard = () => {
         )}
       </div>
     </div>
+    {/*Start of Jed's report functionality*/}
+    {showReportForm && currentMatch && (
+      <ReportUserForm
+          selectedUser={currentMatch.recruitee.user}
+          onClose={() => setShowReportForm(false)}
+      />
+  )}
+  {/*End of Jed's report functionality*/}
+  </>
   );
 };
 

@@ -282,4 +282,4 @@ def post_to_social_media(reddit_posting=True,discord_posting=True, facebook=True
             print(f"Completed postings for {recruiter}. No more posts scheduled.")
             
         time.sleep(1800)
-post_to_social_media(reddit_posting=False, facebook=False, twitter=False, telegram=False, linkedin=False,discord_posting=True)
+post_to_social_media(reddit_posting=False, facebook=True, twitter=True, telegram=True, linkedin=False,discord_posting=False)

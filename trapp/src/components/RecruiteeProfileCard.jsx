@@ -73,7 +73,7 @@ const RecruiteeProfileCard = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user_id: currentMatch.recruitee.user.id,
+        user_id: currentMatch.recruitee.user_id,
         study_id: currentMatch.study_id,
         action: action,
       }),
@@ -96,13 +96,13 @@ const RecruiteeProfileCard = () => {
   */
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
-    handleAction('accepted', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('accepted', currentMatch.recruitee.user_id, currentMatch.study_id);
     setTimeout(() => setAcceptColor(''), 750);
   };
   
   const handleRejectClick = () => {
     setRejectColor('bg-red-500');
-    handleAction('rejected', currentMatch.recruitee.user.id, currentMatch.study_id);
+    handleAction('rejected', currentMatch.recruitee.user_id, currentMatch.study_id);
     setTimeout(() => setRejectColor(''), 750);
   };
 

@@ -62,7 +62,7 @@ const StudyProfileCard = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        user_id: currentMatch.recruitee.user.id,
+        user_id: currentMatch.recruitee.user_id,
         study_id: currentMatch.study_id,
         action: action,
       }),

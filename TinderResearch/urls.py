@@ -27,8 +27,8 @@ urlpatterns = [
     path('analytics/', get_ga_data, name='get_ga_data'),
     path('admin/signup/', admin_signup, name='admin_user_signup'),
     path('report/', ReportUserView.as_view(), name='report_user'),
-    path('admin/reports/', AdminReportView.as_view(), name='admin_reports'),
-    path('admin/reports/<int:pk>/', AdminReportView.as_view(), name='update_report'),
+    path('api/admin/reports/', AdminReportView.as_view(), name='admin_reports'),
+    path('api/admin/reports/<int:pk>/', AdminReportView.as_view(), name='update_report'),
 
     # Ayman paths
     path('api/get-recruitees/', get_Recruitees, name='get_recruitees'),

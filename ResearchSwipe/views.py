@@ -366,7 +366,7 @@ class ReportUserView(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminReportView(views.APIView):
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, format=None):
         reports = Report.objects.all()
@@ -375,25 +375,29 @@ class AdminReportView(views.APIView):
 
     def put(self, request, pk, format=None):
         report = Report.objects.get(pk=pk)
-        serializer = ReportSerializer(report, data=request.data)
-        if serializer.is_valid():
-            action_taken = request.data.get('status')
-            if action_taken in ['resolved', 'ban', 'warn']:  # Adjust as per your actual status options
-                serializer.save()
-                # Prepare and send the notification email based on the action
-                if action_taken == 'ban':
-                    message = f"You have been banned for the following reason: {report.reason}"
-                    subject = "Account Ban Notification"
-                elif action_taken == 'warn':
-                    message = f"You have been warned for the following reason: {report.reason}"
-                    subject = "Account Warning Notification"
-                else:
-                    message = f"Your report has been resolved. Reason: {report.reason}"
-                    subject = "Report Resolved"
+        action_taken = request.data.get('status')
+        # Initialize message and subject variables
+        message = ''
+        subject = ''
 
-                send_notification_email(report.reported_user, message, subject)
-                return Response(serializer.data)
+        if action_taken in ['resolved', 'ban', 'warn']:
+            if action_taken == 'ban':
+                report.status = 'ban'  # Adjust as per your model's field
+                message = f"You have been banned for the following reason: {report.reason}"
+                subject = "Account Ban Notification"
+            elif action_taken == 'warn':
+                report.status = 'warn'  # Adjust as per your model's field
+                message = f"You have been warned for the following reason: {report.reason}"
+                subject = "Account Warning Notification"
+            elif action_taken == 'resolved':
+                report.status = 'resolved'  # Adjust as per your model's field
+                message = f"Your report has been resolved. Reason: {report.reason}"
+                subject = "Report Resolved"
             
-            return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
+            report.save()  # Save the report status update
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            send_notification_email(report.reported_user, message, subject)
+            return Response(ReportSerializer(report).data)
+
+        return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)
+

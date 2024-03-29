@@ -6,8 +6,18 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         const fetchReports = async () => {
+            const token = localStorage.getItem('accessToken'); // Get the stored access token
+            if (!token) {
+                console.error('No access token found');
+                return;
+            }
+    
             try {
-                const response = await axios.get('http://localhost:8000/api/admin/reports/'); // make sure the URL is correct
+                const response = await axios.get('http://localhost:8000/api/admin/reports/', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 // Ensure the response data is an array
                 setReports(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
@@ -16,10 +26,24 @@ const AdminDashboard = () => {
         };
         fetchReports();
     }, []);
+    
 
     const handleResolve = async (reportId, action) => {
+        const token = localStorage.getItem('accessToken'); // Get the stored access token
+        if (!token) {
+            console.error('No access token found');
+            return;
+        }
+    
         try {
-            const response = await axios.put(`http://localhost:8000/api/admin/reports/${reportId}/`, { status: 'resolved', action });
+            const response = await axios.put(`http://localhost:8000/api/admin/reports/${reportId}/`, {
+                status: 'resolved',
+                action: action
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             alert('Report resolved');
             // Update the reports list without the resolved report
             setReports(reports.filter(report => report.id !== reportId));
@@ -27,6 +51,7 @@ const AdminDashboard = () => {
             console.error('Error resolving report:', error);
         }
     };
+    
 
     return (
         <div className="flex justify-center items-center h-screen bg-gray-100">

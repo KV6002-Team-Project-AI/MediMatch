@@ -223,6 +223,7 @@ class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = '__all__'
-        read_only_fields = ('reporter',)
+        read_only_fields = ('reporter', 'reason', 'reported_user')  # assuming 'reporter' is also not updated
+
 
 

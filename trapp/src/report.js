@@ -6,10 +6,22 @@ const ReportUserForm = ({ selectedUser, onClose }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Retrieve the accessToken from localStorage
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            alert('You must be logged in to submit a report.');
+            return;
+        }
+
         try {
-            await axios.post('/api/report/', {
-                reported_user: selectedUser.id, // Assuming selectedUser has an 'id' field
+            await axios.post('http://localhost:8000/report/', {
+                reported_user: selectedUser.id,
                 reason: reason
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`  // Use the accessToken for authorization
+                }
             });
             alert('Report submitted successfully');
             onClose(); // Close the modal/form after successful submission
@@ -55,3 +67,4 @@ const ReportUserForm = ({ selectedUser, onClose }) => {
 };
 
 export default ReportUserForm;
+

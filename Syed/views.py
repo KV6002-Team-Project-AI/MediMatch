@@ -4,12 +4,9 @@ from django.shortcuts import render
 from rest_framework import status, views, permissions
 from rest_framework.response import Response
 from .models import Study
-from .serializers import RecruiteeWithStudySerializer, RecruiterWithStudySerializer
 from Mo.models import Matches
 from Mo.serializers import ProfileInteractionSerializer
-from ResearchSwipe.models import User, Recruiter
 from .serializers import StudySerializer
-
 
 
 class StudyCreate(views.APIView):
@@ -32,6 +29,26 @@ class StudyCreate(views.APIView):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StudyUpdate(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        User = get_user_model()
+        user = request.user
+        study_id = kwargs['study_id']
+        print(study_id)
+
+        try:
+            study = Study.objects.get(pk=study_id, user=user)
+            serializer = StudySerializer(study) 
+            return Response(serializer.data)
+
+        except Study.DoesNotExist:
+            return Response({'detail': 'Study not found or you do not have permission to access it.'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class StudyExpire(views.APIView):

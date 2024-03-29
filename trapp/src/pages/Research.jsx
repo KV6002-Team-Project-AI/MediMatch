@@ -110,6 +110,11 @@ const Research = ({ userRoles }) => {
         fetchDataAfterDelete(studyId);
     };
 
+    // HANDLE EDIT
+    function handleEdit(studyId) {
+        navigate(`/addstudy?study_id=${studyId}`);
+    }
+
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
@@ -314,6 +319,7 @@ const Research = ({ userRoles }) => {
                                         >
                                             <div
                                                 className={`w-full bg-gray-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-gray-600 transform hover:-translate-y-0.5`}
+                                                onClick={() => handleEdit(study.study_id)}
                                             >
                                                 <EditNoteIcon />
                                             </div>

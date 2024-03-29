@@ -104,8 +104,7 @@ const MatchesRecruitee = ({ userRoles }) => {
 
     const handleUnmatch = (user_id, study_id) => {
         console.log(study_id); // Log the match_id to the console (optional)
-    
-        // Make a DELETE request using fetch
+
         fetch(`http://localhost:8000/api/recruiter/matches/`, {
             method: 'POST',
             headers: {
@@ -258,7 +257,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                 <div className='flex mx-2 mb-2 pt-2 text-white gap-2 text-center '>
                                                     <div 
                                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
                                                     >
                                                         Unmatch
                                                     </div>
@@ -302,7 +301,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                     <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                                         <div 
                                                             className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                            onClick={() => handleUnmatch(match.recruitee.user.id, match.study.study_id)}
+                                                            onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
                                                         >
                                                             Unmatch
                                                         </div>

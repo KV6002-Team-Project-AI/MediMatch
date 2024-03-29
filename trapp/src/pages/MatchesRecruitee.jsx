@@ -12,8 +12,14 @@ import MinMaxTable from '../components/MinMaxTable';
 const MatchesRecruitee = ({ userRoles }) => {
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
+    
     const [uniqueCategories, setUniqueCategories] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
+
+    const [uniqueType, setUniqueType] = useState([]);
+    const [selectedType, setSelectedType] = useState('');
+    const [filteredMatches, setFilteredMatches] = useState([]); 
+
     const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
     const [isMdScreen, setIsMdScreen] = useState(false);
     const [hideInfoButton, setHideInfoButton] = useState(false);
@@ -36,9 +42,14 @@ const MatchesRecruitee = ({ userRoles }) => {
         .then(data => {
             setMatches(data);
             console.log(data);
-            // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.category)));
-            setUniqueCategories(uniqueNames);
+            // Extract unique study categories
+            const uniqueCat = Array.from(new Set(data.map(match => match.study_info.category)));
+            setUniqueCategories(uniqueCat);
+
+            // Extract unique study categories
+            const uniqueTy = Array.from(new Set(data.map(match => match.study_info.work_preference)));
+            setUniqueType(uniqueTy);
+
             if (data.length === 0) {
                 setNoMatch(true);
             } else {
@@ -89,10 +100,18 @@ const MatchesRecruitee = ({ userRoles }) => {
             // If the screen width is not medium, show the info button
             setHideInfoButton(false);
         }
+        
     }, [isMdScreen]);
 
     // Filter matches based on selected study
-    const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
+    // const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
+    
+    // Filter matches based on selected category and type
+    useEffect(() => {
+        const filteredMatchesByCategory = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
+        const filteredMatchesByType = selectedType ? filteredMatchesByCategory.filter(match => match.study_info.work_preference === selectedType) : filteredMatchesByCategory;
+        setFilteredMatches(filteredMatchesByType);
+    }, [selectedCategory, selectedType, matches]);
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -105,7 +124,7 @@ const MatchesRecruitee = ({ userRoles }) => {
     const handleUnmatch = (user_id, study_id) => {
         console.log(study_id); // Log the match_id to the console (optional)
 
-        fetch(`http://localhost:8000/api/recruiter/matches/`, {
+        fetch(`http://localhost:8000/api/recruitee/matches/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -168,9 +187,9 @@ const MatchesRecruitee = ({ userRoles }) => {
                     <div className='w-full px-1'>
                         <div className='flex p-2 gap-2 justify-center'>
                             {/* Dropdown menu */}
-                            <div className="w-80">
+                            <div className="w-40">
                                 <FormControl fullWidth>
-                                    <InputLabel id="select-study-label">Select Category</InputLabel>
+                                    <InputLabel id="select-category-input">Select Category</InputLabel>
                                     <Select
                                         labelId="select-category-label"
                                         id="select-category"
@@ -180,6 +199,23 @@ const MatchesRecruitee = ({ userRoles }) => {
                                     >
                                         <MenuItem value="">Select Category</MenuItem>
                                         {uniqueCategories.map((name, index) => (
+                                        <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </div>
+                            <div className="w-32">
+                                <FormControl fullWidth>
+                                    <InputLabel id="select-category-input">Select Type</InputLabel>
+                                    <Select
+                                        labelId="select-type-label"
+                                        id="select-type"
+                                        value={selectedType}
+                                        onChange={(e) => setSelectedType(e.target.value)}
+                                        label="Select Type"
+                                    >
+                                        <MenuItem value="">Select Type</MenuItem>
+                                        {uniqueType.map((name, index) => (
                                         <MenuItem key={index} value={name}>{truncateString(name)}</MenuItem>
                                         ))}
                                     </Select>
@@ -257,7 +293,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                 <div className='flex mx-2 mb-2 pt-2 text-white gap-2 text-center '>
                                                     <div 
                                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                        onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
+                                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
                                                     >
                                                         Unmatch
                                                     </div>
@@ -301,7 +337,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                     <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                                         <div 
                                                             className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                            onClick={() => handleUnmatch(match.recruitee.user.id, match.study_id)}
+                                                            onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
                                                         >
                                                             Unmatch
                                                         </div>

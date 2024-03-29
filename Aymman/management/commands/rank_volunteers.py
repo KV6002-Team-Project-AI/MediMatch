@@ -32,6 +32,7 @@ class Command(BaseCommand):
 
         volunteers_df = pd.DataFrame(volunteers_data)
         studies_df = pd.DataFrame(studies_data)
+        
 
         def is_feature_match(study_feature, volunteer_feature):
             if pd.isnull(study_feature) or pd.isnull(volunteer_feature) or study_feature == '' or volunteer_feature == '':
@@ -86,6 +87,7 @@ class Command(BaseCommand):
                     match_details['study_id'] = study['study_id']
                     match_details['user_id'] = volunteer['user_id']
                     match_details['user'] = study['user']
+                    match_details['isExpired'] = study['isExpired']
 
                     total_numeric_values = sum(value for value in match_details.values() if isinstance(value, (int, float)))
 
@@ -114,10 +116,17 @@ class Command(BaseCommand):
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
             Recruiter_instance = Recruiter.objects.get(user=row['user'])
+            if row['isExpired']:
+                study_status_value = 'expired'
+            else:
+                study_status_value = 'pending'
 
             Matches.objects.update_or_create(
                 study=study_instance,
                 user=user_instance,
                 recruiter=Recruiter_instance,
-                defaults={'ranking': row['ranking_basedon_study']}
+                defaults={'ranking': row['ranking_basedon_study'],
+                          'study_status': study_status_value,
+                          'recruitee_status' : study_status_value
+                          }
             )

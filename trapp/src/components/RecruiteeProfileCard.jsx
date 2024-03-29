@@ -159,9 +159,8 @@ return (
             value={selectedStudy}
             onChange={handleStudySelection}
             label="Select Study"
-            // Applying minimal custom styling for demonstration
             sx={{
-              height: 40, // Adjust the height as needed
+              height: 40,
               '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 },
               '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' }
             }}

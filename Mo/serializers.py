@@ -8,7 +8,7 @@ from Syed.serializers import StudySerializer
 class CustomRecruiteeSerializer(RecruiteeSerializer):
     class Meta(RecruiteeSerializer.Meta):
         fields = (
-            'user',
+            'user_id',
             'full_name',
             'age',
             'biological_sex',
@@ -34,40 +34,20 @@ class CustomRecruiterSerializer(RecruiterSerializer):
     class Meta(RecruiterSerializer.Meta):
         fields = (
             'user_id', 
+            'full_name',
             'research_area',
             'company_info'
         )
 
 # Study serializer that uses specific data from the Study class
-class CustomStudySerializer(StudySerializer):
-    class Meta(StudySerializer.Meta):
-        fields = (
-            'user',  
-            'category', 
-            'description', 
-            'start_date',
-            'duration', 
-            'work_preference',
-            'min_age', 
-            'max_age', 
-            'min_height', 
-            'max_height', 
-            'min_weight', 
-            'max_weight', 
-            'biological_sex', 
-            'profession', 
-            'ethnicity',
-            'activity_level', 
-            'socioeconomic_status', 
-            'health_status'
-        )
+
 
 # Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers
 class ProfileInteractionSerializer(serializers.ModelSerializer):
     # Specific study information (ID and name)
     study_id = serializers.ReadOnlyField(source='study.study_id')
     study_name = serializers.ReadOnlyField(source='study.name')
-    study_info = CustomStudySerializer(source='study', read_only=True)
+    study_info = StudySerializer(source='study', read_only=True)
     # Recruitee information (ID)
     user_id = serializers.ReadOnlyField(source='user.user_id')
     # Statuses of both studies and recruitees

@@ -14,6 +14,7 @@ from django.conf import settings
 from .token import email_verification_token_generator
 from .email_service import EmailService
 from django.core.exceptions import ValidationError
+from django.db.models import Count
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -219,11 +220,24 @@ class UserRoleSerializer(serializers.ModelSerializer):
         model = User
         fields = ('is_recruitee', 'is_recruiter', 'is_superuser', 'is_verified')
 
+
 class ReportSerializer(serializers.ModelSerializer):
+    reported_user_name = serializers.CharField(source='reported_user.username', read_only=True)
+    reported_user_report_count = serializers.SerializerMethodField()
+    reported_user_warn_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Report
-        fields = '__all__'
-        read_only_fields = ('reporter', 'reason', 'reported_user')  # assuming 'reporter' is also not updated
+        fields = ('id', 'reporter', 'reported_user', 'reported_user_name', 'reported_user_report_count', 'reported_user_warn_count', 'reason', 'status', 'created_at', 'updated_at', 'message')
+        # if you want all fields from the model plus the extra fields, use '__all__' and then declare extra fields separately
+
+    def get_reported_user_report_count(self, obj):
+        return Report.objects.filter(reported_user=obj.reported_user).count()
+
+    def get_reported_user_warn_count(self, obj):
+        return Report.objects.filter(reported_user=obj.reported_user, status='warn').count()
+
+
 
 
 

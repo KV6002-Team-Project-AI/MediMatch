@@ -29,6 +29,8 @@ import base64
 import json
 import os
 import tempfile
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 
 # Path to service account key file
 KEY_FILE_LOCATION = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
@@ -202,19 +204,21 @@ class ValidateTokenView(views.APIView):
 class RecruiteeDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, user, pk=None):
-        if user.is_superuser and pk:
-            try:
+    def get_object(self, pk=None):
+        try:
+            # Fetch specific recruitee if pk is provided and the user is superuser
+            if pk and self.request.user.is_superuser:
                 return Recruitee.objects.get(pk=pk)
-            except Recruitee.DoesNotExist:
-                return None
-        return user.recruitee
+            # Fetch the recruitee profile associated with the current user
+            return self.request.user.recruitee
+        except Recruitee.DoesNotExist:
+            return None
 
     def get(self, request, pk=None, *args, **kwargs):
         if hasattr(request.user, 'is_recruiter') and request.user.is_recruiter:
             return Response({"error": "Recruiter cannot access recruitee details"}, status=status.HTTP_403_FORBIDDEN)
 
-        recruitee = self.get_object(request.user, pk)
+        recruitee = self.get_object(pk)
         if recruitee is None:
             return Response({"error": "Recruitee not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -256,16 +260,18 @@ class RecruiteeDetail(views.APIView):
 class RecruiterDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self, user, pk=None):
+    def get_object(self, pk=None):
         try:
-            if user.is_superuser and pk:
+            # Fetch specific recruiter if pk is provided and the user is superuser
+            if pk and self.request.user.is_superuser:
                 return Recruiter.objects.get(pk=pk)
-            return user.recruiter
+            # Fetch the recruiter profile associated with the current user
+            return self.request.user.recruiter
         except Recruiter.DoesNotExist:
             return None
 
     def get(self, request, pk=None, *args, **kwargs):
-        recruiter = self.get_object(request.user, pk)
+        recruiter = self.get_object(pk)
         if recruiter is None:
             return Response({"error": "Recruiter not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -301,13 +307,15 @@ class RecruiterDetail(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    
+User = get_user_model()
+
 class UserRolesView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
-        # Serialize the request.user instance
-        serializer = UserRoleSerializer(request.user)
+    def get(self, request, user_id=None):
+        # If user_id is provided in the URL, get that user's object; otherwise, use request.user
+        user = get_object_or_404(User, pk=user_id) if user_id else request.user
+        serializer = UserRoleSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 class UpdateProfileImageView(views.APIView):
@@ -358,12 +366,17 @@ class DropdownChoicesAPIView(views.APIView):
 class ReportUserView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, format=None):
-        serializer = ReportSerializer(data=request.data)
+    def post(self, request, *args, **kwargs):
+        # Assuming `reported_user` is correctly included in the request data
+        data = request.data.copy()
+        data['reporter'] = request.user.pk  # Set the reporter as the logged-in user
+
+        serializer = ReportSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(reporter=request.user)
+            serializer.save()  # Save the instance
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class AdminReportView(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -376,27 +389,35 @@ class AdminReportView(views.APIView):
     def put(self, request, pk, format=None):
         report = Report.objects.get(pk=pk)
         action_taken = request.data.get('status')
-        # Initialize message and subject variables
-        message = ''
-        subject = ''
+        message = request.data.get('message', '')  # Default message if not provided
 
         if action_taken in ['resolved', 'ban', 'warn']:
+            report.status = action_taken  # Update status directly from the action
+            subject = ''
+
             if action_taken == 'ban':
-                report.status = 'ban'  # Adjust as per your model's field
-                message = f"You have been banned for the following reason: {report.reason}"
+                message = message or f"You have been banned for the following reason: {report.reason}"
                 subject = "Account Ban Notification"
             elif action_taken == 'warn':
-                report.status = 'warn'  # Adjust as per your model's field
-                message = f"You have been warned for the following reason: {report.reason}"
+                message = message or f"You have been warned for the following reason: {report.reason}"
                 subject = "Account Warning Notification"
             elif action_taken == 'resolved':
-                report.status = 'resolved'  # Adjust as per your model's field
-                message = f"Your report has been resolved. Reason: {report.reason}"
-                subject = "Report Resolved"
+                # For resolved status, you might not always want to notify the reported user
+                # So, consider whether to send an email or not based on the message content
+                if message:
+                    subject = "Report Resolved"
+                    message = f"Your report has been resolved. Reason: {report.reason}"
             
-            report.save()  # Save the report status update
+            # Save the report status update
+            report.save()
 
-            send_notification_email(report.reported_user, message, subject)
+            # Send email to the reported user if necessary
+            if subject and message:
+                send_notification_email(report.reported_user, subject, message)
+
+            # Send a thank you email to the reporter
+            send_notification_email(report.reporter, "Report Processing", f"Thank you for reporting. Your report has been {action_taken}.")
+
             return Response(ReportSerializer(report).data)
 
         return Response({"error": "Invalid action"}, status=status.HTTP_400_BAD_REQUEST)

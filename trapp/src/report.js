@@ -14,6 +14,8 @@ const ReportUserForm = ({ selectedUser, onClose }) => {
             return;
         }
 
+      
+
         try {
             await axios.post('http://localhost:8000/report/', {
                 reported_user: selectedUser.id,

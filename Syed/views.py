@@ -49,6 +49,21 @@ class StudyUpdate(views.APIView):
             return Response({'detail': 'Study not found or you do not have permission to access it.'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+    def put(self, request, *args, **kwargs):
+        try:
+            study_id = kwargs['study_id']
+            study = Study.objects.get(pk=study_id)
+            
+        except Study.DoesNotExist:
+            return Response({"message": "Study not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = StudySerializer(study, data=request.data)
+        if serializer.is_valid():
+            # Call the custom update method of the serializer
+            serializer.update(study, serializer.validated_data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class StudyExpire(views.APIView):
@@ -133,19 +148,3 @@ class MatchedRecruiters(views.APIView):
             # Handle exceptions here
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-
-# def delete(self, request, study_id, *args, **kwargs):
-#         try:
-#             # Get the study instance
-#             study = Study.objects.get(pk=study_id)
-
-#             # Delete the study along with related information
-#             study.delete()
-
-#             return Response({'detail': 'Study and related information deleted successfully.'}, status=status.HTTP_204_NO_CONTENT)
-        
-#         except Study.DoesNotExist:
-#             return Response({'detail': 'Study not found.'}, status=status.HTTP_404_NOT_FOUND)
-#         except Exception as e:
-#             # Optionally, log the exception here
-#             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

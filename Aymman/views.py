@@ -20,6 +20,7 @@ from Syed.models import Study
 from Aymman.models import Rank
 from Mo.models import Matches
 from django.core.management import call_command
+from Syed.serializers  import  *
                      
 class RecruiteeDetail(views.APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -121,44 +122,52 @@ def get_study(request, pk):
 
 def get_studies(request):
     Study_queryset = Study.objects.prefetch_related(
-        'biological_sex',
-        'hair_color',
-        'profession',
-        'ethnicity', 
-        'nationality',
-        'pregnancy_status',
-        'language_preference', 
-        'health_status', 
+        'biological_sex', 'hair_color', 'profession', 'ethnicity',
+        'nationality', 'pregnancy_status', 'language_preference', 'health_status',
     ).all()
-    
+
     Study_list = []
 
     for Studies in Study_queryset:
         fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
-        
+
         Study_data = {field: getattr(Studies, field) for field in fields}
         Study_data['user'] = str(Studies.user.id)
 
-        # Handling Many-to-Many Fields
-        m2m_fields = ['biological_sex',
-                      'hair_color',
-                      'profession',
-                      'ethnicity', 
-                      'nationality',
-                      'pregnancy_status',
-                      'language_preference',
-                      'activity_level', 
-                      'health_status'
-                      ]
+        # Initialize serializers for Many-to-Many fields
+        serializer_context = {'request': request}
+        m2m_fields_serializers = {
+            'biological_sex': BiologicalSexSerializer,
+            'hair_color': HairColorSerializer,
+            'profession': ProfessionSerializer,
+            'ethnicity': EthnicitySerializer,
+            'nationality': NationalitySerializer,
+            'pregnancy_status': PregnancyStatusSerializer,
+            'language_preference': LanguagePreferenceSerializer,
+            'health_status': HealthStatusSerializer,
+        }
 
-        for m2m_field in m2m_fields:
+        for m2m_field, Serializer in m2m_fields_serializers.items():
             related_objects = getattr(Studies, m2m_field).all()
-            Study_data[m2m_field] = list(related_objects.values_list('id', flat=True))  # You can adjust 'id' to any attribute
+            serializer = Serializer(related_objects, many=True, context=serializer_context)
+            # Extract names from the serializer data
+            names = [obj['name'] for obj in serializer.data]
+            
+            # Logic to format names
+            if len(names) == 0:
+                Study_data[m2m_field] = ""  # Or any other placeholder you prefer for empty
+            elif len(names) == 1:
+                Study_data[m2m_field] = names[0]  # Directly use the name if only one
+            else:
+                Study_data[m2m_field] = ", ".join(names)  # Join multiple names into a single string
 
         Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
     return HttpResponse(response_data, content_type="application/json")
+
+
+
 
 
 def get_rank_aymane(request):

@@ -35,9 +35,20 @@ class Command(BaseCommand):
         
 
         def is_feature_match(study_feature, volunteer_feature):
-            if pd.isnull(study_feature) or pd.isnull(volunteer_feature) or study_feature == '' or volunteer_feature == '':
+            # Check if either feature is directly None or an empty string, which we treat as a match
+            if study_feature in [None, '', ' ']:
                 return 1
+            
+            # Split the study feature if it contains comma-separated values and strip whitespace
+            if isinstance(study_feature, str) and ',' in study_feature:
+                study_features = [feature.strip() for feature in study_feature.split(',')]
+                # Check if the volunteer feature matches any of the split study features
+                return 1 if volunteer_feature in study_features else 0
+            
+            # Direct comparison for non-list, non-empty values
             return 1 if study_feature == volunteer_feature else 0
+
+
 
         def rank_volunteers(volunteers_df, studies_df):
             categorical_features = [
@@ -45,6 +56,7 @@ class Command(BaseCommand):
                 'hair_color',
                 'profession',
                 'ethnicity',
+                'nationality',
                 'pregnancy_status',
                 'language_preference',
                 'health_status',
@@ -105,7 +117,7 @@ class Command(BaseCommand):
         exclude_columns = [
             'biological_sex_match', 'hair_color_match', 'profession_match', 'ethnicity_match', 
             'pregnancy_status_match', 'language_preference_match', 'health_status_match', 
-            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score','duration_match',
+            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score','duration_match','nationality_match',
         ]
 
         final_output_df = ranked_volunteers_df.drop(columns=exclude_columns)

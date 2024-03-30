@@ -27,7 +27,7 @@ const CreateUserForm = () => {
       }
 
       await axios.post(
-        'http://localhost:8000/admin/signup/',
+        'http://localhost:8000/ad/signup/',
         formData,
         {
           headers: {

@@ -61,23 +61,24 @@ class UserSignup(views.APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['POST'])
-@permission_classes([IsSuperUser])  # custom permission 
-def admin_signup(request):
-    try:
-        data = request.data
-        # Create new user with is_superuser set to True
-        user = User.objects.create(
-            username=data['username'],
-            email=data['email'],
-            password=make_password(data['password']),  
-            is_superuser=True  
-        )
-        user.save()
-        return Response({'message': 'Admin created successfully'}, status=status.HTTP_201_CREATED)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+class AdminSignupView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
+    def post(self, request):
+        try:
+            data = request.data
+            # Create new user with is_superuser set to True
+            user = User.objects.create(
+                email=data['email'],
+                username=data['email'],
+                password=make_password(data['password']),
+                is_superuser=True  # Assuming you still want to create superuser accounts
+            )
+            user.save()
+            return Response({'message': 'Admin created successfully'}, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
 def get_ga_data(request):
     encoded_credentials = os.getenv('GOOGLE_CREDENTIALS_BASE64')
     if not encoded_credentials:
@@ -164,6 +165,11 @@ class UserLoginView(views.APIView):
         serializer = MyAuthTokenSerializer(data=request.data)
         if serializer.is_valid():
             user_instance = serializer.validated_data['user_instance']
+
+            # Check if the user is banned
+            if Report.objects.filter(reported_user=user_instance, status='ban').exists():
+                return Response({"error": "This account is banned."}, status=status.HTTP_403_FORBIDDEN)
+
             user_info = serializer.validated_data['user_info']
             refresh = serializer.validated_data['refresh']
             access = serializer.validated_data['access']

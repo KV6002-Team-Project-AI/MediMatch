@@ -3,7 +3,6 @@ import infoLogo from '../assets/info.png';
 import report from '../assets/report.png';
 import refresh from '../assets/refresh.png';
 import withAuthentication from '../HOCauth';
-import ReportUserForm from '../report';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -11,6 +10,13 @@ import Select from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import ZoomIn from '@mui/material/Zoom';
 import MinMaxTable from './MinMaxTable';
+
+// Start of Jed's report functionality
+import ReportUserForm from '../report';
+import axios from 'axios';
+import html2canvas from 'html2canvas';
+// End of Jed's report functionality
+
 
 const StudyProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
@@ -20,7 +26,7 @@ const StudyProfileCard = () => {
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
   const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
-  const [showReportForm, setShowReportForm] = useState(false);
+
 
   const fetchMatches = () => {
     const token = localStorage.getItem('accessToken');
@@ -103,9 +109,27 @@ const StudyProfileCard = () => {
     setShowAdditionalInfo(!showAdditionalInfo);
   };
 
-  const handleReportClick = () => {
-    setShowReportForm(true);
-  };
+ // Jed's report functionality
+ const [showReportForm, setShowReportForm] = useState(false);
+ const [screenshotData, setScreenshotData] = useState(null);
+ 
+ const handleReportClick = () => {
+     // Identify the element you want to capture
+     const element = document.getElementById('content-to-capture');
+     if (element) {
+         html2canvas(element).then(canvas => {
+             // Convert the canvas to a data URL
+             const imageData = canvas.toDataURL('image/png');
+             // Store the screenshot data in state
+             setScreenshotData(imageData);
+             // Show the report form
+             setShowReportForm(true);
+         }).catch(err => {
+             console.error('Error capturing screenshot:', err);
+         });
+     }
+ };
+   //End of Jed's report functionality
 
   const handleRefreshClick = async () => {
     try {
@@ -187,7 +211,9 @@ const StudyProfileCard = () => {
                           xl:max-w-2xl xl:py-8 xl:mx-0'>
             
         {currentMatch ? (
-          <>
+          
+          <div id="content-to-capture">
+           
           <div className="flex justify-between items-center">
             <div className="bg-green-200 text-green-800  rounded-md shadow hover:bg-green-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-1 text-center">
               {currentMatch.study_info.start_date}
@@ -253,6 +279,7 @@ const StudyProfileCard = () => {
           </div>
         </div> */}
       </div>
+      
       {currentMatch && (
               <div className='flex flex-col justify-center'>
                   <div className="flex justify-between items-center">
@@ -291,7 +318,7 @@ const StudyProfileCard = () => {
                   </div>
               </div>
             )}
-        </>
+        </div>
         ) 
         :
         (
@@ -307,8 +334,9 @@ const StudyProfileCard = () => {
     {/*Start of Jed's report functionality*/}
     {showReportForm && currentMatch && (
       <ReportUserForm
-          selectedUser={currentMatch.recruitee.user_id}
+          selectedUser={currentMatch.recruiter_info.user_id}
           onClose={() => setShowReportForm(false)}
+          screenshotData={screenshotData}
       />
   )}
   {/*End of Jed's report functionality*/}

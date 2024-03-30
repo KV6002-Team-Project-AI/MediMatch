@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
 import InputLabel from '@mui/material/InputLabel';
@@ -102,9 +101,6 @@ const MatchesRecruitee = ({ userRoles }) => {
         }
         
     }, [isMdScreen]);
-
-    // Filter matches based on selected study
-    // const filteredMatches = selectedCategory ? matches.filter(match => match.study_info.category === selectedCategory) : matches;
     
     // Filter matches based on selected category and type
     useEffect(() => {
@@ -122,8 +118,6 @@ const MatchesRecruitee = ({ userRoles }) => {
     };
 
     const handleUnmatch = (user_id, study_id) => {
-        console.log(study_id); // Log the match_id to the console (optional)
-
         fetch(`http://localhost:8000/api/recruitee/matches/`, {
             method: 'POST',
             headers: {
@@ -140,6 +134,7 @@ const MatchesRecruitee = ({ userRoles }) => {
             if (response.ok) {
                 console.log("Match rejected successfully.");
                 fetchMatchesData();
+                handleRefreshClick();
             } else {
                 console.error("Error rejecting match:", response.statusText);
             }
@@ -149,6 +144,25 @@ const MatchesRecruitee = ({ userRoles }) => {
             console.error("Network error:", error);
         });
     }    
+
+    const handleRefreshClick = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('API call failed with status: ' + response.status);
+          }
+      
+          window.location.reload();
+        } catch (error) {
+          console.error('Failed to execute command:', error);
+        }
+    };
 
     // Date Format function
     function formatDate(inputDate) {

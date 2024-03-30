@@ -115,18 +115,28 @@ class Command(BaseCommand):
         for _, row in final_output_df.iterrows():
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
-            Recruiter_instance = Recruiter.objects.get(user=row['user'])
-            if row['isExpired']:
-                study_status_value = 'expired'
-            else:
-                study_status_value = 'pending'
+            recruiter_instance = Recruiter.objects.get(user=row['user'])  # Note: variable names should follow Python naming conventions
 
-            Matches.objects.update_or_create(
+            # Initialize default statuses; these may be updated based on the row's 'isExpired' flag
+            default_study_status = 'pending'  # Assume 'pending' as default, adjust if your logic differs
+            default_recruitee_status = 'pending'  # Assume 'pending' as default, adjust if your logic differs
+
+            # Attempt to fetch an existing match to check current statuses
+            match, created = Matches.objects.get_or_create(
                 study=study_instance,
                 user=user_instance,
-                recruiter=Recruiter_instance,
-                defaults={'ranking': row['ranking_basedon_study'],
-                          'study_status': study_status_value,
-                          'recruitee_status' : study_status_value
-                          }
+                recruiter=recruiter_instance,
+                defaults={
+                    'ranking': row['ranking_basedon_study'],
+                    'study_status': default_study_status,
+                    'recruitee_status': default_recruitee_status
+                }
             )
+
+            if row['isExpired']:
+                match.study_status = 'expired'
+                match.recruitee_status = 'expired'
+            elif not created:
+                pass
+
+            match.save()

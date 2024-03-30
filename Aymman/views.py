@@ -119,60 +119,7 @@ def get_study(request, pk):
     
     return HttpResponse(response_data, content_type="application/json")
 
-def get_studies(request):
-    Study_queryset = Study.objects.prefetch_related(
-        'biological_sex',
-        'hair_color',
-        'profession',
-        'ethnicity',
-        'nationality',
-        'pregnancy_status',
-        'language_preference',
-        'health_status',
-    ).all()
 
-    Study_list = []
-
-    for Studies in Study_queryset:
-        fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
-
-        Study_data = {field: getattr(Studies, field) for field in fields}
-        Study_data['user'] = str(Studies.user.id)
-
-        # Initialize serializers for Many-to-Many fields
-        serializer_context = {'request': request}
-        m2m_fields_serializers = {
-            'biological_sex': BiologicalSexSerializer,
-            'hair_color': HairColorSerializer,
-            'profession': ProfessionSerializer,
-            'ethnicity': EthnicitySerializer,
-            'nationality': NationalitySerializer,
-            'pregnancy_status': PregnancyStatusSerializer,
-            'language_preference': LanguagePreferenceSerializer,  # This remains as is since it's the field name in the model
-            'health_status': HealthStatusSerializer,
-        }
-
-        for m2m_field, Serializer in m2m_fields_serializers.items():
-            related_objects = getattr(Studies, m2m_field).all()
-            serializer = Serializer(related_objects, many=True, context=serializer_context)
-            names = [obj['name'] for obj in serializer.data]
-            
-            output_field_name = m2m_field
-            # Rename 'language_preference' key to 'language_preferences' in the output
-            if m2m_field == 'language_preference':
-                output_field_name = 'language_preferences'
-
-            if len(names) == 0:
-                Study_data[output_field_name] = ""  # Use the adjusted key here
-            elif len(names) == 1:
-                Study_data[output_field_name] = names[0]  # And here
-            else:
-                Study_data[output_field_name] = ", ".join(names)  # And also here
-
-        Study_list.append(Study_data)
-
-    response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
-    return HttpResponse(response_data, content_type="application/json")
 
 
 
@@ -247,6 +194,61 @@ def get_bio_aymane(request):
 
 
 
+
+def get_studies_aymane(request):
+    
+    Study_queryset = Study.objects.all()
+    Study_list = []
+    
+    # List of specific fields you want to include
+    fields_to_include = [
+        
+            # numericals
+            'min_age', 
+            'max_age', 
+            'min_height', 
+            'max_height', 
+            'min_weight', 
+            'max_weight', 
+            # trivial
+            'biological_sex', 
+            'hair_color', 
+            'profession', 
+            'ethnicity', 
+            'pregnancy_status',
+            'health_status',      
+            'work_preference',
+            
+    ]
+
+    for studyy in Study_queryset:
+        
+        studyy_data = {field: getattr(studyy, field) for field in fields_to_include}
+
+        studyy_data['user_id'] = studyy.user.id
+
+        studyy_data['duration_of_participation'] = getattr(studyy, 'duration', None)
+        
+        studyy_data['language_preferences'] = getattr(studyy, 'language_preference', None)
+        
+        studyy_data['study_id'] = getattr(studyy, 'study_id', None) 
+
+        
+        Study_list.append(studyy_data)
+
+    response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
+    
+
+    return HttpResponse(response_data, content_type="application/json")
+
+
+
+
+
+
+
+
+
 def get_Recruitees_aymane(request):
     recruitee_queryset = Recruitee.objects.all()
     recruitee_list = []
@@ -294,51 +296,75 @@ def get_Recruitees_aymane(request):
     
     return HttpResponse(response_data, content_type="application/json")
 
-def get_studies_aymane(request):
-    
-    Study_queryset = Study.objects.all()
+
+
+
+
+
+
+def get_studies(request):
+    Study_queryset = Study.objects.prefetch_related(
+        'biological_sex',
+        'hair_color',
+        'profession',
+        'ethnicity',
+        'nationality',
+        'pregnancy_status',
+        'language_preference',
+        'health_status',
+    ).all()
+
     Study_list = []
-    
-    # List of specific fields you want to include
-    fields_to_include = [
-        
-            # numericals
-            'min_age', 
-            'max_age', 
-            'min_height', 
-            'max_height', 
-            'min_weight', 
-            'max_weight', 
-            # trivial
-            'biological_sex', 
-            'hair_color', 
-            'profession', 
-            'ethnicity', 
-            'pregnancy_status',
-            'health_status',      
-            'work_preference',
+
+    for Studies in Study_queryset:
+        fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
+
+        Study_data = {field: getattr(Studies, field) for field in fields}
+        Study_data['user'] = str(Studies.user.id)
+
+        # Initialize serializers for Many-to-Many fields
+        serializer_context = {'request': request}
+        m2m_fields_serializers = {
+            'biological_sex': BiologicalSexSerializer,
+            'hair_color': HairColorSerializer,
+            'profession': ProfessionSerializer,
+            'ethnicity': EthnicitySerializer,
+            'nationality': NationalitySerializer,
+            'pregnancy_status': PregnancyStatusSerializer,
+            'language_preference': LanguagePreferenceSerializer,  # This remains as is since it's the field name in the model
+            'health_status': HealthStatusSerializer,
+        }
+
+        for m2m_field, Serializer in m2m_fields_serializers.items():
+            related_objects = getattr(Studies, m2m_field).all()
+            serializer = Serializer(related_objects, many=True, context=serializer_context)
+            names = [obj['name'] for obj in serializer.data]
             
-    ]
+            output_field_name = m2m_field
+            # Rename 'language_preference' key to 'language_preferences' in the output
+            if m2m_field == 'language_preference':
+                output_field_name = 'language_preferences'
 
-    for studyy in Study_queryset:
-        
-        studyy_data = {field: getattr(studyy, field) for field in fields_to_include}
+            if len(names) == 0:
+                Study_data[output_field_name] = ""  # Use the adjusted key here
+            elif len(names) == 1:
+                Study_data[output_field_name] = names[0]  # And here
+            else:
+                Study_data[output_field_name] = ", ".join(names)  # And also here
 
-        studyy_data['user_id'] = studyy.user.id
-
-        studyy_data['duration_of_participation'] = getattr(studyy, 'duration', None)
-        
-        studyy_data['language_preferences'] = getattr(studyy, 'language_preference', None)
-        
-        studyy_data['study_id'] = getattr(studyy, 'study_id', None) 
-
-        
-        Study_list.append(studyy_data)
+        Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
-    
-
     return HttpResponse(response_data, content_type="application/json")
+
+
+
+
+
+
+
+
+
 
 class RunCommandAPIView(APIView):
     def get(self, request):

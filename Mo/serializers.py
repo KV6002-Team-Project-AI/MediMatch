@@ -75,6 +75,7 @@ class ProfileInteractionSerializer(serializers.ModelSerializer):
     # Recruitee information (ID)
     user_id = serializers.ReadOnlyField(source='user.user_id')
     # Statuses of both studies and recruitees
+    
     recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     # Recruitee information 

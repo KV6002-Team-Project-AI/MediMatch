@@ -449,6 +449,25 @@ const AddStudy = ({ userRoles }) => {
         }
     };
 
+    const handleRefreshClick = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('API call failed with status: ' + response.status);
+          }
+      
+          window.location.reload();
+        } catch (error) {
+          console.error('Failed to execute command:', error);
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -489,6 +508,7 @@ const AddStudy = ({ userRoles }) => {
         })
         .then(data => {
             console.log('Success:', data);
+            handleRefreshClick();
             navigate('/research'); // or another appropriate action
         })
         .catch(error => {

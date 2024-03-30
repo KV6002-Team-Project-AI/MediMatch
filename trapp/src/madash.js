@@ -4,8 +4,10 @@ import axios from 'axios';
 const AdminDashboard = () => {
     const [reports, setReports] = useState([]);
     const [messages, setMessages] = useState({});
-    const [selectedUser, setSelectedUser] = useState(null); // For storing selected user details
-    const [showModal, setShowModal] = useState(false); // For controlling modal visibility
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [showScreenshotOverlay, setShowScreenshotOverlay] = useState(false);
+    const [selectedScreenshot, setSelectedScreenshot] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('accessToken');
@@ -87,7 +89,15 @@ const AdminDashboard = () => {
         }
     };
     
-    
+    const handleClickScreenshot = (screenshot) => {
+        setSelectedScreenshot(screenshot);
+        setShowScreenshotOverlay(true);
+    };
+
+    const closeScreenshotOverlay = () => {
+        setShowScreenshotOverlay(false);
+        setSelectedScreenshot('');
+    };
 
     const handleMessageChange = (id, value) => {
         setMessages({ ...messages, [id]: value });
@@ -96,42 +106,58 @@ const AdminDashboard = () => {
     const closeModal = () => setShowModal(false);
 
     return (
-        <div className="flex justify-center items-center h-screen bg-gray-100">
-            <div className="w-full max-w-4xl p-5 bg-white rounded-lg shadow-xl">
-                <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">Admin Dashboard</h2>
-                <div className="overflow-x-auto">
-                    {reports.length > 0 ? reports.map(report => (
-                        <div key={report.id} className="bg-gray-50 p-4 rounded-lg mb-6 border border-gray-200">
-                            <button onClick={() => handleClickUser(report.reported_user, report.user_type)}
-                                    className="text-blue-500 hover:text-blue-800">
-                                Reported User: {report.reported_user_name}
-                            </button>
-                            <p>Report Count: {report.reported_user_report_count}</p>
-                            <p>Warn Count: {report.reported_user_warn_count}</p>
-                            <p>Reason: {report.reason}</p>
-                            <textarea value={messages[report.id] || ''}
-                                      onChange={(e) => handleMessageChange(report.id, e.target.value)}
-                                      className="w-full p-2 border rounded"
-                                      placeholder="Add a message (optional)">
-                            </textarea>
-                            <div className="flex justify-end space-x-4">
-                                <button onClick={() => handleAction(report.id, 'ban')}
-                                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-                                    Ban User
+        <div className="flex justify-center items-start h-screen bg-gray-100">
+        <div className="w-full max-w-4xl p-5 bg-blue-300 rounded-lg shadow-xl mt-10">
+            <h2 className="text-3xl font-bold text-gray-800 text-center mb-10">Admin Dashboard</h2>
+            <div className="overflow-x-auto">
+                {reports.length > 0 ? (
+                    <div className="bg-white-100 p-4 rounded-lg max-h-[calc(100vh-200px)] overflow-y-auto">
+                        {reports.map(report => (
+                            <div key={report.id} className="bg-white p-4 rounded-lg mb-6 border border-gray-300 shadow">
+                                <button onClick={() => handleClickUser(report.reported_user, report.user_type)}
+                                        className="text-blue-500 hover:text-blue-800">
+                                    Reported User: {report.reported_user_name}
                                 </button>
-                                <button onClick={() => handleAction(report.id, 'warn')}
-                                        className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-                                    Warn User
-                                </button>
-                                <button onClick={() => handleAction(report.id, 'resolved')}
-                                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                                    No Action Needed
-                                </button>
+                                <p>Report Count: {report.reported_user_report_count}</p>
+                                <p>Warn Count: {report.reported_user_warn_count}</p>
+                                <p>Reason: {report.reason}</p>
+                                {report.screenshot && (
+                                    <button
+                                        className="text-blue-500 hover:text-blue-800 cursor-pointer"
+                                        onClick={() => handleClickScreenshot(`http://localhost:8000${report.screenshot}`)}>
+                                        Screenshot
+                                    </button>
+                                )}
+                                <textarea value={messages[report.id] || ''}
+                                          onChange={(e) => handleMessageChange(report.id, e.target.value)}
+                                          className="w-full p-2 border rounded mt-2"
+                                          placeholder="Add a message (optional)">
+                                </textarea>
+                                <div className="flex justify-end space-x-4 mt-4">
+                                    <button onClick={() => handleAction(report.id, 'ban')}
+                                            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                        Ban User
+                                    </button>
+                                    <button onClick={() => handleAction(report.id, 'warn')}
+                                            className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                                        Warn User
+                                    </button>
+                                    <button onClick={() => handleAction(report.id, 'resolved')}
+                                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                                        No Action Needed
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )) : <p className="text-center text-gray-500">No reports to display.</p>}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-center text-gray-500">No reports to display.</p>
+                )}
             </div>
+        </div>
+
+    
+    
 
             {showModal && selectedUser && (
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={closeModal}>
@@ -175,6 +201,16 @@ const AdminDashboard = () => {
             <p><strong>Company Info:</strong> {selectedUser.company_info}</p>
             {/* Add more fields as needed */}
             <button onClick={closeModal} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
+                Close
+            </button>
+        </div>
+    </div>
+)}
+{showScreenshotOverlay && (
+    <div className="fixed inset-0 z-50 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center" onClick={closeScreenshotOverlay}>
+        <div className="relative bg-white p-4 shadow-lg rounded-md max-w-3xl max-h-full overflow-y-auto">
+            <img src={selectedScreenshot} alt="Screenshot Full" className="max-w-full max-h-full h-auto" />
+            <button onClick={closeScreenshotOverlay} className="absolute top-0 right-0 mt-2 mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
                 Close
             </button>
         </div>

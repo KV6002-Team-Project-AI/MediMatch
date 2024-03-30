@@ -1,44 +1,62 @@
-import React, { useState } from 'react'; // Import useState from React
-import axios from 'axios'; // Import axios for making HTTP requests
+import React, { useState } from 'react';
+import axios from 'axios';
 
-const ReportUserForm = ({ selectedUser, onClose }) => {
+const ReportUserForm = ({ selectedUser, onClose, screenshotData }) => {
     const [reason, setReason] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // Function to convert base64 string to a file object
+function base64ToFile(dataurl, filename) {
+    let arr = dataurl.split(',');
+    let mime = arr[0].match(/:(.*?);/)[1];
+    let bstr = atob(arr[1]);
+    let n = bstr.length;
+    let u8arr = new Uint8Array(n);
 
-        // Retrieve the accessToken from localStorage
-        const token = localStorage.getItem('accessToken');
-        if (!token) {
-            alert('You must be logged in to submit a report.');
-            return;
-        }
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
 
-      
+    return new File([u8arr], filename, { type: mime });
+}
 
-        try {
-            await axios.post('http://localhost:8000/report/', {
-                reported_user: selectedUser.id,
-                reason: reason
-            }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`  // Use the accessToken for authorization
-                }
-            });
-            alert('Report submitted successfully');
-            onClose(); // Close the modal/form after successful submission
-        } catch (error) {
-            console.error('Error submitting report:', error);
-            alert('Error submitting report');
-        }
-    };
+const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+        alert('You must be logged in to submit a report.');
+        return;
+    }
+
+    const screenshotFile = base64ToFile(screenshotData, 'screenshot.png');
+
+    let formData = new FormData();
+    formData.append('reported_user', selectedUser);
+    formData.append('reason', reason);
+    formData.append('screenshot', screenshotFile);
+
+    try {
+        await axios.post('http://localhost:8000/report/', formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        alert('Report submitted successfully');
+        onClose(); // Close the modal/form after successful submission
+    } catch (error) {
+        console.error('Error submitting report:', error);
+        alert('Error submitting report');
+    }
+};
+
 
     return (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
             <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                 <div className="mb-4">
                     <p className="text-gray-700 text-sm font-bold mb-2">
-                        Reporting {selectedUser.username}:
+                        Reporting {selectedUser.username || 'user'}: {/* Handle undefined username */}
                     </p>
                     <textarea
                         id="reason"
@@ -69,4 +87,3 @@ const ReportUserForm = ({ selectedUser, onClose }) => {
 };
 
 export default ReportUserForm;
-

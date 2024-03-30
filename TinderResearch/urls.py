@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import admin
 from Mo.views import MatchActionView, RecruiterMatchUpdateView
 from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane,get_bio_aymane,RunCommandAPIView
-
+from Abdul.views import GenerateSummariesAPIView
 urlpatterns = [
     path('admin/', admin.site.urls),
     
@@ -44,6 +44,10 @@ urlpatterns = [
     path('api/run-command/', RunCommandAPIView.as_view(), name='run_command'),
     path('api/get-bio-aymane/', get_bio_aymane, name='get_bio_aymane'),
     path('api/run-command/', RunCommandAPIView.as_view(), name='run_command'),
+    
+    #abdulah
+    path('api/generate-summaries/', GenerateSummariesAPIView.as_view(), name='generate-summaries'),
+    
 
 
     # Syed Paths

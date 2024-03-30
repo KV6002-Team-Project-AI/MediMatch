@@ -499,12 +499,12 @@ SEX_CHOICES = [
     ]
 
 DURATION_CHOICES = [
-        ('0', 'Less than 1 week'),
-        ('1', '1 week'),
-        ('2', '2 weeks'),
-        ('3', '3 weeks'),
-        ('4', '4 weeks'),
-        ('5', 'More than 4 weeks'),
+        ('Less than 1 week', 'Less than 1 week'),
+        ('1 week', '1 week'),
+        ('2 weeks', '2 weeks'),
+        ('3 weeks', '3 weeks'),
+        ('4 weeks', '4 weeks'),
+        ('More than 4 weeks', 'More than 4 weeks'),
     ]
 
 STUDY_PREFERENCE_CHOICES = [

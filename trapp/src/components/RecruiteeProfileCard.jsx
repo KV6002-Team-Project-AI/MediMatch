@@ -16,6 +16,7 @@ import withAuthentication from '../HOCauth';
 // Start of Jed's report functionality
 import ReportUserForm from '../report';
 import axios from 'axios';
+import html2canvas from 'html2canvas';
 // End of Jed's report functionality
 
 const RecruiteeProfileCard = () => {
@@ -139,10 +140,24 @@ const RecruiteeProfileCard = () => {
 
   // Jed's report functionality
   const [showReportForm, setShowReportForm] = useState(false);
+const [screenshotData, setScreenshotData] = useState(null);
 
-    const handleReportClick = () => {
-        setShowReportForm(true);
-    };
+const handleReportClick = () => {
+    // Identify the element you want to capture
+    const element = document.getElementById('content-to-capture');
+    if (element) {
+        html2canvas(element).then(canvas => {
+            // Convert the canvas to a data URL
+            const imageData = canvas.toDataURL('image/png');
+            // Store the screenshot data in state
+            setScreenshotData(imageData);
+            // Show the report form
+            setShowReportForm(true);
+        }).catch(err => {
+            console.error('Error capturing screenshot:', err);
+        });
+    }
+};
   //End of Jed's report functionality
 
 // TODO: SETUP INFO BUTTON
@@ -311,7 +326,7 @@ return (
             )}
         {currentMatch ? (
           showSummary && (
-          <div>
+          <div id="content-to-capture">
             <div className="text-center mt-2">
               <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
                 {`${currentMatch.recruitee.full_name}, ${currentMatch.recruitee.age}`}
@@ -410,8 +425,9 @@ return (
      {/*Start of Jed's report functionality*/}
     {showReportForm && currentMatch && (
                 <ReportUserForm
-                    selectedUser={currentMatch.recruitee.user}
+                    selectedUser={currentMatch.recruitee.user_id}
                     onClose={() => setShowReportForm(false)}
+                    screenshotData={screenshotData}
                 />
             )}
     {/*End of Jed's report functionality*/}

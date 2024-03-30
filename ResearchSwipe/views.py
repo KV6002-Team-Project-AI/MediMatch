@@ -364,18 +364,23 @@ class DropdownChoicesAPIView(views.APIView):
 
 
 class ReportUserView(views.APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        # Assuming `reported_user` is correctly included in the request data
-        data = request.data.copy()
-        data['reporter'] = request.user.pk  # Set the reporter as the logged-in user
+        # The reported user and reason are in request.data, and the file will be in request.FILES
+        data = {
+            'reporter': request.user.pk,  # Set the reporter as the logged-in user
+            'reported_user': request.data.get('reported_user'),
+            'reason': request.data.get('reason'),
+            'screenshot': request.FILES.get('screenshot') if 'screenshot' in request.FILES else None
+        }
 
         serializer = ReportSerializer(data=data)
         if serializer.is_valid():
             serializer.save()  # Save the instance
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class AdminReportView(views.APIView):

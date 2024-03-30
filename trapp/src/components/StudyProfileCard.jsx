@@ -296,7 +296,7 @@ const StudyProfileCard = () => {
     {/*Start of Jed's report functionality*/}
     {showReportForm && currentMatch && (
       <ReportUserForm
-          selectedUser={currentMatch.recruitee.user}
+          selectedUser={currentMatch.recruitee.user_id}
           onClose={() => setShowReportForm(false)}
       />
   )}

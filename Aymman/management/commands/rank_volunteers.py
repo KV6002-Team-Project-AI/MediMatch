@@ -35,20 +35,9 @@ class Command(BaseCommand):
         
 
         def is_feature_match(study_feature, volunteer_feature):
-            # Check if either feature is directly None or an empty string, which we treat as a match
-            if study_feature in [None, '', ' ']:
+            if pd.isnull(study_feature) or pd.isnull(volunteer_feature) or study_feature == '' or volunteer_feature == '':
                 return 1
-            
-            # Split the study feature if it contains comma-separated values and strip whitespace
-            if isinstance(study_feature, str) and ',' in study_feature:
-                study_features = [feature.strip() for feature in study_feature.split(',')]
-                # Check if the volunteer feature matches any of the split study features
-                return 1 if volunteer_feature in study_features else 0
-            
-            # Direct comparison for non-list, non-empty values
             return 1 if study_feature == volunteer_feature else 0
-
-
 
         def rank_volunteers(volunteers_df, studies_df):
             categorical_features = [
@@ -56,7 +45,6 @@ class Command(BaseCommand):
                 'hair_color',
                 'profession',
                 'ethnicity',
-                'nationality',
                 'pregnancy_status',
                 'language_preference',
                 'health_status',
@@ -117,7 +105,7 @@ class Command(BaseCommand):
         exclude_columns = [
             'biological_sex_match', 'hair_color_match', 'profession_match', 'ethnicity_match', 
             'pregnancy_status_match', 'language_preference_match', 'health_status_match', 
-            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score','duration_match','nationality_match',
+            'work_preference_match', 'age_match', 'height_match', 'weight_match', 'total_match_score','duration_match',
         ]
 
         final_output_df = ranked_volunteers_df.drop(columns=exclude_columns)
@@ -127,18 +115,28 @@ class Command(BaseCommand):
         for _, row in final_output_df.iterrows():
             study_instance = Study.objects.get(study_id=row['study_id'])
             user_instance = Recruitee.objects.get(user=row['user_id'])
-            Recruiter_instance = Recruiter.objects.get(user=row['user'])
-            if row['isExpired']:
-                study_status_value = 'expired'
-            else:
-                study_status_value = 'pending'
+            recruiter_instance = Recruiter.objects.get(user=row['user'])  # Note: variable names should follow Python naming conventions
 
-            Matches.objects.update_or_create(
+            # Initialize default statuses; these may be updated based on the row's 'isExpired' flag
+            default_study_status = 'pending'  # Assume 'pending' as default, adjust if your logic differs
+            default_recruitee_status = 'pending'  # Assume 'pending' as default, adjust if your logic differs
+
+            # Attempt to fetch an existing match to check current statuses
+            match, created = Matches.objects.get_or_create(
                 study=study_instance,
                 user=user_instance,
-                recruiter=Recruiter_instance,
-                defaults={'ranking': row['ranking_basedon_study'],
-                          'study_status': study_status_value,
-                          'recruitee_status' : study_status_value
-                          }
+                recruiter=recruiter_instance,
+                defaults={
+                    'ranking': row['ranking_basedon_study'],
+                    'study_status': default_study_status,
+                    'recruitee_status': default_recruitee_status
+                }
             )
+
+            if row['isExpired']:
+                match.study_status = 'expired'
+                match.recruitee_status = 'expired'
+            elif not created:
+                pass
+
+            match.save()

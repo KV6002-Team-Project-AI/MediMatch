@@ -6178,3 +6178,87 @@ C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Doc
 Watching for file changes with StatReloader
 =======
 >>>>>>> 65622090ad1d08e1bf7b672b0d3fc322a3f8b25c
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\views.py changed, reloading.
+Watching for file changes with StatReloader
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-recruitees-aymane/ HTTP/1.1" 200 285
+Starting new HTTP connection (1): 127.0.0.1:8000
+http://127.0.0.1:8000 "GET /api/get-studies/ HTTP/1.1" 200 1067
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\models.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\Mo\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /api/recruiter/matches/
+Internal Server Error: /api/recruiter/matches/
+Internal Server Error: /api/recruiter/matches/
+Internal Server Error: /api/recruiter/matches/
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\Mo\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Bad Request: /report/
+Bad Request: /report/
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\models.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\serializers.py changed, reloading.
+Watching for file changes with StatReloader
+Bad Request: /report/
+C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\ResearchSwipe\views.py changed, reloading.
+Watching for file changes with StatReloader
+STREAM b'IHDR' 16 13
+STREAM b'sRGB' 41 1
+STREAM b'IDAT' 54 8192
+Importing BlpImagePlugin
+Importing BmpImagePlugin
+Importing BufrStubImagePlugin
+Importing CurImagePlugin
+Importing DcxImagePlugin
+Importing DdsImagePlugin
+Importing EpsImagePlugin
+Importing FitsImagePlugin
+Importing FliImagePlugin
+Importing FpxImagePlugin
+Image: failed to import FpxImagePlugin: No module named 'olefile'
+Importing FtexImagePlugin
+Importing GbrImagePlugin
+Importing GifImagePlugin
+Importing GribStubImagePlugin
+Importing Hdf5StubImagePlugin
+Importing IcnsImagePlugin
+Importing IcoImagePlugin
+Importing ImImagePlugin
+Importing ImtImagePlugin
+Importing IptcImagePlugin
+Importing JpegImagePlugin
+Importing Jpeg2KImagePlugin
+Importing McIdasImagePlugin
+Importing MicImagePlugin
+Image: failed to import MicImagePlugin: No module named 'olefile'
+Importing MpegImagePlugin
+Importing MpoImagePlugin
+Importing MspImagePlugin
+Importing PalmImagePlugin
+Importing PcdImagePlugin
+Importing PcxImagePlugin
+Importing PdfImagePlugin
+Importing PixarImagePlugin
+Importing PngImagePlugin
+Importing PpmImagePlugin
+Importing PsdImagePlugin
+Importing QoiImagePlugin
+Importing SgiImagePlugin
+Importing SpiderImagePlugin
+Importing SunImagePlugin
+Importing TgaImagePlugin
+Importing TiffImagePlugin
+Importing WebPImagePlugin
+Importing WmfImagePlugin
+Importing XbmImagePlugin
+Importing XpmImagePlugin
+Importing XVThumbImagePlugin

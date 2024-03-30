@@ -40,6 +40,7 @@ class Report(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     message = models.TextField(null=True, blank=True)
+    screenshot = models.ImageField(upload_to='report_screenshots/', blank=True, null=True)
 
 class User(AbstractUser):
     # Your existing fields...

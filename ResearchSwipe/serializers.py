@@ -228,7 +228,7 @@ class ReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Report
-        fields = ('id', 'reporter', 'reported_user', 'reported_user_name', 'reported_user_report_count', 'reported_user_warn_count', 'reason', 'status', 'created_at', 'updated_at', 'message')
+        fields = ('id', 'reporter', 'reported_user', 'reported_user_name', 'reported_user_report_count', 'reported_user_warn_count', 'reason', 'status', 'created_at', 'updated_at', 'message', 'screenshot')
         # if you want all fields from the model plus the extra fields, use '__all__' and then declare extra fields separately
 
     def get_reported_user_report_count(self, obj):

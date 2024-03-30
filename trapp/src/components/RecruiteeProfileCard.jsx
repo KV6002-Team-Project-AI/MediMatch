@@ -16,6 +16,8 @@ import withAuthentication from '../HOCauth';
 // Start of Jed's report functionality
 import ReportUserForm from '../report';
 import axios from 'axios';
+import DisplayFeatures from './DisplayFeatures';
+import DisplayInterests from './DisplayInterests';
 // End of Jed's report functionality
 
 const RecruiteeProfileCard = () => {
@@ -200,7 +202,7 @@ return (
               </button>
           </Tooltip>
       </div>
-      <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
+      <div className='mt-2 w-full p-2 bg-white rounded-xl shadow-lg 
                         sm:max-w-md sm:mt-5
                         md:max-w-lg md:mt-10 md:mx-0
                         lg:max-w-xl lg:mt-16 lg:mx-0
@@ -231,50 +233,12 @@ return (
                 leaveDelay={100}
             >
               <button onClick={handleSummaryClick}>
-                <img src={summariseLogo} alt="Summarize" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
+                <img src={summariseLogo} alt="Summarize" className="w-8 h-8 p-1.5 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
               </button>
             </Tooltip>
             <button>
-              <img src={profilePic} alt="Person" className="w-24 h-24 rounded-full border-2 border-gray-300 shadow-sm" />
+              <img src={profilePic} alt="Person" className="w-16 h-16 rounded-full border-2 border-gray-300 shadow-sm" />
             </button>
-            <Tooltip
-                key='0'
-                title='More Info'
-                placement="top"
-                TransitionComponent={ZoomIn}
-                slotProps={{
-                    popper: {
-                        modifiers: [
-                            {
-                                name: 'offset',
-                                options: {
-                                    offset: [0, -6],
-                                },
-                            },
-                        ],
-                    },
-                }}
-                arrow
-                disableInteractive
-                enterDelay={100}
-                leaveDelay={100}
-            >
-            <button>
-              <img src={infoLogo} alt="Info" className="w-10 h-10 p-2 bg-blue-100 rounded-md hover:bg-blue-200 transition" />
-            </button>
-            </Tooltip>
-          </div>
-        )}
-        
-        {currentMatch && !showSummary && (
-          <>
-              <p className='text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-center border-t-2 my-2 py-2'>
-                {currentMatch.recruitee.summary}
-              </p>
-              <div className="flex justify-between items-center mt-6">
-                <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
-                  Reject
-                </button>
                 {/*Start of Jed's report functionality*/}
                 <Tooltip
                         key='0'
@@ -299,10 +263,22 @@ return (
                         leaveDelay={100}
                     >
                     <button onClick={handleReportClick}>
-                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
+                        <img src={report} alt="Report" className="w-8 h-8 p-1.5 bg-amber-400 rounded-md hover:bg-amber-200" />
                     </button>
                     </Tooltip>
                     {/*End of Jed's report functionality*/}
+          </div>
+        )}
+        
+        {currentMatch && !showSummary && (
+          <>
+              <p className='text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-center border-t-2 my-2 py-2'>
+                {currentMatch.recruitee.summary}
+              </p>
+              <div className="flex justify-between items-center mt-6">
+                <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
+                  Reject
+                </button>
                 <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                   Accept
                 </button>
@@ -312,22 +288,41 @@ return (
         {currentMatch ? (
           showSummary && (
           <div>
-            <div className="text-center mt-2">
+            <div className="text-center mt-1">
               <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
                 {`${currentMatch.recruitee.full_name}, ${currentMatch.recruitee.age}`}
               </p>
             </div>
  
-            <div className="text-center mt-2">
+            <div className="text-center mt-1">
               <p className=" sm:text-md md:xl xl:md text-gray-800">
-                {`${currentMatch.recruitee.bio}`}
+                {currentMatch.recruitee.bio}
               </p>
             </div>
  
-            <div className="mt-4">
+            <div className="mt-1">
               <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Features:</h3>
-              <div className="flex flex-wrap justify-center gap-2 mt-2">
-                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
+              <div className="flex flex-wrap justify-center gap-2 mt-1">
+              <DisplayFeatures 
+                  sex={currentMatch.recruitee.biological_sex}
+                  hair={currentMatch.recruitee.hair_color}
+                  profession={currentMatch.recruitee.profession}
+                  ethnicity={currentMatch.recruitee.ethnicity}
+                  nationality={currentMatch.recruitee.nationality}
+                  pregnancy={currentMatch.recruitee.pregnancy_status}
+                  language={currentMatch.recruitee.language_preferences}
+                  activity={currentMatch.recruitee.activity_level}
+                  socioeconomic={currentMatch.recruitee.socioeconomic_status}
+                  health={currentMatch.recruitee.health_status}
+                  medical_history={currentMatch.recruitee.medical_history}
+                  medication_history={currentMatch.recruitee.medication_history}
+                  current_medication={currentMatch.recruitee.current_medication}
+                  family_medication_history={currentMatch.recruitee.family_medication_history}
+                  allergies={currentMatch.recruitee.allergies}
+                  lifestyle={currentMatch.recruitee.lifestyle}
+              />
+
+                {/* <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.age} y.o.
                 </div>
                 <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
@@ -335,14 +330,21 @@ return (
                 </div>
                 <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.weight} kg
-                </div>
+                </div> */}
               </div>
             </div>
  
-            <div className="mt-4">
+            <div className="mt-1">
               <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Interests:</h3>
-              <div className="flex flex-wrap justify-center gap-2 mt-3">
-                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
+              <div className="flex flex-wrap justify-center gap-2 mt-1">
+              <DisplayInterests
+                  interest_1={currentMatch.recruitee.interest_1}
+                  interest_2={currentMatch.recruitee.interest_2}
+                  interest_3={currentMatch.recruitee.interest_3}
+                  interest_4={currentMatch.recruitee.interest_4}
+              />
+                
+                {/* <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.interest_1}
                 </div>
                 <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
@@ -350,7 +352,7 @@ return (
                 </div>
                 <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
                   {currentMatch.recruitee.interest_3}
-                </div>
+                </div> */}
               </div>
             </div>
             {currentMatch && (
@@ -359,34 +361,6 @@ return (
                     <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Reject
                     </button>
-                    {/*Start of Jed's report functionality*/}
-                    <Tooltip
-                        key='0'
-                        title='Report'
-                        placement="top"
-                        TransitionComponent={ZoomIn}
-                        slotProps={{
-                            popper: {
-                                modifiers: [
-                                    {
-                                        name: 'offset',
-                                        options: {
-                                            offset: [0, -4],
-                                        },
-                                    },
-                                ],
-                            },
-                        }}
-                        arrow
-                        disableInteractive
-                        enterDelay={100}
-                        leaveDelay={100}
-                    >
-                    <button onClick={handleReportClick}>
-                        <img src={report} alt="Report" className="w-8 h-8 p-1 bg-amber-400 rounded-md hover:bg-amber-200  transition transform hover:-translate-y-1" />
-                    </button>
-                    </Tooltip>
-                    {/*End of Jed's report functionality*/}
                     <button onClick={() => handleAcceptClick()} className="flex-1 bg-green-600 text-white px-3 py-2 rounded-lg shadow hover:bg-green-700 transition transform hover:-translate-y-1 ml-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Accept
                     </button>
@@ -394,7 +368,6 @@ return (
               </div>
             )}
           </div>
-          
           )
         )
         :  
@@ -410,7 +383,7 @@ return (
      {/*Start of Jed's report functionality*/}
     {showReportForm && currentMatch && (
                 <ReportUserForm
-                    selectedUser={currentMatch.recruitee.user}
+                    selectedUser={currentMatch.recruitee.user_id}
                     onClose={() => setShowReportForm(false)}
                 />
             )}

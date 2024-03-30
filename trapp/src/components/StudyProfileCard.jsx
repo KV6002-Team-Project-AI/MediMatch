@@ -10,6 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 import ZoomIn from '@mui/material/Zoom';
+import MinMaxTable from './MinMaxTable';
 
 const StudyProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
@@ -128,7 +129,7 @@ const StudyProfileCard = () => {
   return ( 
     <>
     <div className={`${AcceptColor || RejectColor} flex flex-col min-h-screen justify-center px-4 items-center transition-colors duration-500`}>
-          <div className='flex gap-2'>
+        <div className='flex gap-2 bg-white p-3 rounded-xl transition-all transform hover:translate-y-1'>
         <FormControl variant="outlined" className="w-full" style={{ minWidth: 120 }}>
           <InputLabel id="select-study-label">Select Category</InputLabel>
           <Select
@@ -175,11 +176,11 @@ const StudyProfileCard = () => {
                 leaveDelay={100}
             >
               <button onClick={handleRefreshClick}>
-                  <img src={refresh} alt="refresh" className="w-8 h-6 p-1 bg-gray-300 rounded-md hover:bg-gray-100 transition" />
+                  <img src={refresh} alt="refresh" className="w-8 h-7 p-1 bg-gray-300 rounded-md hover:bg-gray-100 transition" />
               </button>
           </Tooltip>
       </div>
-          <div className='mt-5 w-full px-3 py-6 bg-white rounded-3xl shadow-lg transform transition-all hover:scale-105 
+          <div className='mt-2 w-full px-2 py-3 bg-white rounded-xl shadow-lg transition transform hover:-translate-y-1
                           sm:max-w-md sm:mt-5
                           md:max-w-lg md:mt-10 md:mx-0
                           lg:max-w-xl lg:mt-16 lg:mx-0
@@ -187,41 +188,51 @@ const StudyProfileCard = () => {
             
         {currentMatch ? (
           <>
-          <div className="flex justify-between items-center ">
-            <div className="bg-green-200 text-green-800  rounded-full shadow hover:bg-green-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+          <div className="flex justify-between items-center">
+            <div className="bg-green-200 text-green-800  rounded-md shadow hover:bg-green-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-1 text-center">
               {currentMatch.study_info.start_date}
             </div>
-            <div className="bg-yellow-200 text-yellow-800  rounded-full shadow hover:bg-yellow-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+            <div className="bg-yellow-200 text-yellow-800  rounded-md shadow hover:bg-yellow-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-1 text-center">
               {currentMatch.study_info.duration}
             </div>
-            <div className="bg-orange-200 text-orange-800  rounded-full shadow hover:bg-orange-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-2 text-center">
+            <div className="bg-blue-200 text-blue-800  rounded-md shadow hover:bg-blue-300 transition duration-300 ease-in-out text-base md:text-lg flex-1 mx-1 text-center">
               {currentMatch.study_info.work_preference}
             </div>
           </div>
 
           <div className="text-center mt-3">
-            <p className="font-semibold text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:md text-gray-800">
+            <p className="font-semibold text-xl md:text-2xl lg:text-3xl text-gray-800">
               {currentMatch.study_name}
             </p>
           </div>
 
-          <div className="text-center mt-3">
-            <p className=" sm:text-md md:xl xl:md text-gray-800">
+          <div className="text-center mt-2">
+            <p className="text-sm md:text-lg text-gray-800">
               {currentMatch.study_info.description}
             </p>
           </div>
 
 
           <div className="flex flex-col mt-2 justify-center items-center">
-            <h4 className="inline-block bg-red-200 text-red-800 px-2 py-2 rounded-full shadow hover:bg-red-300 transition text-sm leading-none">
-              Category: {currentMatch.study_info.category}
+            <h4 className="inline-block bg-cyan-200 text-cyan-900 px-4 py-2 rounded-lg shadow hover:bg-cyan-300 transition text-sm leading-none">
+              {currentMatch.study_info.category}
             </h4>
           </div>
 
 
-        <div className="mt-4">
-        <h3 className="text-center font-semibold text-md sm:text-xl md:text-2xl">Requirements:</h3>
-        <div className="flex overflow-x-auto mt-1 gap-2 mx-2" style={{scrollbarWidth: 'none'}}>
+        <div className="my-2">
+        <h3 className="text-center font-semibold text-md sm:text-lg md:text-xl">Requirements:</h3>
+            <div className='p-2'>
+              <MinMaxTable
+                  minAge={currentMatch.study_info.min_age}
+                  minWeight={currentMatch.study_info.min_weight}
+                  minHeight={currentMatch.study_info.min_height}
+                  maxAge={currentMatch.study_info.max_age}
+                  maxWeight={currentMatch.study_info.max_weight}
+                  maxHeight={currentMatch.study_info.max_height}
+              />
+            </div>
+        {/* <div className="flex overflow-x-auto mt-1 gap-2 mx-2" style={{scrollbarWidth: 'none'}}>
           <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
               {currentMatch.study_info.min_age} y.o.
           </div>
@@ -240,11 +251,11 @@ const StudyProfileCard = () => {
           <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
               {currentMatch.study_info.profession.name}
           </div>
-        </div>
+        </div> */}
       </div>
       {currentMatch && (
               <div className='flex flex-col justify-center'>
-                  <div className="flex justify-between items-center mt-3">
+                  <div className="flex justify-between items-center">
                     <button onClick={() => handleRejectClick()} className="flex-1 bg-red-500 text-white px-3 py-2 rounded-lg shadow hover:bg-red-700 transition transform hover:-translate-y-1 mr-2 flex items-center justify-center text-xs sm:text-sm md:text-base">
                       Reject
                     </button>

@@ -34,18 +34,32 @@ class Command(BaseCommand):
         studies_df = pd.DataFrame(studies_data)
         
 
-        def is_feature_match(study_feature, volunteer_feature):
+        def is_feature_match(study_feature, volunteer_feature, feature_name):
+            # Fields where a match actually means a negative outcome
+            negative_match_fields = [
+                'medical_history_details',  
+                'current_medication_details',
+                'medication_history_details',
+                'allergy_details',
+                'family_medical_history_details',
+            ]
+            
             if study_feature in [None, '', ' ']:
                 return 1
             
-            # Split the study feature if it contains comma-separated values and strip whitespace
+            # Handle negative match logic
+            if feature_name in negative_match_fields:
+                study_features = [item.strip().lower() for item in study_feature.split(',')] if isinstance(study_feature, str) else []
+                volunteer_features = [item.strip().lower() for item in volunteer_feature.split(',')] if isinstance(volunteer_feature, str) else []
+                return 0 if any(item in volunteer_features for item in study_features) else 1
+            
+            # Original logic for other fields
             if isinstance(study_feature, str) and ',' in study_feature:
                 study_features = [feature.strip() for feature in study_feature.split(',')]
-                # Check if the volunteer feature matches any of the split study features
                 return 1 if volunteer_feature in study_features else 0
             
-            # Direct comparison for non-list, non-empty values
             return 1 if study_feature == volunteer_feature else 0
+
 
         def rank_volunteers(volunteers_df, studies_df):
             categorical_features = [
@@ -57,7 +71,14 @@ class Command(BaseCommand):
                 'language_preferences',
                 'health_status',
                 'duration',
-                'work_preference'
+                'work_preference',
+                
+                #0
+                'medical_history_details',  
+                'current_medication_details',
+                'medication_history_details',
+                'allergy_details',
+                'family_medical_history_details', 
             ]
 
             numerical_features_study = [
@@ -84,7 +105,8 @@ class Command(BaseCommand):
                     for feature in categorical_features:
                         study_feature = study.get(feature)
                         volunteer_feature = volunteer.get(feature)
-                        match_details[feature + "_match"] = is_feature_match(study_feature, volunteer_feature)
+                        match_details[feature + "_match"] = is_feature_match(study_feature, volunteer_feature, feature)  # Pass feature name
+
 
                     numerical_match_score = 0
                     for i, num_feature in enumerate(numerical_features_volunteers):
@@ -124,6 +146,11 @@ class Command(BaseCommand):
             'weight_match',
             'total_match_score',
             'duration_match',
+            'medical_history_details_match',  
+            'current_medication_details_match',
+            'medication_history_details_match',
+            'allergy_details_match',
+            'family_medical_history_details_match', 
         ]
 
         final_output_df = ranked_volunteers_df.drop(columns=exclude_columns)

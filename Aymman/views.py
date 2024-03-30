@@ -258,8 +258,6 @@ def get_Recruitees_aymane(request):
         'age',
         'height',
         'weight',  
-        # numericals
-        
         'biological_sex',
         'hair_color',
         'profession',
@@ -267,11 +265,33 @@ def get_Recruitees_aymane(request):
         'pregnancy_status',
         'health_status',
         'work_preference',
-        'language_preferences', 
+        'language_preferences',
+        # New fields added here
+        'medical_history_details',  
+        'current_medication_details',
+        'medication_history_details',
+        'allergy_details',
+        'family_medical_history_details', 
     ]
     
     # Categorical fields to capitalize, including language_preference
-    categorical_fields = ['biological_sex', 'hair_color', 'profession', 'ethnicity', 'pregnancy_status', 'health_status', 'work_preference', 'language_preferences']
+    categorical_fields = ['biological_sex',
+                          'hair_color',
+                          'profession',
+                          'ethnicity',
+                          'pregnancy_status',
+                          'health_status',
+                          'work_preference', 
+                          'language_preferences',
+                          
+                          # New fields added here
+                          'medical_history_details',  
+                          'current_medication_details',
+                          'medication_history_details',
+                          'allergy_details',
+                         'family_medical_history_details',
+                          ]
+    
 
     for recruitee in recruitee_queryset:
         # Fetch only specified fields
@@ -287,15 +307,12 @@ def get_Recruitees_aymane(request):
         
         recruitee_data['duration'] = getattr(recruitee, 'duration_of_participation', None)
         
-        # Since language_preference is now part of the automatic capitalization loop,
-        # the explicit handling for it below is removed.
 
         recruitee_list.append(recruitee_data)
 
     response_data = json.dumps(recruitee_list, cls=DjangoJSONEncoder)
     
     return HttpResponse(response_data, content_type="application/json")
-
 
 
 
@@ -311,7 +328,7 @@ def get_studies(request):
         'pregnancy_status',
         'language_preference',
         'health_status',
-        'medical_history',  
+        'medical_history',
         'medication_history',
         'current_medication',
         'family_medication_history',
@@ -320,11 +337,10 @@ def get_studies(request):
 
     Study_list = []
 
-    for Studies in Study_queryset:
-        fields = [field.name for field in Studies._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
-
-        Study_data = {field: getattr(Studies, field) for field in fields}
-        Study_data['user'] = str(Studies.user.id)
+    for study in Study_queryset:
+        fields = [field.name for field in study._meta.fields if field.get_internal_type() != 'ForeignKey' and field.get_internal_type() != 'ManyToManyField']
+        Study_data = {field: getattr(study, field) for field in fields}
+        Study_data['user'] = str(study.user.id) if study.user else None
 
         serializer_context = {'request': request}
         m2m_fields_serializers = {
@@ -334,29 +350,49 @@ def get_studies(request):
             'ethnicity': EthnicitySerializer,
             'nationality': NationalitySerializer,
             'pregnancy_status': PregnancyStatusSerializer,
-            'language_preference': LanguagePreferenceSerializer,
+            'language_preference': LanguagePreferenceSerializer,  # This serializer handles the original field
             'health_status': HealthStatusSerializer,
-            # Add your new serializers here
-            'medical_history': MedicalHistorySerializer,
-            'medication_history': MedicationHistorySerializer,
-            'current_medication': CurrentMedicationSerializer,
-            'family_medication_history': FamilyMedicalHistorySerializer,
-            'allergies': AllergySerializer,
+            'medical_history_details': MedicalHistorySerializer,
+            'medication_history_details': MedicationHistorySerializer,
+            'current_medication_details': CurrentMedicationSerializer,
+            'family_medication_history_details': FamilyMedicalHistorySerializer,
+            'allergy_details': AllergySerializer,
         }
 
-        for m2m_field, Serializer in m2m_fields_serializers.items():
-            related_objects = getattr(Studies, m2m_field).all()
+        # Adjusting serialization for renamed fields including language_preference to language_preferences
+        field_renames = [
+            ('medical_history', 'medical_history_details'),
+            ('medication_history', 'medication_history_details'),
+            ('current_medication', 'current_medication_details'),
+            ('family_medication_history', 'family_medication_history_details'),
+            ('allergies', 'allergy_details'),
+            ('language_preference', 'language_preferences'),
+            ('biological_sex','biological_sex'),
+            ('hair_color','hair_color'),
+            ('profession','profession'),
+            ('ethnicity','ethnicity'),
+            ('nationality','nationality'),
+            ('pregnancy_status','pregnancy_status'),
+            ('language_preference','language_preference'),
+            ('health_status','health_status'),
+                
+            # Adding this line to handle the specific case
+        ]
+
+        for old_field, new_field in field_renames:
+            related_objects = getattr(study, old_field).all()
+            Serializer = m2m_fields_serializers.get(new_field, m2m_fields_serializers.get(old_field))  # Fallback to old_field if new_field not found
             serializer = Serializer(related_objects, many=True, context=serializer_context)
             names = [obj['name'] for obj in serializer.data] if serializer.data else []
             
-            output_field_name = m2m_field + 's' if m2m_field == 'language_preference' else m2m_field  # Adjust key naming convention if needed
-
-            Study_data[output_field_name] = ", ".join(names)
+            Study_data[new_field] = ", ".join(names)  # Using the new field name in the output
 
         Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
     return HttpResponse(response_data, content_type="application/json")
+
+
 
 
 

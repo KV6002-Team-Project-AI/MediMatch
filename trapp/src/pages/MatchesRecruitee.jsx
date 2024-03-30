@@ -196,7 +196,7 @@ const MatchesRecruitee = ({ userRoles }) => {
     return (
         <div className="mx-3 my-20">
             {/* DROP DOWN STUDIES */}
-            <div className="grid grid-col pb-4">
+            <div className="grid grid-col pb-3">
                 <div className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
                     <div className='w-full px-1'>
                         <div className='flex p-2 gap-2 justify-center'>
@@ -325,7 +325,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                         <div>
                                             {/* Requirements */}
                                             <h2 className="border-t-2  md:border-t-0 md:mt-0 border-gray-300 pt-2 my-2 text-center font-semibold text-md">Study Preferences</h2>
-                                            <div className='flex px-4 pb-4 justify-between h-72 md:h-auto '>
+                                            <div className='flex px-4 pb-4 justify-between h-72 md:h-auto lg:h-96'>
                                                 <Preferences
                                                     sex={match.study_info.biological_sex}
                                                     hair={match.study_info.hair_color}

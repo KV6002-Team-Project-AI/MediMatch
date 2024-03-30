@@ -301,7 +301,6 @@ def get_Recruitees_aymane(request):
 
 
 
-
 def get_studies(request):
     Study_queryset = Study.objects.prefetch_related(
         'biological_sex',
@@ -312,6 +311,11 @@ def get_studies(request):
         'pregnancy_status',
         'language_preference',
         'health_status',
+        'medical_history',  
+        'medication_history',
+        'current_medication',
+        'family_medication_history',
+        'allergies',
     ).all()
 
     Study_list = []
@@ -322,7 +326,6 @@ def get_studies(request):
         Study_data = {field: getattr(Studies, field) for field in fields}
         Study_data['user'] = str(Studies.user.id)
 
-        # Initialize serializers for Many-to-Many fields
         serializer_context = {'request': request}
         m2m_fields_serializers = {
             'biological_sex': BiologicalSexSerializer,
@@ -331,33 +334,29 @@ def get_studies(request):
             'ethnicity': EthnicitySerializer,
             'nationality': NationalitySerializer,
             'pregnancy_status': PregnancyStatusSerializer,
-            'language_preference': LanguagePreferenceSerializer,  # This remains as is since it's the field name in the model
+            'language_preference': LanguagePreferenceSerializer,
             'health_status': HealthStatusSerializer,
+            # Add your new serializers here
+            'medical_history': MedicalHistorySerializer,
+            'medication_history': MedicationHistorySerializer,
+            'current_medication': CurrentMedicationSerializer,
+            'family_medication_history': FamilyMedicalHistorySerializer,
+            'allergies': AllergySerializer,
         }
 
         for m2m_field, Serializer in m2m_fields_serializers.items():
             related_objects = getattr(Studies, m2m_field).all()
             serializer = Serializer(related_objects, many=True, context=serializer_context)
-            names = [obj['name'] for obj in serializer.data]
+            names = [obj['name'] for obj in serializer.data] if serializer.data else []
             
-            output_field_name = m2m_field
-            # Rename 'language_preference' key to 'language_preferences' in the output
-            if m2m_field == 'language_preference':
-                output_field_name = 'language_preferences'
+            output_field_name = m2m_field + 's' if m2m_field == 'language_preference' else m2m_field  # Adjust key naming convention if needed
 
-            if len(names) == 0:
-                Study_data[output_field_name] = ""  # Use the adjusted key here
-            elif len(names) == 1:
-                Study_data[output_field_name] = names[0]  # And here
-            else:
-                Study_data[output_field_name] = ", ".join(names)  # And also here
+            Study_data[output_field_name] = ", ".join(names)
 
         Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
     return HttpResponse(response_data, content_type="application/json")
-
-
 
 
 

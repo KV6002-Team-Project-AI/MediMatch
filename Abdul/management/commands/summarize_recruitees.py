@@ -5,18 +5,18 @@ class Command(BaseCommand):
     help = 'Generates summaries for all recruitees in the database.'
 
     def handle(self, *args, **options):
-        # Fetch all recruitee instances
         recruitees = Recruitee.objects.all()
 
         if recruitees.exists():
             for recruitee in recruitees:
-                self.stdout.write(self.generate_paragraph(recruitee))
+                summary_paragraph = self.generate_paragraph(recruitee)  # Generate the paragraph
+                self.update_summary(recruitee, summary_paragraph)  # Update the recruitee's summary
+                self.stdout.write(self.style.SUCCESS(f'Summary updated for recruitee: {recruitee.user.id}'))
         else:
             self.stdout.write(self.style.WARNING('No recruitees found in the database.'))
 
     def generate_paragraph(self, recruitee):
-        # Constructing the summary paragraph
-        paragraph = f""" a {recruitee.age}-year-old {recruitee.biological_sex} 
+        paragraph = f"""a {recruitee.age}-year-old {recruitee.biological_sex} 
         working as a {recruitee.profession} from {recruitee.nationality}. Height: {recruitee.height}cm, 
         Weight: {recruitee.weight}kg. Medical history: {recruitee.medical_history_details}, 
         Current medications: {recruitee.current_medication_details}, Medication history: {recruitee.medication_history_details}, 
@@ -25,3 +25,7 @@ class Command(BaseCommand):
         Work preferences: {recruitee.work_preference}."""
         
         return paragraph.replace('\n', ' ').strip()
+
+    def update_summary(self, recruitee, summary_paragraph):
+        recruitee.summary = summary_paragraph  
+        recruitee.save() 

@@ -119,11 +119,16 @@ def get_study(request, pk):
     
     return HttpResponse(response_data, content_type="application/json")
 
-
 def get_studies(request):
     Study_queryset = Study.objects.prefetch_related(
-        'biological_sex', 'hair_color', 'profession', 'ethnicity',
-        'nationality', 'pregnancy_status', 'language_preference', 'health_status',
+        'biological_sex',
+        'hair_color',
+        'profession',
+        'ethnicity',
+        'nationality',
+        'pregnancy_status',
+        'language_preference',
+        'health_status',
     ).all()
 
     Study_list = []
@@ -143,28 +148,32 @@ def get_studies(request):
             'ethnicity': EthnicitySerializer,
             'nationality': NationalitySerializer,
             'pregnancy_status': PregnancyStatusSerializer,
-            'language_preference': LanguagePreferenceSerializer,
+            'language_preference': LanguagePreferenceSerializer,  # This remains as is since it's the field name in the model
             'health_status': HealthStatusSerializer,
         }
 
         for m2m_field, Serializer in m2m_fields_serializers.items():
             related_objects = getattr(Studies, m2m_field).all()
             serializer = Serializer(related_objects, many=True, context=serializer_context)
-            # Extract names from the serializer data
             names = [obj['name'] for obj in serializer.data]
             
-            # Logic to format names
+            output_field_name = m2m_field
+            # Rename 'language_preference' key to 'language_preferences' in the output
+            if m2m_field == 'language_preference':
+                output_field_name = 'language_preferences'
+
             if len(names) == 0:
-                Study_data[m2m_field] = ""  # Or any other placeholder you prefer for empty
+                Study_data[output_field_name] = ""  # Use the adjusted key here
             elif len(names) == 1:
-                Study_data[m2m_field] = names[0]  # Directly use the name if only one
+                Study_data[output_field_name] = names[0]  # And here
             else:
-                Study_data[m2m_field] = ", ".join(names)  # Join multiple names into a single string
+                Study_data[output_field_name] = ", ".join(names)  # And also here
 
         Study_list.append(Study_data)
 
     response_data = json.dumps(Study_list, cls=DjangoJSONEncoder)
     return HttpResponse(response_data, content_type="application/json")
+
 
 
 
@@ -244,14 +253,11 @@ def get_Recruitees_aymane(request):
     
     # List of specific fields you want to include
     fields_to_include = [
-        
-        # numericals
-        
         'age',
         'height',
-        'weight',
+        'weight',  
+        # numericals
         
-        # trivial
         'biological_sex',
         'hair_color',
         'profession',
@@ -259,19 +265,28 @@ def get_Recruitees_aymane(request):
         'pregnancy_status',
         'health_status',
         'work_preference',
-     
+        'language_preferences', 
     ]
+    
+    # Categorical fields to capitalize, including language_preference
+    categorical_fields = ['biological_sex', 'hair_color', 'profession', 'ethnicity', 'pregnancy_status', 'health_status', 'work_preference', 'language_preferences']
 
     for recruitee in recruitee_queryset:
         # Fetch only specified fields
         recruitee_data = {field: getattr(recruitee, field) for field in fields_to_include}
+        
+        # Capitalize the first letter of each value for categorical fields
+        for field in categorical_fields:
+            if field in recruitee_data and recruitee_data[field]:
+                recruitee_data[field] = recruitee_data[field].capitalize()
         
         # If you need to include the user ID specifically
         recruitee_data['user_id'] = recruitee.user.id
         
         recruitee_data['duration'] = getattr(recruitee, 'duration_of_participation', None)
         
-        recruitee_data['language_preference'] = getattr(recruitee, 'language_preferences', None)
+        # Since language_preference is now part of the automatic capitalization loop,
+        # the explicit handling for it below is removed.
 
         recruitee_list.append(recruitee_data)
 

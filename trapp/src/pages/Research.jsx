@@ -104,10 +104,30 @@ const Research = ({ userRoles }) => {
             console.error('Error:', error);
         }
     };
+
+    const handleRefreshClick = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('API call failed with status: ' + response.status);
+          }
+      
+          window.location.reload();
+        } catch (error) {
+          console.error('Failed to execute command:', error);
+        }
+      };
     
     // Function to handle delete
     const handleDelete = (studyId) => {
         fetchDataAfterDelete(studyId);
+        handleRefreshClick();
     };
 
     // HANDLE EDIT

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
 import withAuthentication from '../HOCauth'; // Import the HOC
@@ -11,7 +10,6 @@ import DisplayFeatures from "../components/DisplayFeatures";
 import DisplayInterests from "../components/DisplayInterests";
 
 const Matches = ({ userRoles }) => {
-    const navigate = useNavigate();
     const [matches, setMatches] = useState([]);
     const [noMatch, setNoMatch] = useState(false);
     const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
@@ -51,7 +49,6 @@ const Matches = ({ userRoles }) => {
 
     useEffect(() => {
         fetchMatchesData();
-        
     }, []);
 
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
@@ -88,6 +85,7 @@ const Matches = ({ userRoles }) => {
             if (response.ok) {
                 console.log("Match rejected successfully.");
                 fetchMatchesData();
+                handleRefreshClick();
             } else {
                 console.error("Error rejecting match:", response.statusText);
             }
@@ -97,6 +95,25 @@ const Matches = ({ userRoles }) => {
             console.error("Network error:", error);
         });
     }   
+
+    const handleRefreshClick = async () => {
+        try {
+          const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error('API call failed with status: ' + response.status);
+          }
+      
+          window.location.reload();
+        } catch (error) {
+          console.error('Failed to execute command:', error);
+        }
+    };
     
     function truncateString(str) {
         const x = 33

@@ -109,7 +109,7 @@ function DisplayFeatures(props) {
             {listValues.map((item, idx) => (
                 // Check if item is not empty before rendering the div
                 item && (
-                    <div key={idx} className={`bg-${getRandomColorClass()}-100 text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg`}>
+                    <div key={idx} className={`bg-purple-100 text-black p-2 rounded-lg shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg`}>
                         {capitalizeFirstLetter(item)}
                     </div>
                 )

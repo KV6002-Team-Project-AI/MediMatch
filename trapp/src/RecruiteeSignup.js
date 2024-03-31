@@ -96,7 +96,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
             alert('You must agree to the terms of service.');
             return;
         }// Prevent the form from submitting
-        const jwtToken = localStorage.getItem('accessToken'); // Retrieve the token from localStorage
+        
         fetch(url, {
         method: method,
         headers: {
@@ -211,7 +211,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
 
 <div>
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="height">
-        Height ({formData.measurement_system === 'metric' ? 'cm' : 'inches'})
+        Height in ({formData.measurement_system === 'metric' ? 'CM' : 'Inches'})
     </label>
     <input
         id="height"
@@ -220,14 +220,14 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
         value={formData.height}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder={`Height in ${formData.measurement_system === 'Metric' ? 'centimeters' : 'inches'}`}
+        placeholder={`Height in ${formData.measurement_system === 'metric' ? 'Centimeters' : 'Inches'}`}
         min="0"
     />
 </div>
 
 <div>
     <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="weight">
-        Weight ({formData.measurement_system === 'metric' ? 'kg' : 'lbs'})
+        Weight in ({formData.measurement_system === 'metric' ? 'KG' : 'LBs'})
     </label>
     <input
         id="weight"
@@ -236,7 +236,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
         value={formData.weight}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder={`Weight in ${formData.measurement_system === 'Metric' ? 'kilograms' : 'pounds'}`}
+        placeholder={`Weight in ${formData.measurement_system === 'metric' ? 'Kilograms' : 'Pounds'}`}
         min="0"
     />
 </div>

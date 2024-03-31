@@ -11,7 +11,17 @@ import ZoomOut from '@mui/icons-material/ZoomOut';
 import MinMaxTable from '../components/MinMaxTable';
 import Preferences from '../components/Preferences';
 
+/**
+ * Research Page
+ * 
+ * This component displays a list of research studies. It allows users with appropriate permissions to view, search, edit, and delete studies.
+ * 
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {Object} userRoles - Object containing user roles and permissions.
+ * @returns {JSX.Element} - Research component JSX code.
+ */
 const Research = ({ userRoles }) => {
+    // State variables
     const navigate = useNavigate()
     const [studies, setStudies] = useState([]);
     const [noStudy, setNoStudy] = useState(false);
@@ -21,7 +31,12 @@ const Research = ({ userRoles }) => {
     const [isLgScreen, setIsLgScreen] = useState(false);
     const [hideInfoButton, setHideInfoButton] = useState(false);
 
-    // Date Format function
+    /**
+     * Date Format Function
+     * 
+     * @param {Date} inputDate - Input date object.
+     * @returns {string} - Formatted date string (DD-MM-YYYY).
+     */
     function formatDate(inputDate) {
         const date = new Date(inputDate);
         const day = String(date.getDate()).padStart(2, '0');
@@ -30,7 +45,12 @@ const Research = ({ userRoles }) => {
         return `${day}-${month}-${year}`;
     }
 
-    // Duration fix
+    /**
+     * Duration Fix Function
+     * 
+     * @param {string} duration - Input duration string.
+     * @returns {string} - Formatted duration string.
+     */
     function durationFix(duration) {
         if (duration === "Less than 1 week") {
             return "<1 week"
@@ -41,6 +61,7 @@ const Research = ({ userRoles }) => {
         }
     }
 
+    // Effect hook to handle screen resize
     useEffect(() => {
         const handleResize = () => {
             setIsLgScreen(window.innerWidth >= 1024);
@@ -61,6 +82,7 @@ const Research = ({ userRoles }) => {
         )
     );
 
+    // Effect hook to handle changes in screen size
     useEffect(() => {
         // If the screen width is large, hide the info button
         if (isLgScreen) {
@@ -70,12 +92,11 @@ const Research = ({ userRoles }) => {
         } else {
             // If the screen width is not large, show the info button
             setHideInfoButton(false);
-            // Initialize expandedStudies state based on the number of studies
-            // setExpandedStudies(new Array(filteredStudies.length).fill(false));
         }
         
     }, [isLgScreen, filteredStudies]);
 
+    // Effect hook to fetch studies data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -107,6 +128,11 @@ const Research = ({ userRoles }) => {
         fetchData();
     }, []);
     
+    /**
+     * Fetch Data After Delete Function
+     * 
+     * @param {string} studyId - ID of the study to be deleted.
+     */
     const fetchDataAfterDelete = async (studyId) => {
         try {
             const url = `http://localhost:8000/api/studyexpire/`;
@@ -143,6 +169,11 @@ const Research = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handle Refresh Click Function
+     * 
+     * Handles refreshing the page after an action.
+     */
     const handleRefreshClick = async () => {
         try {
           const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
@@ -162,21 +193,35 @@ const Research = ({ userRoles }) => {
         }
       };
     
-    // Function to handle delete
+    /**
+     * Handle Delete Function
+     * 
+     * Handles deleting a study.
+     * 
+     * @param {string} studyId - ID of the study to be deleted.
+     */
     const handleDelete = (studyId) => {
         fetchDataAfterDelete(studyId);
         handleRefreshClick();
     };
 
-    // HANDLE EDIT
+    /**
+     * Handle Edit Function
+     * 
+     * Handles editing a study.
+     * 
+     * @param {string} studyId - ID of the study to be edited.
+     */
     function handleEdit(studyId) {
         navigate(`/addstudy?study_id=${studyId}`);
     }
 
+    // If user does not have permission, return message
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
 
+    // JSX rendering
     return (
         <>
             <div className="mx-3 my-20">

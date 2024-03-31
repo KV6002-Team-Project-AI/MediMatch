@@ -1,4 +1,3 @@
-// App.js
 import React, { useEffect } from 'react';
 import {BrowserRouter as Router,Routes,Route,useLocation,Navigate} from 'react-router-dom';
 import Menu from './components/Menu';
@@ -23,6 +22,11 @@ import ReportUserForm from './report';
 import AdminDashboard from './madash';
 import './App.css';
 
+/**
+ * Hook for tracking page views in Google Analytics.
+ * 
+ * @author Jed Bywater <>
+ */
 function usePageTracking() {
     const location = useLocation();
     useEffect(() => {
@@ -36,6 +40,13 @@ function usePageTracking() {
     }, [location]);
 }
 
+/**
+ * Main application component.
+ * 
+ * @author Syed Wajahat Quadri <w21043564>
+ * @author Mohammed Etri <>
+ * @author Jed Bywater <>
+ */
 function App() {
     usePageTracking(); // Call this in your App component
 

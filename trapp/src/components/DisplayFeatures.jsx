@@ -1,7 +1,36 @@
 import * as React from 'react';
 
+/**
+ * Component for displaying a list of features with randomly generated background colors.
+ * 
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {Object} props - Props containing features to display.
+ * @param {string} props.sex - Gender feature.
+ * @param {string} props.hair - Hair feature.
+ * @param {string} props.profession - Profession feature.
+ * @param {string} props.ethnicity - Ethnicity feature.
+ * @param {string} props.nationality - Nationality feature.
+ * @param {string} props.pregnancy - Pregnancy feature.
+ * @param {string} props.language - Language feature.
+ * @param {string} props.activity - Activity feature.
+ * @param {string} props.socioeconomic - Socioeconomic status feature.
+ * @param {string} props.health - Health status feature.
+ * @param {Array} props.medical_history - Medical history feature.
+ * @param {Array} props.medication_history - Medication history feature.
+ * @param {Array} props.current_medication - Current medication feature.
+ * @param {Array} props.family_medication_history - Family medication history feature.
+ * @param {Array} props.allergies - Allergies feature.
+ * @param {Array} props.lifestyle - Lifestyle feature.
+ * @returns {JSX.Element} - JSX for rendering the features with styled divs.
+ */
 function DisplayFeatures(props) {  
 
+    /**
+     * Maps a dictionary to extract names.
+     * 
+     * @param {Array} dictionary - The dictionary to map.
+     * @returns {Array|string} - The list of names or "none" if dictionary is empty.
+     */
     const mapDictionary = (dictionary) => {
         if (!dictionary || dictionary.length === 0) {
             return;
@@ -10,6 +39,12 @@ function DisplayFeatures(props) {
         }
     };
 
+    /**
+     * Capitalizes the first letter of a string.
+     * 
+     * @param {string} string - The string to capitalize.
+     * @returns {string} - The capitalized string.
+     */
     function capitalizeFirstLetter(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
@@ -59,7 +94,11 @@ function DisplayFeatures(props) {
         'green', 
     ]
 
-    // Function to get a random color from coolColors
+    /**
+     * Gets a random color class from the lightColors array.
+     * 
+     * @returns {string} - The random color class.
+     */
     const getRandomColorClass = () => {
         const randomIndex = Math.floor(Math.random() * lightColors.length);
         return lightColors[randomIndex];

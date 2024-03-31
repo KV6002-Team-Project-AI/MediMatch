@@ -7,9 +7,27 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+/**
+ * Component for displaying a table with minimum and maximum values for attributes.
+ * 
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {Object} props - Props containing minimum and maximum values for attributes.
+ * @param {number} props.minAge - Minimum age value.
+ * @param {number} props.maxAge - Maximum age value.
+ * @param {number} props.minWeight - Minimum weight value.
+ * @param {number} props.maxWeight - Maximum weight value.
+ * @param {number} props.minHeight - Minimum height value.
+ * @param {number} props.maxHeight - Maximum height value.
+ * @returns {JSX.Element} - JSX for rendering the min-max table.
+ */
 function MinMaxTable(props) {
 
-    // Min processing
+    /**
+     * Processes the minimum value to display 'none' if it equals 1, otherwise returns the value.
+     * 
+     * @param {number} minVal - The minimum value to process.
+     * @returns {number|string} - Processed minimum value or 'none'.
+     */
     function minCheck(minVal){
         if (minVal === 1) {
             return "none";
@@ -18,7 +36,12 @@ function MinMaxTable(props) {
         }
     }
 
-    // Max processing
+    /**
+     * Processes the maximum value to display 'none' if it equals 1, 120, or 300, otherwise returns the value.
+     * 
+     * @param {number} maxVal - The maximum value to process.
+     * @returns {number|string} - Processed maximum value or 'none'.
+     */
     function maxCheck(maxVal){
         if (maxVal === 1 ||  maxVal === 120 || maxVal === 300) {
             return "none";
@@ -38,7 +61,7 @@ function MinMaxTable(props) {
         },
       }));
       
-      const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    const StyledTableRow = styled(TableRow)(({ theme }) => ({
         '&:nth-of-type(odd)': {
           backgroundColor: theme.palette.action.hover,
         },

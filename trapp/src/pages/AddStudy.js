@@ -2,6 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
 
+/**
+ * Page responsible for adding a new study or updating an existing one.
+ * It allows recruiters or superusers to input study details including name, description, category, and preferences.
+ * Recruiters can specify study duration, start and expiry dates, and set age, weight, and height preferences.
+ * Additionally, recruiters can select from various options for biological sex, hair color, profession, ethnicity,
+ * nationality, pregnancy status, language preference, activity level, socioeconomic status, health status,
+ * medical history, medication history, current medication, family medication history, allergies, and lifestyle.
+ * Upon submission, the form data is sent to the backend for processing.
+ *
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {Object} userRoles - Object containing user roles information.
+ * @returns {JSX.Element} - JSX for rendering the add study form.
+ */
 const AddStudy = ({ userRoles }) => {
 
     const location = useLocation();
@@ -72,6 +85,12 @@ const AddStudy = ({ userRoles }) => {
     const [showAllergies, setShowAllergies] = useState(false);
     const [showLifestyle, setShowLifestyle] = useState(false);
     
+    /**
+     * Fetches dropdown choices for form fields from the backend.
+     * Sets the dropdownChoices state with the received data.
+     * Logs an error if fetching fails.
+     * If user is updating, fetches existing study data.
+     */
     useEffect(() => {
         fetch('http://localhost:8000/api/dropdown-choices/')
             .then(response => response.json())
@@ -93,12 +112,15 @@ const AddStudy = ({ userRoles }) => {
             return response.json();
         })
         .then(data => {
-            console.log("STUDY DATA FOUND:", data);
+            // Set formData state with fetched study data
             setFormData({
                 ...data,
                 informedConsentStatus: false,
             });   
-            // THIS PART OF CODE SHOULD ONLY RUN ONCE
+
+            // Set show state for various preferences based on fetched data
+            // This part of the code should only run once
+            // Set show state for various preferences based on fetched data
             if (data.min_age === 1 && data.max_age === 120) {
                 setShowAge(false)
             } else {setShowAge(true)}
@@ -132,6 +154,7 @@ const AddStudy = ({ userRoles }) => {
 
     }, [studyId]);
 
+    // useEffect hooks for updating form data based on show state...
     useEffect(() => {
         if (!showAge) {
             setFormData(prevFormData => ({
@@ -278,6 +301,14 @@ const AddStudy = ({ userRoles }) => {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
     
+    /**
+     * Handles change events for form input fields.
+     * Updates the formData state with the new input value.
+     * Performs validation and logic to set values to null when show checkboxes are false.
+     * Displays alerts for validation errors.
+     * 
+     * @param {Event} e - Change event object.
+     */
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
     
@@ -381,6 +412,13 @@ const AddStudy = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handles blur events for form input fields.
+     * Performs validation for minimum and maximum values of age, weight, and height.
+     * Displays alerts for validation errors.
+     * 
+     * @param {Event} e - Blur event object.
+     */
     const handleBlur = (e) => {
         const { name, value } = e.target;
     
@@ -421,6 +459,13 @@ const AddStudy = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handles change events for checkbox input fields.
+     * Updates the formData state with the selected checkbox values.
+     * 
+     * @param {Event} e - Change event object.
+     * @param {string} preferenceName - Name of the preference field to be updated.
+     */
     const handleCheckboxChange = (e, preferenceName) => {
         const { value, checked } = e.target;
     
@@ -449,6 +494,12 @@ const AddStudy = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handles click event for refreshing the page.
+     * Executes a GET request to refresh data from the backend.
+     * Reloads the page upon successful execution.
+     * Displays an error message if the API call fails.
+     */
     const handleRefreshClick = async () => {
         try {
           const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
@@ -468,6 +519,14 @@ const AddStudy = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handles form submission.
+     * Validates form data and displays alerts for validation errors.
+     * Submits the form data to the backend for processing.
+     * Redirects the user upon successful submission.
+     * 
+     * @param {Event} e - Form submission event object.
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
 

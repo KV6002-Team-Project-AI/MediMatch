@@ -11,21 +11,28 @@ class Command(BaseCommand):
             for recruitee in recruitees:
                 summary_paragraph = self.generate_paragraph(recruitee)  # Generate the paragraph
                 self.update_summary(recruitee, summary_paragraph)  # Update the recruitee's summary
-                self.stdout.write(self.style.SUCCESS(f'Summary updated for recruitee: {recruitee.user.id}'))
+                self.stdout.write(self.style.SUCCESS(f'Summary updated for recruitee: {recruitee.user_id}'))
         else:
             self.stdout.write(self.style.WARNING('No recruitees found in the database.'))
 
     def generate_paragraph(self, recruitee):
-        paragraph = f"""a {recruitee.age}-year-old {recruitee.biological_sex} 
-        working as a {recruitee.profession} from {recruitee.nationality}. Height: {recruitee.height}cm, 
-        Weight: {recruitee.weight}kg. Medical history: {recruitee.medical_history_details}, 
-        Current medications: {recruitee.current_medication_details}, Medication history: {recruitee.medication_history_details}, 
-        Allergies: {recruitee.allergy_details}, Family medical history: {recruitee.family_medical_history_details}, 
-        Lifestyle: {recruitee.lifestyle_factors}, Socioeconomic status: {recruitee.socioeconomic_status}, 
-        Work preferences: {recruitee.work_preference}."""
-        
+        # Format fields that should have the first letter capitalized
+        name = recruitee.user.get_full_name().capitalize()
+        profession = recruitee.profession.capitalize()
+        ethnicity = recruitee.nationality.capitalize()
+        # Concatenate the formatted fields with other lowercase fields
+        paragraph = f"""{name}, a {recruitee.age}-year-old {recruitee.biological_sex.lower()} 
+        working as a {profession} from a {ethnicity} ethnic background. Height: {recruitee.height}cm, 
+        Weight: {recruitee.weight}kg. Medical history: {recruitee.medical_history_details.lower()}, 
+        Current medications: {recruitee.current_medication_details.lower()}, Medication history: {recruitee.medication_history_details.lower()}, 
+        Allergies: {recruitee.allergy_details.lower()}, Family medical history: {recruitee.family_medical_history_details.lower()}, 
+        Lifestyle: {recruitee.lifestyle_factors.lower()}, Socioeconomic status: {recruitee.socioeconomic_status.lower()}, 
+        Work preferences: {recruitee.work_preference.lower()}."""
+
         return paragraph.replace('\n', ' ').strip()
 
+
     def update_summary(self, recruitee, summary_paragraph):
-        recruitee.summary = summary_paragraph  
-        recruitee.save() 
+        recruitee.summary = summary_paragraph
+        recruitee.save()
+

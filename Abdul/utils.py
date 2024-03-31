@@ -19,8 +19,8 @@ from transformers import AutoModelForTokenClassification, AutoTokenizer
 import os
 
 class NERModel:
-    def __init__(self, base_path, model_relative_path, id2label, filter_words=None):
-        model_path = os.path.join(base_path, model_relative_path)
+    def __init__(self, model_relative_path, id2label, filter_words=None):
+        model_path = os.path.join(os.getcwd(), model_relative_path)
         self.model = AutoModelForTokenClassification.from_pretrained(model_path)
         self.tokenizer = AutoTokenizer.from_pretrained(model_path)
         self.id2label = id2label
@@ -82,19 +82,18 @@ class NERModel:
         return filtered_entities
 
 # filtering the additonal words
-base_path = "D:/Abdullah/Documents/MediMatch"
 medical_ner = NERModel(
-    base_path, "Abdul/NLP_Models/Medical",
+    "Abdul/NLP_Models/Medical",
     {0: "O", 1: "B-CONDITION", 2: "I-CONDITION", 3: "B-MEDICATION", 4: "I-MEDICATION"},
     {"on", "for", "currently", "taking", "from", "with", "take", "of", "using", "has"}
 )
 allergies_ner = NERModel(
-    base_path, "Abdul/NLP_Models/Allergies",
+    "Abdul/NLP_Models/Allergies",
     {0: "O", 1: "B-ALLERGY", 2: "I-ALLERGY"},
     {"of", "from", "to", "and"}
 )
 lifestyle_ner = NERModel(
-    base_path, "Abdul/NLP_Models/Lifestyle",
+    "Abdul/NLP_Models/Lifestyle",
     {0: "O", 1: "B-LIFESTYLE", 2: "I-LIFESTYLE"},
     {"of", "from", "to", "and", "eat", "food", "a"}
 )
@@ -116,8 +115,7 @@ def get_ner_results(text, model_type):
         else:
             return ", ".join(entity[1] for entity in results)  # Join multiple words with comma
     else:
-        return "Null"  
-
+        return "Null"
 
 
 

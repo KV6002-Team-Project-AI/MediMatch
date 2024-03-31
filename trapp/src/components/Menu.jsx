@@ -9,11 +9,12 @@ import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'; // 
 
 function Menu({ userRoles }) {
   const location = useLocation();
-  const [notification, setNotification] = useState(true);
   const [adminMode, setAdminMode] = useState(false); // State to manage admin mode
 
-  const toggleNotifications = () => {
-    setNotification(!notification);
+  // Function to toggle admin mode, stops event propagation to prevent unintended menu toggling
+  const toggleAdminMode = (event) => {
+    event.stopPropagation(); // Prevent event from affecting other click handlers
+    setAdminMode(!adminMode); // Toggle the visibility of the admin menu
   };
 
   // Regular menu items
@@ -37,11 +38,6 @@ function Menu({ userRoles }) {
     { name: 'Admin Creation', icon: <AdminPanelSettingsIcon />, path: '/admin/create' },
   ];
 
-  // Function to toggle admin mode
-  const toggleAdminMode = () => {
-    setAdminMode(!adminMode); // Toggle the visibility of the admin menu
-  };
-
   // The Admin button, only shown to superusers
   const adminButton = userRoles.is_superuser ? (
     <li onClick={toggleAdminMode} className="flex-shrink cursor-pointer">
@@ -56,9 +52,9 @@ function Menu({ userRoles }) {
   return (
     <div className="fixed inset-x-0 bottom-0 bg-white shadow-md pt-3 z-20 h-16">
       <ul className="flex justify-around items-center text-md font-medium">
-        {adminButton} {/* This will render the Admin button if the user is a superuser */}
+        {adminButton}
         {displayedMenuItems.map((item) => (
-          <li key={item.name} onClick={item.badge ? toggleNotifications : undefined} className="flex-shrink">
+          <li key={item.name} className="flex-shrink">
             <Link to={item.path} className={`transition duration-200 ease-in-out hover:bg-gray-100 ${location.pathname === item.path ? 'text-red-600' : 'text-gray-600'} rounded-lg p-2 inline-flex items-center justify-center`}>
               {item.icon}
               <span className="hidden sm:inline ml-1">{item.name}</span>
@@ -69,6 +65,7 @@ function Menu({ userRoles }) {
     </div>
   );
 }
+
 
 // Wrap your Menu component with the HOC to receive the userRoles prop
 export default withAuthentication(Menu, { checkVerification: false });

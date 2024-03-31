@@ -9,13 +9,19 @@ class Command(BaseCommand):
 
         if recruitees.exists():
             for recruitee in recruitees:
-                summary_paragraph = self.generate_paragraph(recruitee)  # Generate the paragraph
-                self.update_summary(recruitee, summary_paragraph)  # Update the recruitee's summary
-                self.stdout.write(self.style.SUCCESS(f'Summary updated for recruitee: {recruitee.user.id}'))
+                # Generate the summary paragraph for the recruitee
+                summary_paragraph = self.generate_paragraph(recruitee)
+                # Update the recruitee's summary field with the generated paragraph
+                # Ensure the summary fits within the max_length of the summary field
+                recruitee.summary = summary_paragraph[:400]  # Assuming max_length is 400
+                recruitee.save()  # Save the updates to the database
+                # Optionally write out the summary to stdout
+                self.stdout.write(summary_paragraph)
         else:
             self.stdout.write(self.style.WARNING('No recruitees found in the database.'))
 
     def generate_paragraph(self, recruitee):
+        # Constructing the summary paragraph
         paragraph = f"""a {recruitee.age}-year-old {recruitee.biological_sex} 
         working as a {recruitee.profession} from {recruitee.nationality}. Height: {recruitee.height}cm, 
         Weight: {recruitee.weight}kg. Medical history: {recruitee.medical_history_details}, 
@@ -24,6 +30,7 @@ class Command(BaseCommand):
         Lifestyle: {recruitee.lifestyle_factors}, Socioeconomic status: {recruitee.socioeconomic_status}, 
         Work preferences: {recruitee.work_preference}."""
         
+        # Replace newlines with spaces and strip leading/trailing whitespace
         return paragraph.replace('\n', ' ').strip()
 
     def update_summary(self, recruitee, summary_paragraph):

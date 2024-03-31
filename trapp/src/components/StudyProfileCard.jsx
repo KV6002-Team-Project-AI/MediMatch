@@ -134,9 +134,6 @@ const StudyProfileCard = () => {
     setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
   };
 
-  const toggleAdditionalInfo = () => {
-    setShowAdditionalInfo(!showAdditionalInfo);
-  };
 
  // Jed's report functionality
  const [showReportForm, setShowReportForm] = useState(false);

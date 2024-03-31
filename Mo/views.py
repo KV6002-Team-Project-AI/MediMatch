@@ -1,3 +1,42 @@
+"""
+This Django module contains API views for handling match actions for both recruitees and recruiters in a research recruitment platform.
+The module defines two primary classes, `MatchActionView` and `RecruiterMatchUpdateView`, which inherit from Django's `APIView`.
+
+- `MatchActionView`:
+    Handles POST and GET requests for recruitees. The POST method allows recruitees to update the status of their matches
+    (accept or reject) based on user input. The GET method fetches all pending matches for the recruitee, sorted by ranking.
+    
+    Permission: Only authenticated users can access this view.
+
+- `RecruiterMatchUpdateView`:
+    Handles POST and GET requests for recruiters. The POST method allows recruiters to update the status of a study's matches
+    (accept or reject) based on user input. The GET method fetches all pending matches for a recruiter's study, also sorted by ranking.
+    
+    Permission: Only authenticated users can access this view.
+
+Both classes utilize the `ProfileInteractionSerializer` for serializing the match data to and from JSON format. The views ensure
+that only authorized users can update match statuses by checking if the requesting user matches the user ID associated with a recruitee
+or the owner of the study for a recruiter.
+
+Exceptions are handled to provide meaningful error responses, including scenarios where matches or studies are not found, invalid parameters
+are provided, or unexpected errors occur.
+
+Dependencies:
+- `rest_framework.views.APIView`: Base class for handling HTTP requests.
+- `rest_framework.response.Response`: Used to return responses from API views.
+- `rest_framework.status`: Provides HTTP status codes.
+- `rest_framework.permissions.IsAuthenticated`: Ensures that only authenticated users can access the views.
+- `django.db.models.F`: Allows ordering of querysets based on model fields.
+- `.models.Matches`: The model representing match instances.
+- `ResearchSwipe.models.Recruitee` and `Syed.models.Study`: Models representing recruitees and studies.
+- `.serializers.ProfileInteractionSerializer`: Serializer for match instances.
+
+Usage:
+These views are to be hooked into the URLs configuration of a Django project to provide RESTful endpoints for managing match actions
+related to recruitment studies.
+"""
+
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,11 +47,8 @@ from ResearchSwipe.models import Recruitee
 from Syed.models import Study
 from .serializers import ProfileInteractionSerializer
 
-# Recruitees API, POST and GET methods accepted
-# POST method changes current status for recruitee from the default pending state to accepted or rejected depending on user input from frontend
-# GET method retrieves all instances where the users current state is the default state (pending) in order of ranking
-# Rank 1 being the best suited for a specific study and rank 100 being the worst for a speific study
-class MatchActionView(APIView):
+
+class RecruiteeMatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -61,10 +97,7 @@ class MatchActionView(APIView):
         except Exception as e:
             return Response({'detail': 'An unexpected error occurred.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# Recruiters API, POST and GET methods accepted
-# POST method changes current status for study from the default pending state to accepted or rejected depending on user input from frontend
-# GET method retrieves all instances where the users current state is the default state (pending) in order of ranking
-# Rank 1 being the best suited for a specific study and rank 100 being the worst for a speific study
+
 class RecruiterMatchUpdateView(APIView):
     permission_classes = [IsAuthenticated]
 

@@ -280,7 +280,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                     <div className='flex px-2 w-full mx-2 mt-2 mb-1'>
                                         <div className='flex-col w-full item-center'>
                                             <div className="flex justify-between">
-                                                <h2 className="text-xl font-bold">{match.study_name}</h2>
+                                                <h2 className="text-xl font-bold">{match.study_info.name}</h2>
                                             </div>
                                         </div>
                                         {/* Info button */}
@@ -334,7 +334,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                     {/* Unmatch and contact buttons */}
                                                     <div 
                                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
+                                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_info.study_id)}
                                                     >
                                                         Unmatch
                                                     </div>
@@ -380,7 +380,7 @@ const MatchesRecruitee = ({ userRoles }) => {
                                                         {/* Unmatch and contact buttons */}
                                                         <div 
                                                             className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                                            onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
+                                                            onClick={() => handleUnmatch(match.recruitee.user_id, match.study_info.study_id)}
                                                         >
                                                             Unmatch
                                                         </div>

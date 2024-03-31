@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
  * It includes navigation links, user settings, and logout functionality.
  *
  * @author Syed Wajahat Quadri <w21043564>
- * @author Mohammed Etri <>
+ * @author Mohammed Etri <w21015706>
  * @author Jed Bywater <>
  */
 function Header() {

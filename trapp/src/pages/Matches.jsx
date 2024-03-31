@@ -46,7 +46,7 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.name)));
             setUniqueStudyNames(uniqueNames);
             // Set noMatch state based on data length
             if (data.length === 0) {
@@ -71,7 +71,7 @@ const Matches = ({ userRoles }) => {
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_info.name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -189,7 +189,7 @@ const Matches = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study_name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_info.name}
                                             </p>
                                         </div>
                                     </div>
@@ -249,7 +249,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                     <div 
                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
+                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_info.study_id)}
                                     >
                                         Unmatch
                                     </div>

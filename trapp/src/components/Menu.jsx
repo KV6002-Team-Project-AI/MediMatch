@@ -4,7 +4,7 @@
  * It also provides functionality for toggling admin mode and displaying notifications.
  *
  * @author Syed Wajahat Quadri <w21043564>
- * @author Mohammed Etri <>
+ * @author Mohammed Etri <w21015706>
  * @author Jed Bywater <>
  */
 import React, { useState } from 'react';

@@ -44,7 +44,7 @@ function usePageTracking() {
  * Main application component.
  * 
  * @author Syed Wajahat Quadri <w21043564>
- * @author Mohammed Etri <>
+ * @author Mohammed Etri <w21015706>
  * @author Jed Bywater <>
  */
 function App() {

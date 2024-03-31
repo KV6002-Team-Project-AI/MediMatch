@@ -6,7 +6,7 @@ from Syed.views import StudyCreate, StudyExpire, MatchedRecruitees, MatchedRecru
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
-from Mo.views import MatchActionView, RecruiterMatchUpdateView
+from Mo.views import RecruiteeMatchUpdateView, RecruiterMatchUpdateView
 from Aymman.views import get_Recruitee, get_Recruitees, get_studies,get_study, get_Recruitees_aymane,get_studies_aymane, get_rank_aymane,get_bio_aymane,RunCommandAPIView
 from Abdul.views import GenerateSummariesAPIView
 urlpatterns = [
@@ -59,7 +59,7 @@ urlpatterns = [
 
     #Mo paths
     path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
-    path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),
+    path('api/recruitee/matches/', RecruiteeMatchUpdateView.as_view(), name='matches'),
 
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),

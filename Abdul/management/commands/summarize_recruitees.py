@@ -10,17 +10,17 @@ class Command(BaseCommand):
         if recruitees.exists():
             for recruitee in recruitees:
                 summary_paragraph = self.generate_paragraph(recruitee)  # Generate the paragraph
-                self.update_summary(recruitee, summary_paragraph)  # Update the recruitee's summary
+                self.update_summary(recruitee, summary_paragraph)  # Update the recruitee summary
                 self.stdout.write(self.style.SUCCESS(f'Summary updated for recruitee: {recruitee.user_id}'))
         else:
             self.stdout.write(self.style.WARNING('No recruitees found in the database.'))
 
     def generate_paragraph(self, recruitee):
-        # Format fields that should have the first letter capitalized
+        # Format fields that first letter capitalized
         name = recruitee.user.get_full_name().capitalize()
         profession = recruitee.profession.capitalize()
         ethnicity = recruitee.nationality.capitalize()
-        # Concatenate the formatted fields with other lowercase fields
+        # Concatnate formatted fields with other fields
         paragraph = f"""{name}, a {recruitee.age}-year-old {recruitee.biological_sex.lower()} 
         working as a {profession} from a {ethnicity} ethnic background. Height: {recruitee.height}cm, 
         Weight: {recruitee.weight}kg. Medical history: {recruitee.medical_history_details.lower()}, 

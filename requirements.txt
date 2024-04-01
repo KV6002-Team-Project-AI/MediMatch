@@ -63,3 +63,5 @@ whitenoise==6.6.0
 django_celery_beat
 torch==2.2.0
 transformers==4.32.1
+tokenizers==0.10.3
+

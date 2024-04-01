@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 // withPageViewTracker.js
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -5,11 +6,11 @@ import { useLocation } from 'react-router-dom';
 const withPageViewTracker = (WrappedComponent, trackingId) => {
   const TrackPageView = (props) => {
     const location = useLocation();
-    const userId =  localStorage.getItem('userInfo').id; // Replace with your method of obtaining the user ID
+    const userId =  localStorage.getItem('userInfo').id; 
 
     useEffect(() => {
       if (typeof window.gtag === 'function') {
-        // Set the user ID, if available, for user-specific tracking
+        // Set the user ID
         if (userId) {
           window.gtag('set', {'user_id': userId});
         }
@@ -27,3 +28,4 @@ const withPageViewTracker = (WrappedComponent, trackingId) => {
 };
 
 export default withPageViewTracker;
+ {/* End Of Jeds Code*/}

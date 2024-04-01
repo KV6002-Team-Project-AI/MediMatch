@@ -1,3 +1,4 @@
+ // Start Of Jeds Code*/}
 import React, { useEffect, useState } from 'react';
 import UserProfile from '../components/userProfile';
 import RecruiterProfile from '../components/RecruiterProfile';
@@ -40,7 +41,7 @@ const Profile = ({ userRoles }) => {
     }, [userRoles]);
 
     const onUpdateProfileImage = async (newImage) => {
-        // Example logic to send an image update to your backend
+        // logic to send an image update to your backend
         const formData = new FormData();
         formData.append('profile_image', newImage);
     
@@ -89,3 +90,4 @@ const Profile = ({ userRoles }) => {
 
 const trackingId = 'G-BQGVC0WJND';
 export default withAuthentication(withPageViewTracker(Profile, trackingId));
+ {/* End Of Jeds Code*/}

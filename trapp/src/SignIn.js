@@ -1,3 +1,4 @@
+//Start Of Jeds Code*/}
 import * as React from 'react';
 import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
@@ -16,8 +17,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 
 
-
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
@@ -55,7 +54,7 @@ export default function SignIn() {
         localStorage.setItem('refreshToken', data.refresh);
         localStorage.setItem('userInfo', JSON.stringify(data.user));
     
-        // Check the user's role and redirect accordingly
+        
         // Check the user's role and redirect accordingly
       if (data.user.is_superuser) {
         // Redirect superuser to profile page
@@ -164,3 +163,4 @@ export default function SignIn() {
     </ThemeProvider>
   );
 }
+ {/* End Of Jeds Code*/}

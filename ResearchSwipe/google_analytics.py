@@ -1,12 +1,11 @@
+# This is All Jeds code
+
 from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import RunReportRequest
 from google.oauth2 import service_account
 from datetime import datetime, timedelta
 
-# Path to service account key file
-KEY_FILE_LOCATION = r'C:\Users\Jed Bywater\OneDrive - Northumbria University - Production Azure AD\Documents\GitHub\MediMatch\medimatch-418221-2d599ed1a97c.json'
-# GA4 Property ID 
-PROPERTY_ID = '433240422'
+
 
 class GoogleAnalyticsReporter:
     def __init__(self, key_file_location, property_id):

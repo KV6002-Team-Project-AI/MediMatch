@@ -1,3 +1,4 @@
+ // Start Of Jeds Code*/}
 import React, { useState } from 'react';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -63,3 +64,4 @@ function RecruiterProfile({ user, getReadableValue, onUpdateProfileImage }) {
 }
 
 export default RecruiterProfile;
+ {/* End Of Jeds Code*/}

@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -74,3 +75,4 @@ const withAuthentication = (WrappedComponent, { checkVerification = true } = {})
 };
 
 export default withAuthentication;
+ {/* End Of Jeds Code*/}

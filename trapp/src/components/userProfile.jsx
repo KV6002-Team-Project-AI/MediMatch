@@ -1,9 +1,10 @@
+ // Start Of Jeds Code*/}
 import React, { useState } from 'react';
 import { Avatar, Box, Button, Typography } from '@mui/material';
 import Popper from '@mui/material/Popper';
 import Fade from '@mui/material/Fade';
 import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom'; 
 
 function UserProfile({ user, getReadableValue, onUpdateProfileImage }) {
   
@@ -13,8 +14,7 @@ function UserProfile({ user, getReadableValue, onUpdateProfileImage }) {
   const profileImageUrl = user.profile_image_url
   ? new URL(user.profile_image_url, 'http://localhost:8000').href
   : '/static/images/avatar/1.jpg';
-  console.log('Selected image file:', selectedImage);
-  console.log('Profile image URL:', profileImageUrl);
+
     const features = [
         user.height ? `${user.height} CM` : '',
         user.weight ? `${user.weight} KG` : '',
@@ -33,13 +33,9 @@ function UserProfile({ user, getReadableValue, onUpdateProfileImage }) {
       const file = event.target.files[0];
       setSelectedImage(file);
       onUpdateProfileImage(file);
-
-      // Debugging: Log the object URL for the selected image
-      const objectUrl = URL.createObjectURL(file);
-      console.log('New image object URL:', objectUrl);
     }
   };
-    const navigate = useNavigate(); // Use the navigate function
+    const navigate = useNavigate(); 
 
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -120,3 +116,4 @@ function UserProfile({ user, getReadableValue, onUpdateProfileImage }) {
 }
 
 export default UserProfile;
+ {/* End Of Jeds Code*/}

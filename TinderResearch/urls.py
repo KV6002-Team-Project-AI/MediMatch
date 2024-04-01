@@ -32,6 +32,8 @@ urlpatterns = [
     path('report/', ReportUserView.as_view(), name='report_user'),
     path('api/admin/reports/', AdminReportView.as_view(), name='admin_reports'),
     path('api/admin/reports/<int:pk>/', AdminReportView.as_view(), name='update_report'),
+    # End of jeds api's
+
 
     # Ayman paths
     path('api/get-recruitees/', get_Recruitees, name='get_recruitees'),
@@ -65,9 +67,11 @@ urlpatterns = [
     path('api/recruiter/matches/', RecruiterMatchUpdateView.as_view(), name='recruiter-match-update'),
     path('api/recruitee/matches/', MatchActionView.as_view(), name='matches'),
 
+    #Start of jeds code
     # The catch-all pattern for your React frontend should be the last pattern
     re_path(r'^(?!admin|media|static/).*$', TemplateView.as_view(template_name='index.html')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    #End of Jeds Code

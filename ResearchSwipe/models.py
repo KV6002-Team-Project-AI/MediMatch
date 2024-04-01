@@ -1,3 +1,4 @@
+# This is All Jeds code
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from .datavalidation import *
@@ -43,7 +44,7 @@ class Report(models.Model):
     screenshot = models.ImageField(upload_to='report_screenshots/', blank=True, null=True)
 
 class User(AbstractUser):
-    # Your existing fields...
+   
     is_recruitee = models.BooleanField(default=False)
     is_recruiter = models.BooleanField(default=False)
     email = models.EmailField(unique=True)

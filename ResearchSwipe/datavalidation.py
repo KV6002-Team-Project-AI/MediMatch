@@ -1,3 +1,5 @@
+# This is All Jeds code
+
 #Data validation
 NATIONALITY_CHOICES = [
     ('afghan', 'Afghan'),

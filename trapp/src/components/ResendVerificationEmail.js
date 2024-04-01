@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,14 +19,13 @@ const ResendVerificationEmail = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`,
             },
-            credentials: 'include', // Include credentials if your backend expects cookies to be sent
+            credentials: 'include', // Include credentials
         })
-        .then(response => response.json()) // Expecting a JSON response here
+        .then(response => response.json()) // JSON response here
         .then(data => {
             if (data.message) {
                 setMessage(data.message);
-                // Optionally navigate to sign-in page after showing the message
-                // setTimeout(() => navigate("/signin"), 5000);
+                
             } else {
                 throw new Error(data.error || 'Failed to send the email.');
             }
@@ -58,3 +58,4 @@ const ResendVerificationEmail = () => {
 };
 
 export default ResendVerificationEmail;
+ {/* End Of Jeds Code*/}

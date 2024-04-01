@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import withAuthentication from './HOCauth';
@@ -22,7 +23,7 @@ const RecruiterSignup = ({ userRoles }) => {
                 if (data) { // If the data exists, assume it includes an identifier like `id`
                     setFormData(currentData => ({
                         ...currentData,
-                        ...data, // Ensure this includes the `id` or similar identifier
+                        ...data, 
                         termsOfService: currentData.termsOfService // Preserve existing termsOfService state or reset as needed
                     }));
                 }
@@ -47,7 +48,7 @@ const RecruiterSignup = ({ userRoles }) => {
             return;
         }
     
-        // Use `id` or the relevant field as your record identifier
+        // Use `id` or the relevant field as the record identifier
         const method = formData.user ? 'PUT' : 'POST';
     
         fetch('http://localhost:8000/api/recruiter/', {
@@ -133,3 +134,4 @@ const RecruiterSignup = ({ userRoles }) => {
 
 
 export default withAuthentication(RecruiterSignup);
+ {/* End Of Jeds Code*/}

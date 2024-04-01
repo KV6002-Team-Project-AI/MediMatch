@@ -1,16 +1,18 @@
+# This is All Jeds code
+
 from .token import EmailVerificationTokenGenerator
 from django.core.mail import send_mail
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.conf import settings
 
-# Initialize your custom token generator
+# Initialize custom token generator
 email_verification_token_generator = EmailVerificationTokenGenerator()
 
 class EmailService:
     @staticmethod
     def send_verification_email(user, domain='localhost:3000', use_https=False):
-        # Use your custom token generator here
+        # Use custom token generator here
         token = email_verification_token_generator.make_token(user)
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         protocol = 'https' if use_https else 'http'

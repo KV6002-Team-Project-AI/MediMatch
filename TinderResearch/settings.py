@@ -69,7 +69,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+# Start of jeds code
 CORS_ALLOW_CREDENTIALS = True
 
 
@@ -137,7 +137,7 @@ EMAIL_HOST_PASSWORD = 'SG.ySSFd2H1T5qTbpG4be5JGA.iLq02-_amDCOTxsCGF1eKtPUeLg7lKi
 DEFAULT_FROM_EMAIL = 'bywaterjed@gmail.com'
 
 ROOT_URLCONF = 'TinderResearch.urls'
-
+# End of jeds code
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -185,14 +185,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+# Start of jeds code
 # Media files
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL = 'ResearchSwipe.User'
-
+# End of jeds code
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 

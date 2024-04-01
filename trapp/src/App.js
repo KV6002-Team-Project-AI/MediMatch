@@ -22,7 +22,7 @@ import CreateUserForm from './admincreate';
 import ReportUserForm from './report';
 import AdminDashboard from './madash';
 import './App.css';
-
+ {/* Start Of Jeds Code*/}
 function usePageTracking() {
     const location = useLocation();
     useEffect(() => {
@@ -41,7 +41,7 @@ function App() {
 
     const location = useLocation();
     const excludedPaths = ['/signin', '/signup', '/signup/recruitee', '/signup/recruiter', '/landingpage', '/verify-email/:uidb64/:token', '/'];
-
+ {/* End Of Jeds Code*/}
     return (
         <div className="App">
             {!excludedPaths.includes(location.pathname) && <Header />}
@@ -51,8 +51,10 @@ function App() {
                 <Route path='/tinder' element={<Tinder />}/>
                 <Route path='/matches' element={<Matches />}/>
                 <Route path='/matches/recruitee' element={<MatchesRecruitee />}/>
-                <Route path='/profile' element={<Profile />}/>
                 <Route path='/research' element={<Research />}/>
+
+                {/* Start Of Jeds Paths*/}
+                <Route path='/profile' element={<Profile />}/>
                 <Route path='/signin' element={<SignIn />}/>
                 <Route path='/signup' element={<SignUp />}/>
                 <Route path='/verify-email/:uidb64/:token' element={<VerifyEmail />} />
@@ -61,13 +63,15 @@ function App() {
                 <Route path='/admin/create' element={<CreateUserForm />}/>
                 <Route path='/report' element={<ReportUserForm />}/>
                 <Route path='/dashboard' element={<AdminDashboard />}/>
-                <Route path='/test' element={<UserStatus />}/>
                 <Route path="/signup/recruitee" element={<RecruiteeSignup />} />
                 <Route path="/update/recruitee" element={<RecruiteeSignup />} />
                 <Route path="/update/recruiter" element={<RecruiterSignup />} />
                 <Route path="/signup/recruiter" element={<RecruiterSignup />} />
-                <Route path="/addstudy" element={<AddStudy />} />
                 <Route path='/landingpage' element={<LandingPage />}/>
+                 {/* End Of Jeds Paths*/}
+
+                <Route path="/addstudy" element={<AddStudy />} />
+               
 
                 {/* Catch-all route */}
                 <Route path='*' element={<Navigate to='/profile' replace />} />

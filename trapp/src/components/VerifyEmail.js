@@ -1,3 +1,4 @@
+ // Start Of Jeds Code*/}
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ const VerifyEmail = () => {
             })
             .then(data => {
                 setVerificationStatus('Email verified successfully.');
-                setTimeout(() => navigate("/signin"), 3000); // Redirect after 3 seconds
+                setTimeout(() => navigate("/signin"), 1000); // Redirect after 3 seconds
             })
             .catch((error) => {
                 setVerificationStatus('Verification link is invalid or expired.');
@@ -47,3 +48,4 @@ const VerifyEmail = () => {
 };
 
 export default VerifyEmail;
+ {/* End Of Jeds Code*/}

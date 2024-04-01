@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -199,7 +200,7 @@ const AdminDashboard = () => {
             <p><strong>Work Preference:</strong> {selectedUser.work_preference}</p>
             <p><strong>Research Area:</strong> {selectedUser.research_area}</p>
             <p><strong>Company Info:</strong> {selectedUser.company_info}</p>
-            {/* Add more fields as needed */}
+            
             <button onClick={closeModal} className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">
                 Close
             </button>
@@ -222,3 +223,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+ {/* End Of Jeds Code*/}

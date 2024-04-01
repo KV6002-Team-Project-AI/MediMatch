@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React from 'react';
 import { useNavigate  } from 'react-router-dom';
 import logoImage from './assets/puzzle.png'; 
@@ -34,3 +35,4 @@ export default function LandingPage() {
       </div>
     );
   }
+   {/* End Of Jeds Code*/}

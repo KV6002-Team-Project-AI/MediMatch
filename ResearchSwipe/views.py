@@ -1,3 +1,4 @@
+# This is All Jeds code
 from rest_framework import status, views, permissions, generics
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
@@ -14,7 +15,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from django.http import HttpResponse
 from django.views.decorators.cache import never_cache
-from .token import email_verification_token_generator  # Make sure to import your custom token generator
+from .token import email_verification_token_generator 
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from django.views.decorators.csrf import csrf_exempt
@@ -72,7 +73,7 @@ class AdminSignupView(views.APIView):
                 email=data['email'],
                 username=data['email'],
                 password=make_password(data['password']),
-                is_superuser=True  # Assuming you still want to create superuser accounts
+                is_superuser=True  
             )
             user.save()
             return Response({'message': 'Admin created successfully'}, status=status.HTTP_201_CREATED)
@@ -97,11 +98,9 @@ def get_ga_data(request):
         
         property_id = '433240422'  # your GA4 property ID
 
-        # Initialize your analytics reporter with the decoded JSON credentials
+       
         reporter = GoogleAnalyticsReporter(temp_file_name, property_id)
-        # your existing logic...
-
-        # Your existing logic to run reports
+        
         city_report_response = reporter.run_report()
         daily_views_response = reporter.get_daily_views()
 
@@ -413,8 +412,7 @@ class AdminReportView(views.APIView):
                 message = message or f"You have been warned for the following reason: {report.reason}"
                 subject = "Account Warning Notification"
             elif action_taken == 'resolved':
-                # For resolved status, you might not always want to notify the reported user
-                # So, consider whether to send an email or not based on the message content
+                
                 if message:
                     subject = "Report Resolved"
                     message = f"Your report has been resolved. Reason: {report.reason}"

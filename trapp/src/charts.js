@@ -1,3 +1,5 @@
+
+// Start Of Jeds Code*/}
 // AnalyticsChartPage.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -44,7 +46,7 @@ const transformDailyViewsDataForChart = (dailyViewsData) => {
     const labels = dailyViewsData.rows.map(row => {
       const dateString = row.dimensionValues[0].value;
       const year = parseInt(dateString.substring(0, 4));
-      const month = parseInt(dateString.substring(4, 6)) - 1; // Months are zero-based in JavaScript Date constructor
+      const month = parseInt(dateString.substring(4, 6)) - 1; 
       const day = parseInt(dateString.substring(6, 8));
       const date = new Date(year, month, day);
       return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); // Format the date
@@ -104,20 +106,20 @@ const AnalyticsChartPage = () => {
                     </a>
                 </div>
       
-          {/* Add more vertical padding/margin if needed, adjust p-4 for more padding */}
+          
           <main className="flex-grow flex flex-col items-center justify-center p-10 bg-gray-50">
             {loading && <p>Loading analytics data...</p>}
             {error && <p className="text-red-600">{error}</p>}
             {!loading && !error && (
               <>
                 {cityChartData.labels && (
-                  <div className="w-full max-w-4xl mb-12 mt-3 h-64"> {/* Adjust mb (margin-bottom) and mt (margin-top) as needed */}
+                  <div className="w-full max-w-4xl mb-12 mt-3 h-64"> 
                     <h2 className="text-lg font-semibold text-center mb-4">City-Based Active Users</h2>
                     <Line data={cityChartData} options={{ responsive: true, maintainAspectRatio: false }} />
                   </div>
                 )}
                 {dailyViewsChartData.labels && (
-                  <div className="w-full max-w-4xl mb-20 mt-12 h-64"> {/* Adjust mb and mt for spacing between charts */}
+                  <div className="w-full max-w-4xl mb-20 mt-12 h-64"> 
                     <h2 className="text-lg font-semibold text-center mb-4">7-Day Total Views</h2>
                     <Bar data={dailyViewsChartData} options={{ responsive: true, maintainAspectRatio: false }} />
                   </div>
@@ -131,3 +133,4 @@ const AnalyticsChartPage = () => {
   };
   
   export default AnalyticsChartPage;
+   {/* End Of Jeds Code*/}

@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useState } from 'react'; 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -17,7 +18,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 
-// TODO: Remove, this demo shouldn't need to reset the theme.
+
 const defaultTheme = createTheme();
 
 function Copyright(props) {
@@ -104,10 +105,9 @@ export default function SignUp() {
       return; // Prevent submission if passwords do not match
     }
   
-    // Here you would include the password strength check before proceeding with submission
     checkPasswordStrength(password);
 
-    // Ensure you check password strength before proceeding with the signup logic
+    // check password strength before proceeding 
     if (passwordStrength === 'weak') {
       // Handle weak password case (e.g., show an error message)
       console.error('Password is too weak');
@@ -287,4 +287,4 @@ export default function SignUp() {
   </ThemeProvider>
 );
 }
-
+ {/* End Of Jeds Code*/}

@@ -1,3 +1,4 @@
+// Start Of Jeds Code*/}
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import withAuthentication from './HOCauth'
@@ -113,7 +114,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
         })
         .then(data => {
             console.log('Success:', data);
-            navigate('/profile'); // or another appropriate action
+            navigate('/profile'); 
         })
         .catch(error => {
             console.error('Error:', error);
@@ -382,7 +383,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
             value={formData.medical_history_details}
             onChange={handleChange}
             className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Please provide details of your medical history"
+            placeholder="Please input in this formate: Diagnosed with X or Mother diagnosed with Y"
         />
     )}
 </div>
@@ -407,7 +408,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
             value={formData.current_medication_details}
             onChange={handleChange}
             className="mt-2 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Please list your current medications"
+            placeholder="Please input in this formate: Prescribed X or Was prescribed to take Y"
         />
     )}
 </div>
@@ -465,7 +466,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
             value={formData.allergy_details}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="Details of your allergies"
+            placeholder="Please input in this formate: Im allergic to X"
         />
     </div>
 )}
@@ -536,7 +537,7 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
         value={formData.lifestyle_factors}
         onChange={handleChange}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
-        placeholder="Detail your diet, physical activity, smoking, or drinking habits"
+        placeholder="Please input in this formate: Im Vegan"
     />
 </div>
 
@@ -820,3 +821,4 @@ if (!userRoles.is_recruitee && !userRoles.is_superuser) {
 }
 
 export default withAuthentication(RecruiteeSignup);
+ {/* End Of Jeds Code*/}

@@ -1,13 +1,41 @@
+"""
+Serializers module for the recruitment platform.
+
+This module defines serializers to convert queryset and model instances into JSON so that the data can be rendered into
+JSON, XML, or other content types. Serializers also provide deserialization, allowing parsed data to be converted back
+into complex types, after first validating the incoming data.
+
+Classes:
+- CustomRecruiteeSerializer: Extends the RecruiteeSerializer to include a custom set of fields that represent the recruitee's profile.
+- CustomRecruiterSerializer: Extends the RecruiterSerializer to include a custom set of fields specific to recruiters.
+- CustomStudySerializer: Extends the StudySerializer to provide a tailored serializer for studies with a specific set of fields.
+- ProfileInteractionSerializer: A model serializer for match instances between recruitees and studies. It includes nested serialization for
+  study details, recruitee profiles, and recruiter information.
+
+The serializers use the Meta class inherited from the base serializers to customize the fields that are included in the serialized output.
+For the ProfileInteractionSerializer, read-only fields are used to fetch information from related models without the need for additional queries.
+
+The CustomRecruiteeSerializer, CustomRecruiterSerializer, and CustomStudySerializer are used within the ProfileInteractionSerializer
+to provide detailed information about the study, recruitee, and recruiter involved in a match. This approach allows for a comprehensive
+view of match instances, suitable for API responses that require detailed object representation.
+
+Dependencies:
+- rest_framework.serializers: Base serializer classes from Django REST Framework.
+- .models.Matches: The Matches model from the current application's models.
+- ResearchSwipe.serializers.RecruiteeSerializer, RecruiterSerializer: Base serializers for recruitee and recruiter profiles.
+- Syed.serializers.StudySerializer: The base serializer for studies.
+
+Usage:
+These serializers are intended to be used in views and API endpoints where match data, along with detailed information about
+recruitees, recruiters, and studies, need to be serialized or deserialized for HTTP responses or requests.
+"""
+
 from rest_framework import serializers
-
-from ResearchSwipe.models import User
-
 from .models import Matches
-from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer, UserSerializer
+from ResearchSwipe.serializers import RecruiteeSerializer, RecruiterSerializer
 from Syed.serializers import StudySerializer
 
 
-# Recruitee serializer that uses specific data from the Recruitee class
 class CustomRecruiteeSerializer(RecruiteeSerializer):
     class Meta(RecruiteeSerializer.Meta):
         fields = (
@@ -15,6 +43,7 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'full_name',
             'age',
             'biological_sex',
+            'medical_history_details',
             'height',
             'weight',
             'profession',
@@ -32,7 +61,6 @@ class CustomRecruiteeSerializer(RecruiteeSerializer):
             'summary'
         )
 
-# Recruiter serializer that uses specific data from the Recruiter class
 class CustomRecruiterSerializer(RecruiterSerializer):
     class Meta(RecruiterSerializer.Meta):
         fields = (
@@ -42,46 +70,14 @@ class CustomRecruiterSerializer(RecruiterSerializer):
             'company_info'
         )
 
-# Study serializer that uses specific data from the Study class
-class CustomStudySerializer(StudySerializer):
-    class Meta(StudySerializer.Meta):
-        fields = (
-            'user',  
-            'category', 
-            'description', 
-            'start_date',
-            'duration', 
-            'work_preference',
-            'min_age', 
-            'max_age', 
-            'min_height', 
-            'max_height', 
-            'min_weight', 
-            'max_weight', 
-            'biological_sex', 
-            'profession', 
-            'ethnicity',
-            'activity_level', 
-            'socioeconomic_status', 
-            'health_status'
-        )
 
-# Matches serializer that uses all information in the Match class including the study, recruitee and recruiter serializers
 class ProfileInteractionSerializer(serializers.ModelSerializer):
-    # Specific study information (ID and name)
-    study_id = serializers.ReadOnlyField(source='study.study_id')
-    study_name = serializers.ReadOnlyField(source='study.name')
     study_info = StudySerializer(source='study', read_only=True)
-    # Recruitee information (ID)
-    user_id = serializers.ReadOnlyField(source='user.user_id')
-    # Statuses of both studies and recruitees
     recruitee_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
     study_status = serializers.ChoiceField(choices=Matches.STATUS_CHOICES, default='pending')
-    # Recruitee information 
     recruitee = CustomRecruiteeSerializer(source='user', read_only=True)
-    # Recruiter information 
     recruiter_info = CustomRecruiterSerializer(source='recruiter', read_only=True)
 
     class Meta:
         model = Matches
-        fields = ('match_id', 'study_id', 'study_name', 'user_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')
+        fields = ('match_id', 'study_info', 'recruitee_status', 'study_status', 'recruitee', 'recruiter_info')

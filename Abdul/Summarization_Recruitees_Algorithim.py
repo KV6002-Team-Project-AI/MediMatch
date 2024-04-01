@@ -1,11 +1,11 @@
 from ResearchSwipe.models import Recruitee
 
 def getRecruitees():
-    # Step 1: Query the Recruitee model for all instances
+    # query the recruitee model for all instances
     recruitees = Recruitee.objects.all()
 
     for recruitee in recruitees:
-            # Step 2: Extract the data you need
+            # extract the data needed
             full_name = recruitees.full_name
             age = recruitees.age
             biological_sex = recruitees.biological_sex

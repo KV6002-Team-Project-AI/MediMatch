@@ -1,6 +1,47 @@
+/**
+ * RecruiteeProfileCard Component
+ * 
+ * This React component renders a profile card for recruitees in a recruitment platform, 
+ * allowing recruiters to view detailed information about candidates, including their 
+ * interests, features, and summary. It supports actions such as accepting or rejecting 
+ * candidates, refreshing the list of matches, and reporting a user with a screenshot of 
+ * their profile.
+ * 
+ * The component leverages Material-UI for the UI elements and html2canvas for capturing 
+ * screenshots. It fetches data from a REST API to simulate fetching matches and handling 
+ * actions on those matches. The state management is done using React's useState hook, 
+ * and side effects, such as API calls, are handled using the useEffect hook.
+ * 
+ * The UI is divided into several sections, including a study selection dropdown, a 
+ * summary button with toggle functionality, accept and reject actions with color feedback, 
+ * and a report functionality that captures a screenshot of the recruitee's profile.
+ * 
+ * Endpoint: api/recruiter/matches/
+ * 
+ * Features:
+ * - Fetch and display recruitee matches from a REST API
+ * - Dynamically update the UI based on user interactions
+ * - Select a study to filter matches
+ * - Toggle between the summary view and detailed view of a recruitee
+ * - Accept or reject recruitee with visual feedback
+ * - Refresh matches list
+ * - Report a recruitee with a screenshot of their profile
+ * 
+ * Note:
+ * This code was primarily authored by Mohamed Etri, with specific functionalities contributed by Jed 
+ * (report functionality) and Syed (Some UI elements).
+ * 
+ * Usage:
+ * The component is intended to be used in a recruitment platform where recruiters need to 
+ * evaluate candidates quickly and efficiently. It assumes the existence of an API endpoint 
+ * for fetching and posting match data, and it requires Material-UI and html2canvas libraries.
+ * 
+ * @author Mohamed Etri
+ * Contributions by: Jed (Report functionality), Syed (Some UI elements)
+ */
+
 import React, { useState, useEffect } from 'react';
 import profilePic from '../assets/profile-pic.jpg';
-import infoLogo from '../assets/info.png';
 import summariseLogo from '../assets/summary.png';
 import report from '../assets/report.png';
 import refresh from '../assets/refresh.png';
@@ -23,7 +64,7 @@ import html2canvas from 'html2canvas';
 const RecruiteeProfileCard = () => {
   const [currentMatch, setCurrentMatch] = useState(null);
   const [matches, setMatches] = useState([]);
-  const [uniqueStudyNames, setUniqueStudyNames] = useState([]);// State to store unique study names
+  const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
   const [selectedStudy, setSelectedStudy] = useState('Select a Study');
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
@@ -41,20 +82,16 @@ const RecruiteeProfileCard = () => {
         .then(data => {
             const pendingMatches = data.filter(match => match.study_status === 'pending');
             setMatches(pendingMatches);
-            // Extract unique study names and set state
-            const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_name)));
+            const uniqueNames = Array.from(new Set(pendingMatches.map(match => match.study_info.name)));
             setUniqueStudyNames(uniqueNames);
             
-            // Automatically select the first study if no study is selected
             if (selectedStudy === 'Select a Study' || selectedStudy === '') {
-                const firstStudyName = uniqueNames[0] || 'Select a Study'; // Default to 'Select a Study' if no matches
+                const firstStudyName = uniqueNames[0] || 'Select a Study';
                 setSelectedStudy(firstStudyName);
-                // Filter the matches for the first study and set currentMatch
-                const filteredMatches = pendingMatches.filter(match => match.study_name === firstStudyName);
+                const filteredMatches = pendingMatches.filter(match => match.study_info.name === firstStudyName);
                 setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
             } else {
-                // Filter the matches for the selected study and set currentMatch
-                const filteredMatches = pendingMatches.filter(match => match.study_name === selectedStudy);
+                const filteredMatches = pendingMatches.filter(match => match.study_info.name === selectedStudy);
                 setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
             }
         })
@@ -76,7 +113,7 @@ const RecruiteeProfileCard = () => {
       },
       body: JSON.stringify({
         user_id: currentMatch.recruitee.user_id,
-        study_id: currentMatch.study_id,
+        study_id: currentMatch.study_info.study_id,
         action: action,
       }),
     })
@@ -87,24 +124,22 @@ const RecruiteeProfileCard = () => {
       return response.json();
     })
     .then(() => {
-      fetchMatches(); // Re-fetch the matches after the action is completed
+      fetchMatches();
     })
     .catch(error => console.error('Error:', error));
   };
 
-  /*
-    These functions will call the handleAction with the correct status
-    with a visual background change when user accepts or rejects
-  */
+
   const handleAcceptClick = () => {
     setAcceptColor('bg-green-500');
-    handleAction('accepted', currentMatch.recruitee.user_id, currentMatch.study_id);
+    handleAction('accepted', currentMatch.recruitee.user_id, currentMatch.study_info.study_id);
     setTimeout(() => setAcceptColor(''), 750);
   };
   
+
   const handleRejectClick = () => {
     setRejectColor('bg-red-500');
-    handleAction('rejected', currentMatch.recruitee.user_id, currentMatch.study_id);
+    handleAction('rejected', currentMatch.recruitee.user_id, currentMatch.study_info.study_id);
     setTimeout(() => setRejectColor(''), 750);
   };
 
@@ -116,7 +151,7 @@ const RecruiteeProfileCard = () => {
   const handleStudySelection = (event) => {
     const selected = event.target.value;
     setSelectedStudy(selected);
-    const filteredMatches = matches.filter(match => match.study_name === selected);
+    const filteredMatches = matches.filter(match => match.study_info.name === selected);
     setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
   };
 
@@ -139,10 +174,9 @@ const RecruiteeProfileCard = () => {
     }
   };
 
-  // Jed's report functionality
   const [showReportForm, setShowReportForm] = useState(false);
-const [screenshotData, setScreenshotData] = useState(null);
-
+  const [screenshotData, setScreenshotData] = useState(null);
+  //Start of Jed's report functionality
 const handleReportClick = () => {
     // Identify the element you want to capture
     const element = document.getElementById('content-to-capture');
@@ -160,8 +194,6 @@ const handleReportClick = () => {
     }
 };
   //End of Jed's report functionality
-
-// TODO: SETUP INFO BUTTON
 
 return (
   <>
@@ -217,9 +249,9 @@ return (
           </Tooltip>
       </div>
       <div className='mt-2 w-full p-2 bg-white rounded-xl shadow-lg 
-                        sm:max-w-md sm:mt-5
-                        md:max-w-lg md:mt-10 md:mx-0
-                        lg:max-w-xl lg:mt-16 lg:mx-0
+                        sm:max-w-md
+                        md:max-w-lg 
+                        lg:max-w-xl 
                         xl:max-w-2xl xl:py-8 xl:mx-0'>
         
         {currentMatch && (
@@ -335,16 +367,6 @@ return (
                   allergies={currentMatch.recruitee.allergies}
                   lifestyle={currentMatch.recruitee.lifestyle}
               />
-
-                {/* <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.age} y.o.
-                </div>
-                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.height} cm
-                </div>
-                <div className="bg-blue-200 text-blue-800 px-4 py-1 rounded-full shadow hover:bg-blue-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.weight} kg
-                </div> */}
               </div>
             </div>
  
@@ -357,16 +379,6 @@ return (
                   interest_3={currentMatch.recruitee.interest_3}
                   interest_4={currentMatch.recruitee.interest_4}
               />
-                
-                {/* <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.interest_1}
-                </div>
-                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.interest_2}
-                </div>
-                <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg">
-                  {currentMatch.recruitee.interest_3}
-                </div> */}
               </div>
             </div>
             {currentMatch && (

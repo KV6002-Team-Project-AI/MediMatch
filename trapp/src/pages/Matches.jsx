@@ -1,3 +1,13 @@
+/**
+ * Matches component responsible for displaying matched recruitees to recruiters.
+ * It fetches data about matched recruitees from the backend and allows recruiters to view and interact with them.
+ * Recruiters can unmatch recruitees and view their profiles including bio, features, and interests.
+ *
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {object} userRoles - Object containing user roles information.
+ * @returns {JSX.Element} Returns the JSX for the Matches Page.
+ */
+
 import { useState, useEffect } from "react";
 import profilePic from '../assets/profile-pic.jpg';
 import infoLogo from '../assets/info.png';
@@ -10,12 +20,14 @@ import DisplayFeatures from "../components/DisplayFeatures";
 import DisplayInterests from "../components/DisplayInterests";
 
 const Matches = ({ userRoles }) => {
-    const [matches, setMatches] = useState([]);
-    const [noMatch, setNoMatch] = useState(false);
-    const [uniqueStudyNames, setUniqueStudyNames] = useState([]);
-    const [selectedStudy, setSelectedStudy] = useState('');
-    const [expandedProfiles, setExpandedProfiles] = useState({}); // State to track expanded profiles
+    // State variables
+    const [matches, setMatches] = useState([]); // Store matched recruitees
+    const [noMatch, setNoMatch] = useState(false); // Track if there are no matches
+    const [uniqueStudyNames, setUniqueStudyNames] = useState([]); // Store unique study names
+    const [selectedStudy, setSelectedStudy] = useState(''); // Track selected study
+    const [expandedProfiles, setExpandedProfiles] = useState({}); // Track expanded profiles
 
+    // Function to fetch matches data from the backend
     const fetchMatchesData = () => {
         fetch('http://localhost:8000/api/matchedrecruitees/', {
             method: 'GET',
@@ -34,8 +46,9 @@ const Matches = ({ userRoles }) => {
             setMatches(data);
             console.log(data);
             // Extract unique study names
-            const uniqueNames = Array.from(new Set(data.map(match => match.study_name)));
+            const uniqueNames = Array.from(new Set(data.map(match => match.study_info.name)));
             setUniqueStudyNames(uniqueNames);
+            // Set noMatch state based on data length
             if (data.length === 0) {
                 setNoMatch(true);
             } else {
@@ -47,17 +60,18 @@ const Matches = ({ userRoles }) => {
         });
     }
 
+    // Fetch matches data on component mount
     useEffect(() => {
         fetchMatchesData();
     }, []);
 
+    // Render permission error if user is not a recruiter or superuser
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
 
     // Filter matches based on selected study
-    const filteredMatches = selectedStudy ? matches.filter(match => match.study_name === selectedStudy) : matches;
-
+    const filteredMatches = selectedStudy ? matches.filter(match => match.study_info.name === selectedStudy) : matches;
 
     // Function to toggle profile expansion
     const toggleProfileExpansion = (index) => {
@@ -67,8 +81,8 @@ const Matches = ({ userRoles }) => {
         }));
     };
 
+    // Function to handle unmatching
     const handleUnmatch = (user_id, study_id) => {    
-        
         fetch(`http://localhost:8000/api/recruiter/matches/`, {
             method: 'POST',
             headers: {
@@ -84,8 +98,8 @@ const Matches = ({ userRoles }) => {
         .then(response => {
             if (response.ok) {
                 console.log("Match rejected successfully.");
-                fetchMatchesData();
-                handleRefreshClick();
+                fetchMatchesData(); // Refresh matches data
+                handleRefreshClick(); // Refresh the page
             } else {
                 console.error("Error rejecting match:", response.statusText);
             }
@@ -96,6 +110,7 @@ const Matches = ({ userRoles }) => {
         });
     }   
 
+    // Function to handle refreshing the page
     const handleRefreshClick = async () => {
         try {
           const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
@@ -115,8 +130,9 @@ const Matches = ({ userRoles }) => {
         }
     };
     
+    // Function to truncate long strings
     function truncateString(str) {
-        const x = 33
+        const x = 33;
         if (str.length > x) {
           return str.slice(0, x) + '...';
         } else {
@@ -134,7 +150,7 @@ const Matches = ({ userRoles }) => {
                             {/* Dropdown menu */}
                             <div className="w-80">
                                 <FormControl fullWidth>
-                                    <InputLabel id="s elect-study-label">Select Study</InputLabel>
+                                    <InputLabel id="select-study-label">Select Study</InputLabel>
                                     <Select
                                         labelId="select-study-label"
                                         id="select-study"
@@ -173,7 +189,7 @@ const Matches = ({ userRoles }) => {
                                         </div>
                                         <div>
                                             <p className="text-sm">
-                                                <span className="font-semibold">Matched with: </span> {match.study_name}
+                                                <span className="font-semibold">Matched with: </span> {match.study_info.name}
                                             </p>
                                         </div>
                                     </div>
@@ -233,7 +249,7 @@ const Matches = ({ userRoles }) => {
                                 <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
                                     <div 
                                         className='w-full bg-red-500  p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5'
-                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_id)}
+                                        onClick={() => handleUnmatch(match.recruitee.user_id, match.study_info.study_id)}
                                     >
                                         Unmatch
                                     </div>

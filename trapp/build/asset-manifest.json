@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.af01090c.css",
-    "main.js": "/static/js/main.1ec5f7d4.js",
+    "main.css": "/static/css/main.8c987073.css",
+    "main.js": "/static/js/main.339c33bb.js",
     "static/js/453.dbaddae4.chunk.js": "/static/js/453.dbaddae4.chunk.js",
     "static/media/MediMatchLogo.png": "/static/media/MediMatchLogo.7a298a1ba9978a88d68b.png",
     "static/media/profile-pic.jpg": "/static/media/profile-pic.bfdfdf0b93cea89198d9.jpg",
@@ -11,12 +11,12 @@
     "static/media/summary.png": "/static/media/summary.c7bd95d583bb13be795a.png",
     "index.html": "/index.html",
     "static/media/add.svg": "/static/media/add.c0ff4737afe3a322cdbcd0ca75936452.svg",
-    "main.af01090c.css.map": "/static/css/main.af01090c.css.map",
-    "main.1ec5f7d4.js.map": "/static/js/main.1ec5f7d4.js.map",
+    "main.8c987073.css.map": "/static/css/main.8c987073.css.map",
+    "main.339c33bb.js.map": "/static/js/main.339c33bb.js.map",
     "453.dbaddae4.chunk.js.map": "/static/js/453.dbaddae4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.af01090c.css",
-    "static/js/main.1ec5f7d4.js"
+    "static/css/main.8c987073.css",
+    "static/js/main.339c33bb.js"
   ]
 }

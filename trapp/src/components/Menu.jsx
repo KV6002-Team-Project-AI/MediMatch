@@ -1,3 +1,12 @@
+/**
+ * Menu component responsible for displaying the application menu.
+ * It dynamically renders menu items based on the user's role and admin mode.
+ * It also provides functionality for toggling admin mode and displaying notifications.
+ *
+ * @author Syed Wajahat Quadri <w21043564>
+ * @author Mohammed Etri <w21015706>
+ * @author Jed Bywater <>
+ */
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import withAuthentication from '../HOCauth';
@@ -69,4 +78,3 @@ function Menu({ userRoles }) {
 
 // Wrap your Menu component with the HOC to receive the userRoles prop
 export default withAuthentication(Menu, { checkVerification: false });
-

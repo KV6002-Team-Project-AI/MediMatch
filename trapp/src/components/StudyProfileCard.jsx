@@ -1,5 +1,36 @@
+/**
+ * StudyProfileCard Component
+ * 
+ * This React component is designed to present detailed information about study matches
+ * in a recruitment platform context. It allows users to view and interact with potential 
+ * study matches based on various criteria, such as category, duration, and preferences.
+ * Users can accept or reject matches, and have the option to report a match, which
+ * triggers a modal form for further actions.
+ * 
+ * The component makes use of several hooks for state management, including useState for
+ * storing matches, selected study categories, and UI state. It also utilizes useEffect for
+ * fetching matches upon component mount. Actions such as accepting, rejecting, and reporting
+ * matches are facilitated through event handlers that update the component's state and potentially
+ * make API calls to reflect these actions in the backend.
+ * 
+ * UI elements are primarily based on Material-UI components, offering a consistent and
+ * customizable user interface. The component structure includes selection controls for study
+ * categories, informational tooltips, and a dynamic table for displaying minimum and maximum
+ * requirements for study participation.
+ * 
+ * Endpoint: api/recruitee/matches/
+ * 
+ * Usage:
+ * This component is intended for use in web applications focused on study recruitment,
+ * enabling users (recruiters or recruitees) to manage their study matches efficiently.
+ * It requires the Material-UI library for UI components and assumes a backend service
+ * for fetching and updating match data.
+ * 
+ * Author: Mohamed Etri
+ * Contributions by: Jed (Report functionality), Syed (Some UI elements)
+ */
+
 import React, { useState, useEffect } from 'react';
-import infoLogo from '../assets/info.png';
 import report from '../assets/report.png';
 import refresh from '../assets/refresh.png';
 import withAuthentication from '../HOCauth';
@@ -25,8 +56,6 @@ const StudyProfileCard = () => {
   const [selectedStudy, setSelectedStudy] = useState('Select a Category');
   const [AcceptColor, setAcceptColor] = useState('');
   const [RejectColor, setRejectColor] = useState('');
-  const [showAdditionalInfo, setShowAdditionalInfo] = useState(false);
-
 
   const fetchMatches = () => {
     const token = localStorage.getItem('accessToken');
@@ -70,7 +99,7 @@ const StudyProfileCard = () => {
       },
       body: JSON.stringify({
         user_id: currentMatch.recruitee.user_id,
-        study_id: currentMatch.study_id,
+        study_id: currentMatch.study_info.study_id,
         action: action,
       }),
     })
@@ -81,7 +110,7 @@ const StudyProfileCard = () => {
       return response.json();
     })
     .then(() => {
-      fetchMatches(); // Refetch the matches after the action is completed
+      fetchMatches();
     })
     .catch(error => console.error('Error:', error));
   };
@@ -105,9 +134,6 @@ const StudyProfileCard = () => {
     setCurrentMatch(filteredMatches.length > 0 ? filteredMatches[0] : null);
   };
 
-  const toggleAdditionalInfo = () => {
-    setShowAdditionalInfo(!showAdditionalInfo);
-  };
 
  // Jed's report functionality
  const [showReportForm, setShowReportForm] = useState(false);
@@ -130,6 +156,7 @@ const StudyProfileCard = () => {
      }
  };
    //End of Jed's report functionality
+   
 
   const handleRefreshClick = async () => {
     try {
@@ -162,9 +189,8 @@ const StudyProfileCard = () => {
             value={selectedStudy}
             onChange={handleStudySelection}
             label="Select Category"
-            // Applying minimal custom styling for demonstration
             sx={{
-              height: 40, // Adjust the height as needed
+              height: 40,
               '.MuiOutlinedInput-input': { paddingTop: 0, paddingBottom: 0 },
               '.MuiSelect-select': { paddingTop: '6px', paddingBottom: '6px' }
             }}
@@ -205,10 +231,10 @@ const StudyProfileCard = () => {
           </Tooltip>
       </div>
           <div className='mt-2 w-full px-2 py-3 bg-white rounded-xl shadow-lg transition transform hover:-translate-y-1
-                          sm:max-w-md sm:mt-5
-                          md:max-w-lg md:mt-10 md:mx-0
-                          lg:max-w-xl lg:mt-16 lg:mx-0
-                          xl:max-w-2xl xl:py-8 xl:mx-0'>
+                          sm:max-w-md
+                          md:max-w-lg
+                          lg:max-w-xl
+                          xl:max-w-2xl'>
             
         {currentMatch ? (
           
@@ -228,7 +254,7 @@ const StudyProfileCard = () => {
 
           <div className="text-center mt-3">
             <p className="font-semibold text-xl md:text-2xl lg:text-3xl text-gray-800">
-              {currentMatch.study_name}
+              {currentMatch.study_info.name}
             </p>
           </div>
 
@@ -258,26 +284,6 @@ const StudyProfileCard = () => {
                   maxHeight={currentMatch.study_info.max_height}
               />
             </div>
-        {/* <div className="flex overflow-x-auto mt-1 gap-2 mx-2" style={{scrollbarWidth: 'none'}}>
-          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.min_age} y.o.
-          </div>
-          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.max_age} y.o.
-          </div>
-          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.min_height} cm
-          </div>
-          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.max_height} cm
-          </div>
-          <div className="bg-green-200 text-green-800 px-4 py-1 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.biological_sex.name}
-          </div>
-          <div className="bg-green-200 text-green-800 px-4 py-2 rounded-full shadow hover:bg-green-300 transition text-sm sm:text-base md:text-lg whitespace-nowrap" style={{width: 'min-content'}}>
-              {currentMatch.study_info.profession.name}
-          </div>
-        </div> */}
       </div>
       
       {currentMatch && (

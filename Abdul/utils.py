@@ -81,7 +81,7 @@ class NERModel:
                 filtered_entities.append((label, " ".join(filtered_entity_words)))
         return filtered_entities
 
-# filtering the additonal words
+# filtering the additonal words, change later to relative path
 medical_ner = NERModel(
     "Abdul/NLP_Models/Medical",
     {0: "O", 1: "B-CONDITION", 2: "I-CONDITION", 3: "B-MEDICATION", 4: "I-MEDICATION"},

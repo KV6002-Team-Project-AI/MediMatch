@@ -11,14 +11,32 @@ import ZoomOut from '@mui/icons-material/ZoomOut';
 import MinMaxTable from '../components/MinMaxTable';
 import Preferences from '../components/Preferences';
 
+/**
+ * Research Page
+ * 
+ * This component displays a list of research studies. It allows users with appropriate permissions to view, search, edit, and delete studies.
+ * 
+ * @author Syed Wajahat Quadri <w21043564>
+ * @param {Object} userRoles - Object containing user roles and permissions.
+ * @returns {JSX.Element} - Research component JSX code.
+ */
 const Research = ({ userRoles }) => {
+    // State variables
     const navigate = useNavigate()
     const [studies, setStudies] = useState([]);
     const [noStudy, setNoStudy] = useState(false);
     const [expandedStudies, setExpandedStudies] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Date Format function
+    const [isLgScreen, setIsLgScreen] = useState(false);
+    const [hideInfoButton, setHideInfoButton] = useState(false);
+
+    /**
+     * Date Format Function
+     * 
+     * @param {Date} inputDate - Input date object.
+     * @returns {string} - Formatted date string (DD-MM-YYYY).
+     */
     function formatDate(inputDate) {
         const date = new Date(inputDate);
         const day = String(date.getDate()).padStart(2, '0');
@@ -27,7 +45,12 @@ const Research = ({ userRoles }) => {
         return `${day}-${month}-${year}`;
     }
 
-    // Duration fix
+    /**
+     * Duration Fix Function
+     * 
+     * @param {string} duration - Input duration string.
+     * @returns {string} - Formatted duration string.
+     */
     function durationFix(duration) {
         if (duration === "Less than 1 week") {
             return "<1 week"
@@ -38,6 +61,42 @@ const Research = ({ userRoles }) => {
         }
     }
 
+    // Effect hook to handle screen resize
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLgScreen(window.innerWidth >= 1024);
+        };
+
+        handleResize(); // Call initially to set the state
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    // Filter studies based on search query
+    const filteredStudies = studies.filter(study =>
+        Object.values(study).some(attribute =>
+            typeof attribute === 'string' && attribute.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    );
+
+    // Effect hook to handle changes in screen size
+    useEffect(() => {
+        // If the screen width is large, hide the info button
+        if (isLgScreen) {
+            setHideInfoButton(true);
+            // Expand all studies when the screen is large
+            setExpandedStudies(new Array(filteredStudies.length).fill(true));
+        } else {
+            // If the screen width is not large, show the info button
+            setHideInfoButton(false);
+        }
+        
+    }, [isLgScreen, filteredStudies]);
+
+    // Effect hook to fetch studies data
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -69,6 +128,11 @@ const Research = ({ userRoles }) => {
         fetchData();
     }, []);
     
+    /**
+     * Fetch Data After Delete Function
+     * 
+     * @param {string} studyId - ID of the study to be deleted.
+     */
     const fetchDataAfterDelete = async (studyId) => {
         try {
             const url = `http://localhost:8000/api/studyexpire/`;
@@ -105,6 +169,11 @@ const Research = ({ userRoles }) => {
         }
     };
 
+    /**
+     * Handle Refresh Click Function
+     * 
+     * Handles refreshing the page after an action.
+     */
     const handleRefreshClick = async () => {
         try {
           const response = await fetch('http://127.0.0.1:8000/api/run-command/', {
@@ -124,28 +193,35 @@ const Research = ({ userRoles }) => {
         }
       };
     
-    // Function to handle delete
+    /**
+     * Handle Delete Function
+     * 
+     * Handles deleting a study.
+     * 
+     * @param {string} studyId - ID of the study to be deleted.
+     */
     const handleDelete = (studyId) => {
         fetchDataAfterDelete(studyId);
         handleRefreshClick();
     };
 
-    // HANDLE EDIT
+    /**
+     * Handle Edit Function
+     * 
+     * Handles editing a study.
+     * 
+     * @param {string} studyId - ID of the study to be edited.
+     */
     function handleEdit(studyId) {
         navigate(`/addstudy?study_id=${studyId}`);
     }
 
+    // If user does not have permission, return message
     if (!userRoles.is_recruiter && !userRoles.is_superuser) {
         return <div className='mt-20'>You do not have permission to view this page.</div>;
     }
 
-    // Filter studies based on search query
-    const filteredStudies = studies.filter(study =>
-        Object.values(study).some(attribute =>
-            typeof attribute === 'string' && attribute.toLowerCase().includes(searchQuery.toLowerCase())
-        )
-    );
-
+    // JSX rendering
     return (
         <>
             <div className="mx-3 my-20">
@@ -205,174 +281,184 @@ const Research = ({ userRoles }) => {
                     </div>
                 }
                 {!noStudy &&
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
+                        
                         {/* DISPLAYING STUDIES */}
                         {filteredStudies.map((study, index) => (
                             <div key={index} className="flex justify-center items-center bg-white transition duration-500 ease-in-out shadow-md hover:bg-gray-100 rounded-2xl hover:shadow-2xl">
-                                <div className='w-full px-1 md:px-2'>
-
-                                    {/* DATES */}
-                                    <div className='flex px-1 pb-2 mx-1 justify-center gap-2 pt-2 text-center items-center'>
-                                        <p className='text-sm w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
-                                            <span className='font-semibold'>Starts:</span> {formatDate(study.start_date)}
-                                        </p>
-                                        <p className='text-sm w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
-                                            <span className='font-semibold'>Duration:</span> {durationFix(study.duration)}
-                                        </p>
-                                        <p className='text-sm w-full py-0.5 bg-red-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
-                                            <span className='font-semibold'>Expires:</span> {formatDate(study.expiry_date)}
-                                        </p>
-                                    </div>
-
-                                    {/* STUDY INFO CARD */}
-                                    <div className='flex p-2 gap-2 justify-between'>
-                                        <div className='flex-col'>
-                                            <h2 className="text-xl font-bold">{study.name}</h2>
-                                            <h3 className='text-md'>{study.work_preference}</h3>
-                                        </div>
-                                        <div className="flex-col text-right">
-                                            <h2>{study.category}</h2>
-                                        </div>
-                                    </div>
-                                    <div className='flex px-2 pb-4 justify-between'>
-                                        <div className='flex-col'>
-                                            <p className='text-justify'>
-                                                {study.description}
+                                <div className='flex flex-col px-1 md:px-2 lg:flex-row lg:gap-2'>
+                                    <div className='w-full'>
+                                        {/* DATES */}
+                                        <div className='flex px-1 py-2 mx-1 mt-1 justify-center gap-2 text-center items-center'>
+                                            <p className='text-sm w-full py-0.5 bg-green-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
+                                                <span className='font-semibold'>Starts:</span> {formatDate(study.start_date)}
+                                            </p>
+                                            <p className='text-sm w-full py-0.5 bg-blue-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
+                                                <span className='font-semibold'>Duration:</span> {durationFix(study.duration)}
+                                            </p>
+                                            <p className='text-sm w-full py-0.5 bg-red-200 text-black rounded-md shadow transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg'>
+                                                <span className='font-semibold'>Expires:</span> {formatDate(study.expiry_date)}
                                             </p>
                                         </div>
-                                    </div>
-                                    {expandedStudies[index] &&
-                                        <div>
-                                            {/* REQUIREMENTS */}
-                                            <h1 className='text-center text-lg font-bold border-t-2 border-gray-300 py-2 mt-2 '>Requirements</h1>
-                                            <div className='flex px-2 pb-4 justify-between'>
-                                                <MinMaxTable
-                                                    minAge={study.min_age}
-                                                    minWeight={study.min_weight}
-                                                    minHeight={study.min_height}
-                                                    maxAge={study.max_age}
-                                                    maxWeight={study.max_weight}
-                                                    maxHeight={study.max_height}
-                                                />
+
+                                        {/* STUDY INFO CARD */}
+                                        <div className='flex p-2 gap-2 justify-between'>
+                                            <div className='flex-col'>
+                                                <h2 className="text-xl font-bold">{study.name}</h2>
+                                                <h3 className='text-md'>{study.work_preference}</h3>
                                             </div>
-                                            {/* PREFERENCES */}
-                                            <h1 className='text-center text-lg font-bold mb-2 '>Preferences</h1>
-                                            <div className='flex px-2 pb-4 justify-between h-64'>
-                                                <Preferences
-                                                    sex={study.biological_sex}
-                                                    hair={study.hair_color}
-                                                    profession={study.profession}
-                                                    ethnicity={study.ethnicity}
-                                                    nationality={study.nationality}
-                                                    pregnancy={study.pregnancy_status}
-                                                    language={study.language_preferences}
-                                                    activity={study.activity_level}
-                                                    socioeconomic={study.socioeconomic_status}
-                                                    health={study.health_status}
-                                                    medical_history={study.medical_history}
-                                                    medication_history={study.medication_history}
-                                                    current_medication={study.current_medication}
-                                                    family_medication_history={study.family_medication_history}
-                                                    allergies={study.allergies}
-                                                    lifestyle={study.lifestyle}
-                                                />
+                                            <div className="flex-col text-right">
+                                                <h2>{study.category}</h2>
                                             </div>
                                         </div>
-                                    }
+                                        <div className='flex px-2 pb-4 justify-between'>
+                                            <div className='flex-col'>
+                                                <p className='text-justify'>
+                                                    {study.description}
+                                                </p>
+                                            </div>
+                                        </div>
+                                        {expandedStudies[index] &&
+                                            <div>
+                                                {/* REQUIREMENTS */}
+                                                <h1 className='text-center text-lg font-bold border-t-2 border-gray-300 py-2 mt-2 '>Requirements</h1>
+                                                <div className='flex px-2 pb-4 justify-between'>
+                                                    <MinMaxTable
+                                                        minAge={study.min_age}
+                                                        minWeight={study.min_weight}
+                                                        minHeight={study.min_height}
+                                                        maxAge={study.max_age}
+                                                        maxWeight={study.max_weight}
+                                                        maxHeight={study.max_height}
+                                                    />
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div className='w-full lg:border-l-2'>
+                                        {expandedStudies[index] &&
+                                            <div className='lg:mt-2'>
+                                                {/* PREFERENCES */}
+                                                <h1 className='text-center text-lg font-bold mb-2 '>Preferences</h1>
+                                                <div className='flex px-2 pb-3 justify-between h-72 md:h-auto lg:h-96 lg:ml-2'>
+                                                    <Preferences
+                                                        sex={study.biological_sex}
+                                                        hair={study.hair_color}
+                                                        profession={study.profession}
+                                                        ethnicity={study.ethnicity}
+                                                        nationality={study.nationality}
+                                                        pregnancy={study.pregnancy_status}
+                                                        language={study.language_preferences}
+                                                        activity={study.activity_level}
+                                                        socioeconomic={study.socioeconomic_status}
+                                                        health={study.health_status}
+                                                        medical_history={study.medical_history}
+                                                        medication_history={study.medication_history}
+                                                        current_medication={study.current_medication}
+                                                        family_medication_history={study.family_medication_history}
+                                                        allergies={study.allergies}
+                                                        lifestyle={study.lifestyle}
+                                                    />
+                                                </div>
 
-                                    {/* BUTTONS */}
-                                    <div className='flex mx-2 mb-2 text-white gap-2 text-center'>
-                                        <Tooltip
-                                            key={index}
-                                            title={expandedStudies[index] ? "Collapse" : "View"}
-                                            placement="top"
-                                            TransitionComponent={ZoomIn}
-                                            slotProps={{
-                                                popper: {
-                                                    modifiers: [
-                                                        {
-                                                            name: 'offset',
-                                                            options: {
-                                                                offset: [0, -4],
-                                                            },
-                                                        },
-                                                    ],
-                                                },
-                                            }}
-                                            arrow
-                                            disableInteractive
-                                            enterDelay={100}
-                                            leaveDelay={100}
-                                        >
-                                            <div
-                                                className={`w-full bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5`}
-                                                onClick={() => setExpandedStudies(prevState => {
-                                                    const newState = [...prevState];
-                                                    newState[index] = !newState[index];
-                                                    return newState;
-                                                })}
-                                            >
-                                                {expandedStudies[index] ? <ZoomOut /> : <ZoomInIcon />}
                                             </div>
-                                        </Tooltip>
-                                        <Tooltip
-                                            key={index}
-                                            title="Edit"
-                                            placement="top"
-                                            TransitionComponent={ZoomIn}
-                                            slotProps={{
-                                                popper: {
-                                                    modifiers: [
-                                                        {
-                                                            name: 'offset',
-                                                            options: {
-                                                                offset: [0, -4],
+                                        }
+                                        {/* BUTTONS */}
+                                        <div className='flex mx-2 mb-3 text-white gap-2 text-center'>
+                                            <Tooltip
+                                                key={index}
+                                                title={expandedStudies[index] ? "Collapse" : "View"}
+                                                placement="top"
+                                                TransitionComponent={ZoomIn}
+                                                slotProps={{
+                                                    popper: {
+                                                        modifiers: [
+                                                            {
+                                                                name: 'offset',
+                                                                options: {
+                                                                    offset: [0, -4],
+                                                                },
                                                             },
-                                                        },
-                                                    ],
-                                                },
-                                            }}
-                                            arrow
-                                            disableInteractive
-                                            enterDelay={100}
-                                            leaveDelay={100}
-                                        >
-                                            <div
-                                                className={`w-full bg-gray-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-gray-600 transform hover:-translate-y-0.5`}
-                                                onClick={() => handleEdit(study.study_id)}
-                                            >
-                                                <EditNoteIcon />
-                                            </div>
-                                        </Tooltip>
-                                        <Tooltip
-                                            key={index}
-                                            title="Delete"
-                                            placement="top"
-                                            TransitionComponent={ZoomIn}
-                                            slotProps={{
-                                                popper: {
-                                                    modifiers: [
-                                                        {
-                                                            name: 'offset',
-                                                            options: {
-                                                                offset: [0, -4],
+                                                        ],
+                                                    },
+                                                }}
+                                                arrow
+                                                disableInteractive
+                                                enterDelay={100}
+                                                leaveDelay={100}
+                                                >
+                                                    {!hideInfoButton && ( 
+                                                <div
+                                                    className={`w-full bg-blue-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-blue-600 transform hover:-translate-y-0.5`}
+                                                    onClick={() => setExpandedStudies(prevState => {
+                                                        const newState = [...prevState];
+                                                        newState[index] = !newState[index];
+                                                        return newState;
+                                                    })}
+                                                >
+                                                    {expandedStudies[index] ? <ZoomOut /> : <ZoomInIcon />}
+                                                </div>
+                                                    )}
+                                            </Tooltip>
+                                            <Tooltip
+                                                key={index}
+                                                title="Edit"
+                                                placement="top"
+                                                TransitionComponent={ZoomIn}
+                                                slotProps={{
+                                                    popper: {
+                                                        modifiers: [
+                                                            {
+                                                                name: 'offset',
+                                                                options: {
+                                                                    offset: [0, -4],
+                                                                },
                                                             },
-                                                        },
-                                                    ],
-                                                },
-                                            }}
-                                            arrow
-                                            disableInteractive
-                                            enterDelay={100}
-                                            leaveDelay={100}
-                                        >
-                                            <div
-                                                className={`w-full bg-red-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5`}
-                                                onClick={() => handleDelete(study.study_id)}
+                                                        ],
+                                                    },
+                                                }}
+                                                arrow
+                                                disableInteractive
+                                                enterDelay={100}
+                                                leaveDelay={100}
                                             >
-                                                <DeleteIcon />
-                                            </div>
-                                        </Tooltip>
+                                                <div
+                                                    className={`w-full bg-gray-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-gray-600 transform hover:-translate-y-0.5`}
+                                                    onClick={() => handleEdit(study.study_id)}
+                                                >
+                                                    <EditNoteIcon />
+                                                </div>
+                                            </Tooltip>
+                                            <Tooltip
+                                                key={index}
+                                                title="Delete"
+                                                placement="top"
+                                                TransitionComponent={ZoomIn}
+                                                slotProps={{
+                                                    popper: {
+                                                        modifiers: [
+                                                            {
+                                                                name: 'offset',
+                                                                options: {
+                                                                    offset: [0, -4],
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                }}
+                                                arrow
+                                                disableInteractive
+                                                enterDelay={100}
+                                                leaveDelay={100}
+                                            >
+                                                <div
+                                                    className={`w-full bg-red-500 p-2 rounded-lg shadow hover:shadow-lg transition duration-300 ease-in-out hover:bg-red-800 transform hover:-translate-y-0.5`}
+                                                    onClick={() => handleDelete(study.study_id)}
+                                                >
+                                                    <DeleteIcon />
+                                                </div>
+                                            </Tooltip>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

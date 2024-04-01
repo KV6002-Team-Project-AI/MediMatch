@@ -1,20 +1,29 @@
 //Start Of Jeds Code*/}
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import puzzleLogo from '../assets/puzzle.png';
 import mediMatchLogo from '../assets/MediMatchLogo.png';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+/**
+ * Header component responsible for displaying the application header.
+ * It includes navigation links, user settings, and logout functionality.
+ *
+ * @author Syed Wajahat Quadri <w21043564>
+ * @author Mohammed Etri <w21015706>
+ * @author Jed Bywater <>
+ */
 function Header() {
-    const location = useLocation();
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState(null);
     const [userRoles, setUserRoles] = useState({ isRecruitee: false, isRecruiter: false });
 
+    /**
+     * Fetches user roles from the backend upon component mount.
+     */
     useEffect(() => {
-        // API call to fetch user roles
         fetch('http://localhost:8000/api/user', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
@@ -30,14 +39,25 @@ function Header() {
         .catch(error => console.error('Error fetching user roles:', error));
     }, []);
 
+    /**
+     * Handles opening the user settings menu.
+     * @param {Event} event - The event triggering the menu opening.
+     */
     const handleMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
+    /**
+     * Handles closing the user settings menu.
+     */
     const handleClose = () => {
         setAnchorEl(null);
     };
 
+    /**
+     * Handles user logout action.
+     * Clears authentication tokens and redirects to the sign-in page.
+     */
     const handleLogout = () => {
         fetch('/api/logout/', {
             method: 'POST',

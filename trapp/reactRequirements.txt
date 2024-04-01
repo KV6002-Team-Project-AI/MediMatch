@@ -1,3 +1,9 @@
+# Step 1: Open the terminal
+# Step 2: Make sure you are in the correct directory. Running this command should get you in - "cd trapp"
+# Step 3: Then, run the following commands to install all required packages.
+# Step 4: Run it seperately like this. Eg: "npm install semantic-ui-react"
+# Step 5: Install each individually. 
+
 semantic-ui-react
 react-stack-cards
 @mui/icons-material 
@@ -5,3 +11,4 @@ react-stack-cards
 @emotion/styled 
 @emotion/react 
 @duetds/react
+eslint-plugin-react --save-dev

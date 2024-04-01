@@ -87,22 +87,6 @@ function DisplayFeatures(props) {
         lifestyle
     ]
 
-    const lightColors = [
-        'teal', 
-        'cyan',
-        'emerald',
-        'green', 
-    ]
-
-    /**
-     * Gets a random color class from the lightColors array.
-     * 
-     * @returns {string} - The random color class.
-     */
-    const getRandomColorClass = () => {
-        const randomIndex = Math.floor(Math.random() * lightColors.length);
-        return lightColors[randomIndex];
-    };
 
     return (
         <>

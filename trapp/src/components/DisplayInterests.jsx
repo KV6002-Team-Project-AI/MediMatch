@@ -35,23 +35,6 @@ function DisplayInterests(props) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    const lightColors = [
-        'teal', 
-        'cyan',
-        'emerald',
-        'green', 
-    ]
-
-    /**
-     * Gets a random color class from the lightColors array.
-     * 
-     * @returns {string} - The random color class.
-     */
-    const getRandomColorClass = () => {
-        const randomIndex = Math.floor(Math.random() * lightColors.length);
-        return lightColors[randomIndex];
-    };
-
     return (
         <>
             {listValues.map((item, idx) => (

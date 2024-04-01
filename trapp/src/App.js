@@ -21,16 +21,7 @@ import CreateUserForm from './admincreate';
 import ReportUserForm from './report';
 import AdminDashboard from './madash';
 import './App.css';
-<<<<<<< HEAD
  {/* Start Of Jeds Code*/}
-=======
-
-/**
- * Hook for tracking page views in Google Analytics.
- * 
- * @author Jed Bywater <>
- */
->>>>>>> 13353e45788ac10262ee4eb4b7899884cba67a88
 function usePageTracking() {
     const location = useLocation();
     useEffect(() => {

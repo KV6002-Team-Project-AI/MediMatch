@@ -1,6 +1,6 @@
 # MediMatch
 
-Provide a short description of your project here. What is the purpose of MediMatch? What does it do?
+MediMatch is a groundbreaking software application inspired by intuitive platforms like Tinder. Utilizing AI and digital tools, MediMatch aims to revolutionize recruitment, fostering diversity and sustained engagement in longitudinal studies. 
 
 ## Getting Started
 

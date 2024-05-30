@@ -1,6 +1,6 @@
 # MediMatch
 
-MediMatch is a groundbreaking software application inspired by intuitive platforms like Tinder. Utilizing AI and digital tools, MediMatch aims to revolutionize recruitment, fostering diversity and sustained engagement in longitudinal studies. 
+MediMatch is a groundbreaking web application inspired by intuitive platforms like Tinder. Utilizing AI and digital tools, MediMatch aims to revolutionize recruitment, fostering diversity and sustained engagement in longitudinal studies. 
 
 ## Getting Started
 
